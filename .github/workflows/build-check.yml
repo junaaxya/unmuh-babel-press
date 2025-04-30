@@ -1,4 +1,4 @@
-name: Build Check
+name: Build & Test Check
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [dev, main]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +17,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Ganti sesuai versi Node.js proyek kamu
+          node-version: 18
 
       - name: Install Dependencies
         run: npm install
 
       - name: Run Build
         run: npm run build
+
+      - name: Run Tests
+        run: npm run test
