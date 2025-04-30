@@ -9,6 +9,7 @@ import {
     faEnvelope,
     faBars,
     faXmark,
+    faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 
 config.autoAddCss = false;
@@ -20,5 +21,6 @@ library.add(
     faHandshake,
     faEnvelope,
     faBars,
-    faXmark
+    faXmark,
+    faMagnifyingGlass
 );

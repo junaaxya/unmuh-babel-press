@@ -12,6 +12,7 @@ import {
     faEnvelope,
     faBars,
     faXmark,
+    faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import DarkModeToggle from '../darkmode-toggle/DarkModeToggle';
 import SearchBar from '../searchbar/SearchBar';
@@ -30,11 +31,11 @@ export default function Navbar() {
                         width={50}
                         height={50}
                     />
-                    <div className="text-sm leading-tight">
-                        <p className="font-bold">
+                    <div className="text-xs leading-tight">
+                        <p className="font-bold text-[10px] md:text-lg">
                             BADAN PENERBIT DAN PUBLIKASI
                         </p>
-                        <p className="text-xs">
+                        <p className="text-[7px] md:text-sm md:-my-1.5">
                             Universitas Muhammadiyah Bangka Belitung
                         </p>
                     </div>
@@ -43,6 +44,7 @@ export default function Navbar() {
                 {/* Search + DarkMode + Toggle */}
                 <div className="flex items-center gap-3">
                     <div className="hidden md:block">
+                       
                         <SearchBar />
                     </div>
                     <DarkModeToggle />
