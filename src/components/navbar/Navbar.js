@@ -44,7 +44,6 @@ export default function Navbar() {
                 {/* Search + DarkMode + Toggle */}
                 <div className="flex items-center gap-3">
                     <div className="hidden md:block">
-                       
                         <SearchBar />
                     </div>
                     <DarkModeToggle />
@@ -59,7 +58,7 @@ export default function Navbar() {
 
             {/* Menu Items */}
             <div
-                className={`bg-blue-700 md:flex md:items-center md:justify-center transition-all duration-300 ${
+                className={`bg-blue-700 shadow-sm/50 md:flex md:items-center md:justify-center transition-all duration-300 ${
                     menuOpen ? 'block' : 'hidden'
                 }`}
             >
