@@ -1,69 +1,73 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import Button from '@/components/button/Button';
-import BookCard from '@/components/card/BookCard';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { BookCarousel } from '@/components/carousel';
 
-// src/sections/Section2Books/Section2Books.js
-
-const dummyBooks = [
+const books = [
     {
         id: 1,
         title: 'Seni Rupa SMA/MA Kelas X',
         subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png', // ganti nanti dengan API
+        image: '/unmuhpress.png',
     },
     {
         id: 2,
         title: 'Seni Rupa SMA/MA Kelas X',
         subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png', // ganti nanti dengan API
+        image: '/unmuhpress.png',
     },
     {
         id: 3,
         title: 'Seni Rupa SMA/MA Kelas X',
         subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png', // ganti nanti dengan API
+        image: '/unmuhpress.png',
     },
     {
         id: 4,
         title: 'Seni Rupa SMA/MA Kelas X',
         subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png', // ganti nanti dengan API
+        image: '/unmuhpress.png',
     },
+    {
+        id: 5,
+        title: 'Seni Rupa SMA/MA Kelas X',
+        subtitle: 'Untuk SMA/MA/SMK',
+        image: '/unmuhpress.png',
+    },
+    
 ];
 
 export default function Section2Books() {
     return (
         <section className="py-16 px-4 bg-white">
-            <div className="max-w-7xl mx-auto">
-                <h2 className="text-3xl font-bold text-center text-blue-800 mb-10 -mt-10">
-                    Buku Terbit Minggu ini
-                </h2>
-                <div className="flex flex-col-reverse md:flex-row">
-                    <div className="mb-8 flex flex-col items-center justify-center md:block md:mt-20  mx-auto mt-9 md:mr-1 flex-shrink-0 w-full md:w-64">
-                        <h3 className="text-2xl flex items-center text-center font-bold text-blue-800 ">
+            <div className="max-w-7xl mx-auto space-y-10">
+                <motion.h2
+                    className="text-3xl font-bold text-center text-blue-800"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                >
+                    Buku Terbit Minggu Ini
+                </motion.h2>
+
+                <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
+                    <motion.div
+                        className="w-full md:w-64 text-center md:text-left mb-8 md:mb-0 md:mt-24 md:ml-8"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h3 className="text-2xl font-bold text-blue-800 mb-4">
                             Buku-Buku Terbaru
                         </h3>
-                        <Button
-                            icon={faArrowRight}
-                            variant="primary"
-                            className="flex items-center"
-                        >
+                        <Button icon={faArrowRight} variant="primary">
                             Buku lainnya
                         </Button>
-                    </div>
-                    <div className="flex-1 overflow-x-auto flex space-x-4">
-                        {dummyBooks.map((book) => (
-                            <BookCard key={book.id} {...book} />
-                        ))}
-                    </div>
-                    {/* Arrow Button */}
-                    <div className="hidden sm:flex items-center justify-center min-w-[48px]">
-                        <Button
-                            icon={faArrowRight}
-                            variant="primary"
-                            className="flex items-center"
-                        ></Button>
-                    </div>
+                    </motion.div>
+
+                    <BookCarousel books={books} autoplay />
                 </div>
             </div>
         </section>
