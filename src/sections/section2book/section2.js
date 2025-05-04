@@ -4,40 +4,9 @@ import { motion } from 'framer-motion';
 import Button from '@/components/button/Button';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { BookCarousel } from '@/components/carousel';
+import SectionHeading from '@/components/common/SectionHeading';
+import dummyBooks from '@/data/dummyBooks';
 
-const books = [
-    {
-        id: 1,
-        title: 'Seni Rupa SMA/MA Kelas X',
-        subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png',
-    },
-    {
-        id: 2,
-        title: 'Seni Rupa SMA/MA Kelas X',
-        subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png',
-    },
-    {
-        id: 3,
-        title: 'Seni Rupa SMA/MA Kelas X',
-        subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png',
-    },
-    {
-        id: 4,
-        title: 'Seni Rupa SMA/MA Kelas X',
-        subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png',
-    },
-    {
-        id: 5,
-        title: 'Seni Rupa SMA/MA Kelas X',
-        subtitle: 'Untuk SMA/MA/SMK',
-        image: '/unmuhpress.png',
-    },
-    
-];
 
 export default function Section2Books() {
     return (
@@ -48,8 +17,11 @@ export default function Section2Books() {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                >
-                    Buku Terbit Minggu Ini
+                > <SectionHeading
+                                    title="Buku Terbit Minggu Ini"
+                                    subtitle=""
+                                />
+                    
                 </motion.h2>
 
                 <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
@@ -67,7 +39,7 @@ export default function Section2Books() {
                         </Button>
                     </motion.div>
 
-                    <BookCarousel books={books} autoplay />
+                    <BookCarousel books={dummyBooks} autoplay />
                 </div>
             </div>
         </section>
