@@ -8,10 +8,11 @@ module.exports = {
     ],
     theme: {
         extend: {
-            colors: {
-               
-            },
+            colors: {},
         },
     },
-    plugins: [],
+    plugins: [
+        require('tailwind-scrollbar-hide'),
+        require('tailwind-scrollbar')({ nocompatible: true }),
+    ],
 };
