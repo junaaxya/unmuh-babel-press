@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/app/api/admin/login/route.js",
+    "middleware.js",
+    "src/app/lib/db.js",
+    "src/app/lib/auth.js",
+    "src/app/admin/dashboard/loading.js",
+    "src/app/admin/login/page.js",
+    "src/app/admin/dashboard/page.js"
+  ],
+  "exclude": ["node_modules"]
+}
