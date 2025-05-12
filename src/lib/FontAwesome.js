@@ -11,6 +11,7 @@ import {
     faXmark,
     faMagnifyingGlass,
     faArrowRight,
+    faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 
 config.autoAddCss = false;
@@ -25,4 +26,5 @@ library.add(
     faXmark,
     faMagnifyingGlass,
     faArrowRight,
+    faCalendarDays,
 );
