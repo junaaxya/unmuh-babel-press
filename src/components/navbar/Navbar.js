@@ -14,7 +14,7 @@ import {
     faXmark,
     faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import DarkModeToggle from '../darkmode-toggle/DarkModeToggle';
+import DarkModeToggle from '../ui/DarkModeToggle/DarkModeToggle';
 import SearchBar from '../searchbar/SearchBar';
 
 export default function Navbar() {

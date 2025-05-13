@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import BookCard from '../books/BookCard';
+import BookCard from '../Book/BookCard';
 import LazyItem from './LazyItem';
 
 export default function BookCarousel({ books, autoplay = true }) {

@@ -1,12 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Button from '@/components/button/Button';
+import Button from '@/components/ui/button/Button';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { BookCarousel } from '@/components/carousel';
 import SectionHeading from '@/components/common/SectionHeading';
 import dummyBooks from '@/data/dummyBooks';
-
 
 export default function Section2Books() {
     return (
@@ -17,11 +16,12 @@ export default function Section2Books() {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                > <SectionHeading
-                                    title="Buku Terbit Minggu Ini"
-                                    subtitle=""
-                                />
-                    
+                >
+                    {' '}
+                    <SectionHeading
+                        title="Buku Terbit Minggu Ini"
+                        subtitle=""
+                    />
                 </motion.h2>
 
                 <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
