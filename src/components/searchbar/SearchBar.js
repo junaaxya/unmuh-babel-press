@@ -24,7 +24,7 @@ export default function SearchBar() {
             <input
                 type="text"
                 placeholder="Cari Buku..."
-                className="w-full max-w-md rounded-lg pl-8  py-2 bg-amber-50 text-black text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-800 shadow-sm transition duration-150 ease-in-out"
+                className="w-full max-w-md rounded-lg pl-8  py-2 bg-blue-200 text-black text-sm placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-800 shadow-sm transition duration-150 ease-in-out"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
