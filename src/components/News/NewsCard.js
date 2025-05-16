@@ -1,32 +1,54 @@
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCalendarDays,
+    faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/ui/button/Button';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
+export default function NewsCard({
+    title,
+    date,
+    description,
+    image,
+    link,
+    category = 'Berita',
+}) {
+    // Truncate description if it's too long
+    const truncatedDescription =
+        description.length > 120
+            ? `${description.substring(0, 120)}...`
+            : description;
 
-export default function NewsCard({ title, date, description, image, link }) {
     return (
         <motion.article
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-xl shadow p-4 flex flex-col transition hover:shadow-lg"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300 border border-gray-100 dark:border-gray-700"
         >
-            <Image
-                src={image}
-                alt={title}
-                width={400}
-                height={250}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-                priority
-            />
-            <div className="flex items-center text-sm text-gray-500 mb-2">
+            <div className="relative aspect-video w-full mb-4 overflow-hidden rounded-lg">
+                <Image
+                    src={image}
+                    alt={title}
+                    width={600}
+                    height={400}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    priority
+                />
+                <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-medium px-2.5 py-1 rounded">
+                    {category}
+                </span>
+            </div>
+
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
                 <FontAwesomeIcon
                     icon={faCalendarDays}
-                    style={{ color: '#808080' }}
-                    className="mr-2"
+                    className="mr-2 text-blue-600 dark:text-blue-400"
+                    size="sm"
                 />
                 {new Date(date).toLocaleDateString('id-ID', {
                     day: 'numeric',
@@ -34,11 +56,24 @@ export default function NewsCard({ title, date, description, image, link }) {
                     year: 'numeric',
                 })}
             </div>
-            <h3 className="font-semibold text-lg mb-2">{title}</h3>
-            <p className="text-sm text-gray-600 mb-4">{description}</p>
-            <a href={link}>
-                <Button>Baca Selengkapnya</Button>
-            </a>
+
+            <h3 className="font-bold text-xl mb-3 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                {title}
+            </h3>
+
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-grow line-clamp-3">
+                {truncatedDescription}
+            </p>
+
+            <Link href={link} className="mt-auto">
+                <Button className="w-full flex items-center justify-center gap-2 group">
+                    <span>Baca Selengkapnya</span>
+                    <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="transform transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                </Button>
+            </Link>
         </motion.article>
     );
 }

@@ -21,21 +21,21 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <nav className="bg-blue-600 text-white shadow">
+        <nav className="bg-cyan-50 text-white shadow">
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo + Title */}
                 <div className="flex items-center space-x-4">
                     <Image
                         src="/unmuhpress.png"
                         alt="Logo"
-                        width={50}
-                        height={50}
+                        width={90}
+                        height={90}
                     />
                     <div className="text-xs leading-tight">
-                        <p className="font-bold text-[10px] md:text-lg">
+                        <p className="font-bold text-[10px] md:text-lg text-blue-700">
                             BADAN PENERBIT DAN PUBLIKASI
                         </p>
-                        <p className="text-[7px] md:text-sm md:-my-1.5">
+                        <p className="text-[6px] md:text-sm md:-my-1.5 text-gray-700">
                             Universitas Muhammadiyah Bangka Belitung
                         </p>
                     </div>
