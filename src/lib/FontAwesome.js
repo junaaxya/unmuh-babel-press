@@ -19,7 +19,6 @@ import {
   faLinkedinIn,
    faMapMarkerAlt,
   faPhone,
-  faEnvelope,
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -43,6 +42,5 @@ library.add(
       faLinkedinIn,
        faMapMarkerAlt,
         faPhone,
-        faEnvelope,
         faClock,
 );
