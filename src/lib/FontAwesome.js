@@ -12,6 +12,15 @@ import {
     faMagnifyingGlass,
     faArrowRight,
     faCalendarDays,
+     faFacebookF,
+  faTwitter,
+  faInstagram,
+  faYoutube,
+  faLinkedinIn,
+   faMapMarkerAlt,
+  faPhone,
+  faEnvelope,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 
 config.autoAddCss = false;
@@ -27,4 +36,13 @@ library.add(
     faMagnifyingGlass,
     faArrowRight,
     faCalendarDays,
+     faFacebookF,
+      faTwitter,
+      faInstagram,
+      faYoutube,
+      faLinkedinIn,
+       faMapMarkerAlt,
+        faPhone,
+        faEnvelope,
+        faClock,
 );
