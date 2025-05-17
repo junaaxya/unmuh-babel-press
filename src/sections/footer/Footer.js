@@ -73,11 +73,11 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <FontAwesomeIcon icon={faPhone} className="text-blue-400" />
-              (021) 12345678
+              +62 821-7122-2017
             </li>
             <li className="flex items-center gap-2">
               <FontAwesomeIcon icon={faEnvelope} className="text-blue-400" />
-              haki@univ.edu
+              ubp@unmuhbabel.ac.id
             </li>
             <li className="flex items-center gap-2">
               <FontAwesomeIcon icon={faClock} className="text-blue-400" />
@@ -89,11 +89,11 @@ export default function Footer() {
 
       {/* Bottom */}
       <div className="border-t border-gray-700 mt-10 pt-6 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>© 2023 Portal HAKI Universitas Muhammadiyah Bangka Belitung. Seluruh hak cipta dilindungi.</p>
+        <p>© 2025 Universitas Muhammadiyah Bangka Belitung. Seluruh hak cipta dilindungi.</p>
         <div className="flex gap-6">
           <a href="#" className="hover:underline">Kebijakan Privasi</a>
           <a href="#" className="hover:underline">Syarat & Ketentuan</a>
-          <a href="#" className="hover:underline">Peta Situs</a>
+          <a href="#" className="hover:underline">Beranda</a>
         </div>
       </div>
     </footer>
