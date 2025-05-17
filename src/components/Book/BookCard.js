@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-export default function BookCard({ id, title, subtitle, image, lazy = false }) {
+export default function BookCard({ id, title, Penulis, image, lazy = false }) {
     return (
         <motion.article
-            className="relative w-full max-w-xs flex-shrink-0 bg-white shadow-md rounded-2xl overflow-hidden transition-transform hover:scale-105 hover:shadow-lg group mx-auto"
+            className="relative w-[260px] max-w-xs flex-shrink-0 bg-white shadow-md rounded-2xl overflow-hidden transition-transform hover:scale-105 hover:shadow-lg group mx-auto"
             role="group"
             aria-labelledby={`book-title-${id}`}
             initial={{ opacity: 0, y: 20 }}
@@ -19,16 +19,18 @@ export default function BookCard({ id, title, subtitle, image, lazy = false }) {
             </div>
 
             {/* Gambar Buku */}
-            <div className="relative h-60 w-full bg-gray-100">
-                <Image
-                    src={image}
-                    alt={`Cover buku ${title}`}
-                    fill
-                    sizes="(max-width: 768px) 90vw, 250px"
-                    className="object-cover object-top"
-                    priority={!lazy}
-                    loading={lazy ? 'lazy' : 'eager'}
-                />
+            <div className="flex justify-center items-center bg-gray-100 ">
+                <div className="relative h-[350px] w-[250px] bg-gray-100">
+                    <Image
+                        src={image}
+                        alt={`Cover buku ${title}`}
+                        fill
+                        sizes="(max-width: 768px) 90vw, 250px"
+                        className="object-cover object-top"
+                        priority={!lazy}
+                        loading={lazy ? 'lazy' : 'eager'}
+                    />
+                </div>
             </div>
 
             {/* Konten */}
@@ -39,7 +41,7 @@ export default function BookCard({ id, title, subtitle, image, lazy = false }) {
                 >
                     {title}
                 </h3>
-                <p className="text-sm text-gray-600 line-clamp-2">{subtitle}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">{Penulis}</p>
 
                 <motion.button
                     whileHover={{ scale: 1.05 }}
