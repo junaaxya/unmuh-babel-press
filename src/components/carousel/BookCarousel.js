@@ -58,7 +58,7 @@ export default function BookCarousel({ books, autoplay = true }) {
                 transition={{ duration: 0.6 }}
                 tabIndex={0} // Allow keyboard focus
             >
-                {books.map((book) => (
+                {(books ?? []).map((book) => (
                     <LazyItem key={book.id}>
                         <BookCard {...book} />
                     </LazyItem>

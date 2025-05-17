@@ -120,7 +120,7 @@ export default function Footer() {
                         <ul className="space-y-2">
                             <li>
                                 <Link
-                                    href="/"
+                                    href="/Beranda"
                                     className="hover:text-blue-400 transition-colors duration-300 flex items-center"
                                 >
                                     <span className="text-blue-500 mr-2">
