@@ -1,3 +1,4 @@
+
 // src/data/dummyBooks.js
 
 
@@ -103,7 +104,7 @@ const dummyBooks = [
   {
     id: 8,
     Kode_Buku: "-",
-    Juul: "BUKU KUMPULAN ARTIKEL HASIL PENELITIAN MAHASISWA",
+    title: "BUKU KUMPULAN ARTIKEL HASIL PENELITIAN MAHASISWA",
     ISBN: "-",
     Penerbit: "UNMUH BABEL Press",
     Penulis: "Mahasiswa Peserta Pengenalan Lapangan Persekolahan 1 , FKIP UNMUH BABEL Tahun Akademik 2020/2021",
@@ -159,3 +160,4 @@ const dummyBooks = [
 ];
 
 export default dummyBooks;
+
