@@ -1,5 +1,6 @@
 // src/data/dummyBooks.js
 
+
 const dummyBooks = [
   {
     id: 1,
@@ -12,6 +13,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "75",
     image: "/cover1.jpg",
+    kategori: "Lembar Kerja Siswa (LKS)",
+    sinopsis:"Buku referensi ini menyajikan kekayaan budaya Bangka Belitung melalui pendekatan kearifan lokal yang terintegrasi dengan pembelajaran tematik. Dirancang khusus untuk memudahkan guru dalam menyampaikan materi budaya secara sistematis, buku ini tidak hanya menampilkan keanekaragaman tradisi dan nilai-nilai luhur masyarakat Bangka Belitung, tetapi juga menyelaraskannya dengan kurikulum pendidikan yang berlaku. Dengan urutan materi yang sesuai buku teks tematik, buku ini menjadi alat pendukung efektif bagi pendidik untuk menanamkan pemahaman budaya sekaligus memperkuat identitas lokal peserta didik."
   },
   {
     id: 2,
@@ -24,6 +27,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "52",
     image: "/cover2.jpg",
+    kategori:"Pedoman Pengenalan Lapangan Persekolahan",
+    sinopsis:"Buku pedoman ini merupakan panduan komprehensif bagi mahasiswa Fakultas Keguruan dan Ilmu Pendidikan (FKIP) Universitas Muhammadiyah Bangka Belitung dalam melaksanakan kegiatan Pengenalan Lapangan Persekolahan (PLP 1). Dirancang khusus untuk membantu mahasiswa calon pendidik memahami budaya sekolah dan dinamika pembelajaran—khususnya di masa pandemi—buku ini menyajikan panduan observasi yang terstruktur, mulai dari aspek budaya sekolah hingga adaptasi pembelajaran dalam kondisi pembatasan fisik. Sebagai bagian dari kurikulum wajib, pedoman ini tidak hanya memperkuat bekal teoritis mahasiswa tetapi juga membangun jejaring dan pengalaman praktis yang esensial bagi pengembangan kompetensi keguruan. Dengan pendampingan dari dosen dan guru pembimbing, buku ini menjadi alat vital untuk memastikan PLP 1 berjalan efektif dan bermakna bagi seluruh civitas akademika."
   },
   {
     id: 3,
@@ -36,6 +41,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "37",
     image: "/cover3.jpg",
+    kategori:"cerita rakyat",
+    sinopsis:"Buku ini menghadirkan kisah inspiratif tentang kepahlawanan Datuk Panduk Aek Mas, seorang pemimpin yang amanah dan penuh teladan. Dirancang sebagai bacaan anak usia dini, cerita ini tidak hanya mengajarkan literasi dasar, tetapi juga menyampaikan pesan-pesan moral tentang kepemimpinan, keberanian, dan nilai-nilai karakter positif. Melalui petualangan Datuk yang penuh tantangan, pembaca diajak memahami hakikat hidup sebagai pemimpin sejati yang selalu memperjuangkan kebaikan untuk rakyatnya. Dengan bahasa yang sederhana namun sarat makna, buku ini menjadi media yang efektif untuk menanamkan nilai-nilai luhur pada generasi muda sejak dini."
   },
   {
     id: 4,
@@ -48,6 +55,8 @@ const dummyBooks = [
     Ukuran: "27",
     Halaman: "75",
     image: "/cover4.jpg",
+    kategori:"Buku Ajar",
+    sinopsis:"Buku ini menyajikan panduan komprehensif tentang strategi pengembangan karakter peserta didik melalui pendekatan pembelajaran terpadu. Dirancang khusus oleh tim dosen Pendidikan Guru Sekolah Dasar Universitas Muhammadiyah Bangka Belitung, buku ini menjadi referensi penting bagi mahasiswa calon guru, pendidik, dan masyarakat umum yang ingin memahami integrasi pendidikan karakter dalam sistem pembelajaran. Dengan menyajikan garis besar perkuliahan dan konsep-konsep praktis, buku ini tidak hanya membantu pembaca memahami teori perkembangan karakter, tetapi juga memberikan strategi implementatif yang dapat langsung diaplikasikan di kelas. Kehadiran buku ini diharapkan dapat memperkaya khazanah pendidikan karakter yang semakin relevan dalam membentuk generasi unggul di era modern."
   },
   {
     id: 5,
@@ -60,6 +69,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "33",
     image: "/cover5.jpg",
+    kategori:"Buku Ajar",
+    sinopsis:"Buku ini menyajikan panduan komprehensif tentang pengelolaan peserta didik sebagai kunci keberhasilan sistem pendidikan. Dengan fokus pada pengembangan potensi fisik, intelektual, sosial-emosional, dan psikologis peserta didik, buku ini menawarkan strategi praktis untuk meningkatkan motivasi belajar dan pencapaian prestasi. Materi mencakup manajemen penerimaan peserta didik baru, layanan bimbingan konseling, hingga pengelolaan minat belajar, menjadikannya referensi esensial bagi pendidik dan administrator sekolah. Buku ini menekankan bahwa keberhasilan pendidikan tidak hanya diukur dari kecerdasan akademik, tetapi juga dari keseimbangan motivasi dan pengembangan karakter, sehingga peserta didik dapat menjadi individu yang bermanfaat bagi diri sendiri dan masyarakat."
   },
   {
     id: 6,
@@ -72,6 +83,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "91",
     image: "/cover6.jpg",
+    kategori:"Motivasi & Pengembangan Diri Islami",
+    sinopsis:"Buku ini mengajak pembaca menelusuri konsep cinta sejati dalam bingkai syariat Islam, menjauhi praktik pacaran dan mengarahkan pada pernikahan yang diridhai Allah SWT. Dengan prinsip halalkan atau tinggalkan, penulis membimbing kita untuk memahami aturan cinta yang sesuai ajaran Islam—baik cinta kepada Allah, Rasul-Nya, orang tua, maupun pasangan halal. Lebih dari sekadar motivasi, buku ini menjadi panduan praktis menjalani cinta tanpa melanggar batasan agama, sekaligus mengingatkan pentingnya kesabaran bagi yang belum mampu menikah. Ditulis dengan gaya santai namun penuh makna, BARATA tidak hanya mengubah cara pandang tentang cinta, tetapi juga mengajak pembaca berbagi kebaikan dengan menyebarkan ilmu yang terkandung di dalamnya."
   },
   {
     id: 7,
@@ -84,6 +97,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "83",
     image: "/cover7.jpg",
+    kategori:"Buku Ajar",
+    sinopsis:"Buku ini hadir sebagai solusi atas tantangan pembelajaran IPS di era adaptif, khususnya dalam penerapan Kurikulum 2013 yang berpusat pada peserta didik (student-centered). Dirancang untuk calon guru dan guru SD, buku ini tidak hanya membahas konsep dasar IPS tetapi juga menyajikan strategi pembelajaran yang aplikatif, baik secara daring maupun luring. Dengan pendekatan kontekstual, buku ini membantu pendidik menstimulasi kemampuan, sikap, dan keterampilan siswa dalam menyikapi persoalan sosial di lingkungan sekitar maupun isu global. Sebagai referensi praktis, buku ini bertujuan mewujudkan pembelajaran IPS yang bermakna dan relevan dengan perkembangan zaman, sekaligus menjawab kompleksitas tantangan pendidikan di masa pandemi dan pascapandemi."
   },
   {
     id: 8,
@@ -96,6 +111,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "520",
     image: "/cover8.jpg",
+    kategori:"Buku Kumpulan Artikel",
+    sinopsis:"Buku ini merupakan kumpulan artikel hasil penelitian mahasiswa FKIP Universitas Muhammadiyah Bangka Belitung yang lahir dari kegiatan Pengenalan Lapangan Persekolahan I. Menyajikan berbagai temuan penelitian segar di bidang pendidikan, buku ini tidak hanya menjadi bukti nyata kontribusi akademik mahasiswa tetapi juga sumber inspirasi bagi pengembangan penelitian lebih lanjut. Dengan ISBN resmi, karya ini menawarkan perspektif praktis dan solusi inovatif terhadap tantangan pendidikan aktual, khususnya dalam konteks lapangan persekolahan. Cocok untuk mahasiswa pendidikan, peneliti pemula, dan praktisi yang ingin mengeksplorasi penerapan teori pendidikan dalam setting nyata, buku ini menjadi jembatan berharga antara dunia akademik dan praktik lapangan."
   },
   {
     id: 9,
@@ -108,6 +125,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "30",
     image: "/cover9.jpg",
+    kategori:"Lembar Kerja Siswa (LKS)",
+    sinopsis:"Buku ini menyajikan panduan praktis tentang penerapan Computational Thinking (CT) dalam pembelajaran matematika melalui Lembar Kerja Peserta Didik (LKPD) yang siap pakai. Dirancang untuk guru, mahasiswa, dan orang tua, buku ini tidak hanya menjelaskan konsep dasar dan ranah berpikir CT, tetapi juga memberikan contoh konkret LKPD yang dapat langsung diimplementasikan di kelas. Dengan pendekatan yang aplikatif, buku ini bertujuan memudahkan pendidik dalam mengintegrasikan keterampilan berpikir komputasional ke dalam kurikulum matematika, sekaligus membantu siswa mengembangkan logika pemecahan masalah secara sistematis dan kreatif. Cocok sebagai referensi inovatif untuk menunjang pembelajaran matematika yang lebih interaktif dan efektif."
   },
   {
     id: 10,
@@ -120,6 +139,8 @@ const dummyBooks = [
     Ukuran: "29",
     Halaman: "124",
     image: "/cover10.jpg",
+    kategori:"Buku Ajar",
+    sinopsis:"Buku ini menyajikan kajian teoritis dan praktis tentang manajemen pendidikan dasar melalui pendekatan kepustakaan dari para ahli di bidang Administrasi dan Manajemen Pendidikan. Dirancang untuk mahasiswa, buku ini menjadi jembatan pemahaman antara konsep teoretis dengan penerapannya di lapangan, khususnya dalam pengelolaan sekolah dasar. Dengan berbagai disiplin ilmu yang terintegrasi, pembaca diajak mengembangkan sistem manajemen pendidikan yang efektif, mulai dari redesain organisasi sekolah hingga penciptaan tolok ukur kinerja yang optimal. Hadir sebagai kerangka dasar, buku ini tidak hanya memberikan pencerahan konseptual tetapi juga panduan aplikatif untuk membangun lembaga pendidikan yang berkualitas."
   },
   {
     id: 11,
@@ -132,6 +153,8 @@ const dummyBooks = [
     Ukuran: "-",
     Halaman: "140",
     image: "/cover11.jpg",
+    kategori:"Buku Ajar",
+    sinopsis:"Bahan ajar ini dirancang khusus untuk memudahkan pemahaman konsep-konsep baru Ilmu Pengetahuan Alam (IPA) di tingkat Sekolah Dasar. Fokus pada materi getaran dan gelombang, modul ini dilengkapi dengan rangkuman, gambar ilustratif, dan info sains terkait untuk menunjang pembelajaran yang komunikatif dan optimal. Cocok digunakan sebagai referensi guru dalam menyusun kegiatan belajar mengajar yang interaktif, sekaligus membantu siswa menguasai IPA dengan pendekatan visual dan praktis. Buku ini juga menyertakan contoh penerapan konsep dalam kehidupan sehari-hari, menjadikan IPA lebih relevan dan menarik untuk dipelajari."
   },
 ];
 
