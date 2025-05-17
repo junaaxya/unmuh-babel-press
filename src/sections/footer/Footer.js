@@ -1,101 +1,290 @@
-'use client';
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faFacebookF,
-  faTwitter,
-  faInstagram,
-  faYoutube,
-  faLinkedinIn,
+    faFacebookF,
+    faTwitter,
+    faInstagram,
+    faYoutube,
+    faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import {
-  faMapMarkerAlt,
-  faPhone,
-  faEnvelope,
-  faClock,
+    faMapMarkerAlt,
+    faPhone,
+    faEnvelope,
+    faClock,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Footer() {
-  return (
-    <footer className="bg-neutral-900 text-gray-300 py-12 px-6 md:px-20">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-        
-        {/* Kolom 1: Logo & Deskripsi */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <Image src="/unmuhpress.png" alt="Logo" width={60} height={60} />
-            <h2 className="text-white font-bold text-lg leading-tight">
-              BADAN PENERBIT <br /> DAN PUBLIKASI
-            </h2>
-          </div>
-          <p className="text-sm mb-4">
-            Badan Penerbit dan Publikasi Universitas Muhammadiyah Bangka Belitung
-          </p>
-          <div className="flex gap-4 text-lg">
-            <FontAwesomeIcon icon={faFacebookF} className="hover:text-white cursor-pointer" />
-            <FontAwesomeIcon icon={faTwitter} className="hover:text-white cursor-pointer" />
-            <FontAwesomeIcon icon={faInstagram} className="hover:text-white cursor-pointer" />
-            <FontAwesomeIcon icon={faYoutube} className="hover:text-white cursor-pointer" />
-            <FontAwesomeIcon icon={faLinkedinIn} className="hover:text-white cursor-pointer" />
-          </div>
-        </div>
+    return (
+        <footer className="bg-gray-900 text-gray-300">
+            {/* Main Footer Content */}
+            <div className="container mx-auto px-4 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {/* Column 1 - About */}
+                    <div className="mb-6 lg:mb-0">
+                        <div className="flex items-center mb-4">
+                            <Image
+                                src="/unmuhpress.png"
+                                alt="Unmuh Press Logo"
+                                width={90}
+                                height={90}
+                                className="mr-2"
+                            />
+                            <div>
+                                <h2 className="text-white font-bold text-lg leading-tight">
+                                    BADAN PENERBIT
+                                    <br />
+                                    DAN PUBLIKASI
+                                </h2>
+                            </div>
+                        </div>
+                        <p className="text-sm mb-4">
+                            Badan Penerbit dan Publikasi Universitas
+                            Muhammadiyah Bangka Belitung
+                        </p>
+                        <div className="flex space-x-3">
+                            <Link
+                                href="https://facebook.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Facebook"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faFacebookF}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://twitter.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Twitter"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-400 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faTwitter}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://instagram.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Instagram"
+                            >
+                                <div className="bg-gray-700 hover:bg-pink-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faInstagram}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://youtube.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="YouTube"
+                            >
+                                <div className="bg-gray-700 hover:bg-red-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faYoutube}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://linkedin.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="LinkedIn"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-700 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faLinkedinIn}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
 
-        {/* Kolom 2: Tautan Cepat */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Tautan Cepat</h3>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:underline">Beranda</a></li>
-            <li><a href="#" className="hover:underline">Profil</a></li>
-            <li><a href="#" className="hover:underline">Katalog</a></li>
-            <li><a href="#" className="hover:underline">Berita & Event</a></li>
-            <li><a href="#" className="hover:underline">Layanan</a></li>
-            <li><a href="#" className="hover:underline">Kontak</a></li>
-          </ul>
-        </div>
+                    {/* Column 2 - Quick Links */}
+                    <div className="mb-6 lg:mb-0">
+                        <h3 className="text-white font-bold text-lg mb-4">
+                            Tautan Cepat
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href="/Beranda"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Beranda</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/profil"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Profil</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/katalog"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Katalog</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/berita-event"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Berita & Event</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/layanan"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Layanan</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/kontak"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Kontak</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
 
-        {/* Kolom 3: Layanan */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Layanan Unmuh Press</h3>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:underline">Paket Penerbitan</a></li>
-          </ul>
-        </div>
+                    {/* Column 3 - Services */}
+                    <div className="mb-6 lg:mb-0">
+                        <h3 className="text-white font-bold text-lg mb-4">
+                            Layanan Unmuh Press
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href="/paket-penerbitan"
+                                    className="hover:text-blue-400 transition-colors duration-300"
+                                >
+                                    Paket Penerbitan
+                                </Link>
+                            </li>
+                            {/* Add other services here as needed */}
+                        </ul>
+                    </div>
 
-        {/* Kolom 4: Kontak */}
-        <div>
-          <h3 className="text-white font-semibold mb-4">Kontak Kami</h3>
-          <ul className="space-y-3 text-sm">
-            <li className="flex items-start gap-2">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-blue-400 mt-1" />
-              <span>Gedung Rektorat Lt.3, Universitas Muhammadiyah Bangka Belitung, Jl. Pendidikan No.1, Pangkal Pinang</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="text-blue-400" />
-              (021) 12345678
-            </li>
-            <li className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faEnvelope} className="text-blue-400" />
-              haki@univ.edu
-            </li>
-            <li className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faClock} className="text-blue-400" />
-              Senin–Jumat: 08.00–16.00 WIB
-            </li>
-          </ul>
-        </div>
-      </div>
+                    {/* Column 4 - Contact */}
+                    <div>
+                        <h3 className="text-white font-bold text-lg mb-4">
+                            Kontak Kami
+                        </h3>
+                        <ul className="space-y-3">
+                            <li className="flex">
+                                <FontAwesomeIcon
+                                    icon={faMapMarkerAlt}
+                                    className="text-blue-400 mr-3 mt-1 w-5"
+                                />
+                                <span>
+                                    Gedung Rektorat Lt.3, Universitas
+                                    Muhammadiyah Bangka Belitung, Jl. Pendidikan
+                                    No.1, Pangkal Pinang
+                                </span>
+                            </li>
+                            <li className="flex items-center">
+                                <FontAwesomeIcon
+                                    icon={faPhone}
+                                    className="text-blue-400 mr-3 w-5"
+                                />
+                                <span>(+62) 821-7122-2017</span>
+                            </li>
+                            <li className="flex items-center">
+                                <FontAwesomeIcon
+                                    icon={faEnvelope}
+                                    className="text-blue-400 mr-3 w-5"
+                                />
+                                <Link
+                                    href="mailto:haki@univ.edu"
+                                    className="hover:text-blue-400 transition-colors duration-300"
+                                >
+                                    ubp@unmuhbabel.ac.id
+                                </Link>
+                            </li>
+                            <li className="flex items-center">
+                                <FontAwesomeIcon
+                                    icon={faClock}
+                                    className="text-blue-400 mr-3 w-5"
+                                />
+                                <span>Senin-Jumat: 08.00-16.00 WIB</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-      {/* Bottom */}
-      <div className="border-t border-gray-700 mt-10 pt-6 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>© 2023 Portal HAKI Universitas Muhammadiyah Bangka Belitung. Seluruh hak cipta dilindungi.</p>
-        <div className="flex gap-6">
-          <a href="#" className="hover:underline">Kebijakan Privasi</a>
-          <a href="#" className="hover:underline">Syarat & Ketentuan</a>
-          <a href="#" className="hover:underline">Peta Situs</a>
-        </div>
-      </div>
-    </footer>
-  );
+            {/* Footer Bottom - Copyright */}
+            <div className="border-t border-gray-800">
+                <div className="container mx-auto px-4 py-6">
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <p className="text-sm mb-4 md:mb-0">
+                            © {new Date().getFullYear()} Universitas
+                            Muhammadiyah Bangka Belitung. Seluruh hak cipta
+                            dilindungi.
+                        </p>
+                        <div className="flex space-x-4 text-sm">
+                            <Link
+                                href="/kebijakan-privasi"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Kebijakan Privasi
+                            </Link>
+                            <Link
+                                href="/syarat-ketentuan"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Syarat & Ketentuan
+                            </Link>
+                            <Link
+                                href="/peta-situs"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Beranda
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    );
 }
