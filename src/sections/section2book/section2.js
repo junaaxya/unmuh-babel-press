@@ -5,7 +5,7 @@ import Button from '@/components/ui/button/Button';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { BookCarousel } from '@/components/carousel';
 import SectionHeading from '@/components/common/SectionHeading';
-import { dummyNews } from '@/data/dummyNewBook';
+import { dummyNewBook } from '@/data/dummyNewBook';
 
 export default function Section2Books() {
     return (
@@ -39,7 +39,7 @@ export default function Section2Books() {
                         </Button>
                     </motion.div>
 
-                    <BookCarousel books={dummyNews} autoplay />
+                    <BookCarousel books={dummyNewBook} autoplay />
                 </div>
             </div>
         </section>

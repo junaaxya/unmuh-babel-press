@@ -5,6 +5,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import dummyBooks from '@/data/dummyBooks';
+
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarAlt,
@@ -18,6 +20,7 @@ import {
     faTwitter,
     faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons';
+import { dummyNewBook } from '@/data/dummyNewBook';
 
 const BookDetail = ({ params }) => {
     // Use React.use() to unwrap the params Promise
@@ -25,7 +28,8 @@ const BookDetail = ({ params }) => {
     const { id } = unwrappedParams;
     const [activeTab, setActiveTab] = useState('spesifikasi');
 
-    const book = dummyBooks.find((book) => book.id === parseInt(id));
+    const allBooks = [...dummyBooks, ...dummyNewBook];
+    const book = allBooks.find((book) => book.id === parseInt(id));
 
     if (!book) {
         return (
