@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import BookCard from '../Book/BookCard';
 import LazyItem from './LazyItem';
 
-export default function BookCarousel({ books, autoplay = true }) {
+export default function BookCarousel({ books, autoplay = true, }) {
     const scrollRef = useRef(null);
     const [dragging, setDragging] = useState(false);
 

@@ -49,7 +49,7 @@ export default function Navbar() {
                     <DarkModeToggle />
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
-                        className="md:hidden text-white text-lg"
+                        className="md:hidden text-blue-700 text-lg"
                     >
                         <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
                     </button>
@@ -79,7 +79,7 @@ export default function Navbar() {
                         </Link>
                     </li>
                     <li>
-                        <Link href="#" className="flex items-center py-2">
+                        <Link href="/catalog" className="flex items-center py-2">
                             <FontAwesomeIcon icon={faBook} className="mr-2" />
                             Katalog
                         </Link>

@@ -1,7 +1,7 @@
 'use client';
 import SectionHeading from '@/components/common/SectionHeading';
 import { NewsList, NewsLoading, NewsEmpty } from '@/components/News';
-import { dummyNews } from '@/data/dummyNews';
+import { dummyNews } from '@/data/dummyNewBook';
 
 export default function Section4NewsEvent() {
     const newsData = dummyNews;

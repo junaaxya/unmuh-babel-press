@@ -5,7 +5,7 @@ import Button from '@/components/ui/button/Button';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { BookCarousel } from '@/components/carousel';
 import SectionHeading from '@/components/common/SectionHeading';
-import dummyBooks from '@/data/dummyBooks';
+import { dummyNews } from '@/data/dummyNewBook';
 
 export default function Section2Books() {
     return (
@@ -19,7 +19,7 @@ export default function Section2Books() {
                 >
                     {' '}
                     <SectionHeading
-                        title="Buku Terbit Minggu Ini"
+                        title="Buku Terbit Bulan Ini"
                         subtitle=""
                     />
                 </motion.h2>
@@ -38,8 +38,8 @@ export default function Section2Books() {
                             Buku lainnya
                         </Button>
                     </motion.div>
-        
-                    <BookCarousel books={dummyBooks} autoplay />
+
+                    <BookCarousel books={dummyNews} autoplay />
                 </div>
             </div>
         </section>

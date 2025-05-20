@@ -142,7 +142,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/katalog"
+                                    href="/catalog"
                                     className="hover:text-blue-400 transition-colors duration-300 flex items-center"
                                 >
                                     <span className="text-blue-500 mr-2">
@@ -218,8 +218,9 @@ export default function Footer() {
                                 />
                                 <span>
                                     Gedung Rektorat Lt.3, Universitas
-                                    Muhammadiyah Bangka Belitung, Jl. Pendidikan
-                                    No.1, Pangkal Pinang
+                                    Muhammadiyah Bangka Belitung, Jl. KH Ahmad
+                                    Dahlan, Keramat, Rangkui, Pangkal Pinang,
+                                    Bangka Belitung
                                 </span>
                             </li>
                             <li className="flex items-center">
@@ -258,9 +259,8 @@ export default function Footer() {
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-sm mb-4 md:mb-0">
-                            © {new Date().getFullYear()} Universitas
-                            Muhammadiyah Bangka Belitung. Seluruh hak cipta
-                            dilindungi.
+                            © {new Date().getFullYear()} Unmuh Babel Press.
+                            Seluruh hak cipta dilindungi.
                         </p>
                         <div className="flex space-x-4 text-sm">
                             <Link

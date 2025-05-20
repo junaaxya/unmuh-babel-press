@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Button from '@/components/ui/button/Button';
 import { faBookOpen, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 export default function HeroSection() {
     return (
@@ -21,7 +22,7 @@ export default function HeroSection() {
                     </p>
                     <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                         <Button icon={faBookOpen} variant="primary">
-                            Lihat Katalog
+                           <Link href="/catalog">Lihat Katalog</Link> 
                         </Button>
                         <Button icon={faEnvelope} variant="outline">
                             Hubungi Kami
