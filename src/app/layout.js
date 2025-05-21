@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-    title: 'Unmuh Press - Penerbit Buku Digital Muhammadiyah Babel',
-    description: 'Unmuh Press adalah platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
+    title: 'Unmuh Babel Press - Penerbit Buku Digital Muhammadiyah Babel',
+    description: 'Unmuh Babel Press adalah platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
     keywords: 'buku, penerbitan, digital, universitas muhammadiyah bangka belitung, unmuhpress',
     authors: [{ name: 'Unmuh Press Team', url: 'https://unmuhbabelpress.com' }],
     openGraph: {
-        title: 'Unmuh Press - Penerbit Buku Digital Muhammadiyah Babel',
+        title: 'Unmuh Babel Press - Penerbit Buku Digital Muhammadiyah Babel',
         description: 'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
         url: 'https://unmuhbabelpress.com',
         siteName: 'Unmuh Press',
@@ -39,6 +39,9 @@ export const metadata = {
         title: 'Unmuh Press - Penerbit Buku Digital Muhammadiyah Babel',
         description: 'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
         images: ['https://unmuhbabelpress.com/unmuhpress.ong'],
+    },
+    icons: {
+        icon: '/favicon32.png', 
     },
 };
 

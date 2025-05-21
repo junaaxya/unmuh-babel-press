@@ -6,9 +6,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import BookCard from '../Book/BookCard';
 import LazyItem from './LazyItem';
 
-export default function BookCarousel({ books, autoplay = true, }) {
+export default function BookCarousel({ books, autoplay = true }) {
     const scrollRef = useRef(null);
     const [dragging, setDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
 
     // Auto-scroll every 3s
     useEffect(() => {
@@ -36,6 +38,25 @@ export default function BookCarousel({ books, autoplay = true, }) {
         scrollRef.current?.scrollBy({ left: offset, behavior: 'smooth' });
     };
 
+    // Touch event handlers for mobile
+    const handleTouchStart = (e) => {
+        setDragging(true);
+        setStartX(e.touches[0].pageX);
+        setScrollLeft(scrollRef.current.scrollLeft);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!dragging) return;
+        e.preventDefault();
+        const x = e.touches[0].pageX;
+        const walk = (x - startX) * 2; // Multiply for faster scroll
+        scrollRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleTouchEnd = () => {
+        setDragging(false);
+    };
+
     return (
         <div className="relative w-full group overflow-x-hidden">
             {/* LEFT ARROW */}
@@ -50,13 +71,16 @@ export default function BookCarousel({ books, autoplay = true, }) {
             {/* SCROLL CONTAINER */}
             <motion.div
                 ref={scrollRef}
-                className="flex space-x-4 px-6 scrollbar-hide snap-x snap-mandatory overflow-hidden"
+                className="flex space-x-4 px-6 scrollbar-hide snap-x snap-mandatory overflow-x-auto touch-pan-x"
                 onMouseDown={() => setDragging(true)}
                 onMouseUp={() => setDragging(false)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
-                tabIndex={0} // Allow keyboard focus
+                tabIndex={0}
             >
                 {(books ?? []).map((book) => (
                     <LazyItem key={book.id}>
