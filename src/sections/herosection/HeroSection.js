@@ -21,9 +21,11 @@ export default function HeroSection() {
                         mahasiswa.
                     </p>
                     <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <Button icon={faBookOpen} variant="primary">
-                           <Link href="/catalog">Lihat Katalog</Link> 
-                        </Button>
+                        <Link href="/catalog">
+                            <Button icon={faBookOpen} variant="primary">
+                                Lihat Katalog
+                            </Button>
+                        </Link>
                         <Button icon={faEnvelope} variant="outline">
                             Hubungi Kami
                         </Button>
