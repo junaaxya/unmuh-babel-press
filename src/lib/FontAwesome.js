@@ -17,7 +17,6 @@ import {
     faClock,
 } from '@fortawesome/free-solid-svg-icons';
 
-
 import {
     faFacebookF,
     faTwitter,
