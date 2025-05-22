@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Head from 'next/head';
 import { BookCard } from '@/components/Book';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons';
 import dummyBooks from '@/data/dummyBooks';
 import { dummyNewBook } from '@/data/dummyNewBook';
-
+import Seo from '@/components/common/Seo';
 
 
 export default function CatalogPage() {
@@ -15,62 +14,55 @@ export default function CatalogPage() {
     const [activeCategory, setActiveCategory] = useState('all');
 
     const allBooksRaw = useMemo(() => [...dummyBooks, ...dummyNewBook], []);
+    const normalizedBooks = useMemo(
+        () =>
+            allBooksRaw.map((book) => ({
+                id: book.id || Math.random().toString(36).substring(2, 9),
+                title: book.title || 'Judul Tidak Tersedia',
+                Penulis: book.Penulis || 'Penulis Tidak Diketahui',
+                kategori: book.kategori || 'Umum',
+                image: book.image || '/default-book-cover.jpg',
+                tahun_terbit: book.tahun_terbit || '-',
+                harga: book.harga || 'N/A',
+            })),
+        [allBooksRaw]
+    );
 
-    // Validasi dan normalisasi data dummyBooks
-    const normalizedBooks = useMemo(() => {
-    return allBooksRaw.map((book) => ({
-        id: book.id || Math.random().toString(36).substring(2, 9),
-        title: book.title || 'Judul Tidak Tersedia',
-        Penulis: book.Penulis || 'Penulis Tidak Diketahui',
-        kategori: book.kategori || 'Umum',
-        image: book.image || '/default-book-cover.jpg',
-        tahun_terbit: book.tahun_terbit || '-',
-    }));
-}, [allBooksRaw]);
+    const categories = useMemo(
+        () => [...new Set(normalizedBooks.map((b) => b.kategori))],
+        [normalizedBooks]
+    );
 
-    // Extract unique categories - bungkus dengan useMemo agar tidak dibuat ulang setiap render
-    const categories = useMemo(() => {
-        return [...new Set(normalizedBooks.map((book) => book.kategori))];
-    }, [normalizedBooks]);
-
-    // Filter books
     const filteredBooks = useMemo(() => {
-        const searchLower = searchTerm.toLowerCase();
-
-        return normalizedBooks.filter((book) => {
-            const matchesSearch =
-                book.title.toLowerCase().includes(searchLower) ||
-                book.Penulis.toLowerCase().includes(searchLower);
-
-            const matchesCategory =
-                activeCategory === 'all' || book.kategori === activeCategory;
-
-            return matchesSearch && matchesCategory;
-        });
+        const search = searchTerm.toLowerCase();
+        return normalizedBooks.filter(
+            (book) =>
+                (book.title.toLowerCase().includes(search) ||
+                    book.Penulis.toLowerCase().includes(search)) &&
+                (activeCategory === 'all' || book.kategori === activeCategory)
+        );
     }, [searchTerm, activeCategory, normalizedBooks]);
 
-    // Group books by category
     const booksByCategory = useMemo(() => {
         const group = {};
-        categories.forEach((category) => {
-            group[category] = filteredBooks.filter(
-                (book) => book.kategori === category
-            );
+        categories.forEach((cat) => {
+            group[cat] = filteredBooks.filter((book) => book.kategori === cat);
         });
         return group;
     }, [categories, filteredBooks]);
+
     return (
         <>
-            <Head>
-                <title>Katalog Buku | UnMuh Press</title>
-                <meta
-                    name="description"
-                    content="Katalog lengkap buku terbitan UnMuh Press"
-                />
-            </Head>
+            <Seo
+                title="Katalog Buku"
+                description="Lihat koleksi buku terbaru dari Unmuh Press."
+                image="https://unmuhbabelpress.com/og-catalog.jpg"
+                url="https://unmuhbabelpress.com/catalog"
+            />
 
             <div className="bg-gray-50 min-h-screen py-12">
                 <div className="container mx-auto px-4">
+                    {/* Header */}
                     <div className="text-center mb-10">
                         <h1 className="text-4xl font-bold text-gray-800 mb-3">
                             Katalog Buku
@@ -86,26 +78,27 @@ export default function CatalogPage() {
                             <div className="flex-grow relative">
                                 <FontAwesomeIcon
                                     icon={faSearch}
-                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                                    className="absolute w-4 left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                                    fixedWidth
                                 />
                                 <input
                                     type="text"
                                     placeholder="Cari judul atau penulis..."
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full pl-10 pr-4 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     value={searchTerm}
                                     onChange={(e) =>
                                         setSearchTerm(e.target.value)
                                     }
                                 />
                             </div>
-
                             <div className="flex items-center gap-2">
                                 <FontAwesomeIcon
                                     icon={faFilter}
-                                    className="text-gray-700"
+                                    className="w-4 text-gray-700"
+fixedWidth
                                 />
                                 <select
-                                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={activeCategory}
                                     onChange={(e) =>
                                         setActiveCategory(e.target.value)
@@ -120,14 +113,13 @@ export default function CatalogPage() {
                                 </select>
                             </div>
                         </div>
-
                         <div className="mt-4 text-gray-500 text-sm">
                             Menampilkan {filteredBooks.length} dari{' '}
                             {normalizedBooks.length} buku
                         </div>
                     </div>
 
-                    {/* Books Display */}
+                    {/* Book Display */}
                     {filteredBooks.length === 0 ? (
                         <div className="text-center py-16">
                             <div className="text-5xl text-gray-300 mb-4">
@@ -151,56 +143,32 @@ export default function CatalogPage() {
                             </button>
                         </div>
                     ) : activeCategory === 'all' ? (
-                        // Tampilkan berdasarkan kategori
                         categories.map((category) => {
-                            const booksInCategory =
-                                booksByCategory[category] || [];
-                            if (booksInCategory.length === 0) return null;
-
+                            const books = booksByCategory[category];
+                            if (!books.length) return null;
                             return (
                                 <div key={category} className="mb-12">
                                     <div className="flex items-center mb-6">
                                         <div className="w-1 h-16 bg-blue-600 mr-4"></div>
-                                        <div>
-                                            <h2 className="text-2xl font-bold text-gray-800">
-                                                {category}
-                                                <span className="ml-2 text-sm font-normal text-gray-500">
-                                                    ({booksInCategory.length}{' '}
-                                                    buku)
-                                                </span>
-                                            </h2>
-                                        </div>
+                                        <h2 className="text-2xl font-bold text-gray-800">
+                                            {category}
+                                        </h2>
+                                        <span className="ml-2 text-sm text-gray-500">
+                                            ({books.length} buku)
+                                        </span>
                                     </div>
-
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                        {booksInCategory.map((book) => (
-                                            <BookCard
-                                                key={book.id}
-                                                id={book.id}
-                                                title={book.title}
-                                                kategori={book.kategori}
-                                                image={book.image}
-                                                tahun_terbit={book.tahun_terbit}
-                                                harga={book.harga}
-                                            />
+                                        {books.map((book) => (
+                                            <BookCard key={book.id} {...book} />
                                         ))}
                                     </div>
                                 </div>
                             );
                         })
                     ) : (
-                        // Tampilkan buku dalam kategori tertentu
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {filteredBooks.map((book) => (
-                                <BookCard
-                                    key={book.id}
-                                    id={book.id}
-                                    title={book.title}
-                                    kategori={book.kategori}
-                                    image={book.image}
-                                    tahun_terbit={book.tahun_terbit}
-                                    harga={book.harga}
-                                />
+                                <BookCard key={book.id} {...book} />
                             ))}
                         </div>
                     )}
