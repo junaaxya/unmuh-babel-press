@@ -41,7 +41,7 @@ export const metadata = {
         images: ['https://unmuhbabelpress.com/unmuhpress.ong'],
     },
     icons: {
-        icon: '/favicon32.png', 
+        icon: '/favicon.ico', 
     },
 };
 
