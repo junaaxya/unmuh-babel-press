@@ -14,20 +14,20 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model Admin
+ * Model admin
  * 
  */
-export type Admin = $Result.DefaultSelection<Prisma.$AdminPayload>
+export type admin = $Result.DefaultSelection<Prisma.$adminPayload>
 /**
- * Model ListBuku
+ * Model berita
  * 
  */
-export type ListBuku = $Result.DefaultSelection<Prisma.$ListBukuPayload>
+export type berita = $Result.DefaultSelection<Prisma.$beritaPayload>
 /**
- * Model Berita
+ * Model listbuku
  * 
  */
-export type Berita = $Result.DefaultSelection<Prisma.$BeritaPayload>
+export type listbuku = $Result.DefaultSelection<Prisma.$listbukuPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -155,34 +155,34 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.admin`: Exposes CRUD operations for the **Admin** model.
+   * `prisma.admin`: Exposes CRUD operations for the **admin** model.
     * Example usage:
     * ```ts
     * // Fetch zero or more Admins
     * const admins = await prisma.admin.findMany()
     * ```
     */
-  get admin(): Prisma.AdminDelegate<ExtArgs, ClientOptions>;
+  get admin(): Prisma.adminDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.listBuku`: Exposes CRUD operations for the **ListBuku** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ListBukus
-    * const listBukus = await prisma.listBuku.findMany()
-    * ```
-    */
-  get listBuku(): Prisma.ListBukuDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.berita`: Exposes CRUD operations for the **Berita** model.
+   * `prisma.berita`: Exposes CRUD operations for the **berita** model.
     * Example usage:
     * ```ts
     * // Fetch zero or more Beritas
     * const beritas = await prisma.berita.findMany()
     * ```
     */
-  get berita(): Prisma.BeritaDelegate<ExtArgs, ClientOptions>;
+  get berita(): Prisma.beritaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.listbuku`: Exposes CRUD operations for the **listbuku** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Listbukus
+    * const listbukus = await prisma.listbuku.findMany()
+    * ```
+    */
+  get listbuku(): Prisma.listbukuDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -623,9 +623,9 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Admin: 'Admin',
-    ListBuku: 'ListBuku',
-    Berita: 'Berita'
+    admin: 'admin',
+    berita: 'berita',
+    listbuku: 'listbuku'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -644,205 +644,205 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "listBuku" | "berita"
+      modelProps: "admin" | "berita" | "listbuku"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      Admin: {
-        payload: Prisma.$AdminPayload<ExtArgs>
-        fields: Prisma.AdminFieldRefs
+      admin: {
+        payload: Prisma.$adminPayload<ExtArgs>
+        fields: Prisma.adminFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AdminFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload> | null
+            args: Prisma.adminFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AdminFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           findFirst: {
-            args: Prisma.AdminFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload> | null
+            args: Prisma.adminFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AdminFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           findMany: {
-            args: Prisma.AdminFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>[]
+            args: Prisma.adminFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>[]
           }
           create: {
-            args: Prisma.AdminCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           createMany: {
-            args: Prisma.AdminCreateManyArgs<ExtArgs>
+            args: Prisma.adminCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.AdminDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           update: {
-            args: Prisma.AdminUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           deleteMany: {
-            args: Prisma.AdminDeleteManyArgs<ExtArgs>
+            args: Prisma.adminDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AdminUpdateManyArgs<ExtArgs>
+            args: Prisma.adminUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.AdminUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
+            args: Prisma.adminUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$adminPayload>
           }
           aggregate: {
             args: Prisma.AdminAggregateArgs<ExtArgs>
             result: $Utils.Optional<AggregateAdmin>
           }
           groupBy: {
-            args: Prisma.AdminGroupByArgs<ExtArgs>
+            args: Prisma.adminGroupByArgs<ExtArgs>
             result: $Utils.Optional<AdminGroupByOutputType>[]
           }
           count: {
-            args: Prisma.AdminCountArgs<ExtArgs>
+            args: Prisma.adminCountArgs<ExtArgs>
             result: $Utils.Optional<AdminCountAggregateOutputType> | number
           }
         }
       }
-      ListBuku: {
-        payload: Prisma.$ListBukuPayload<ExtArgs>
-        fields: Prisma.ListBukuFieldRefs
+      berita: {
+        payload: Prisma.$beritaPayload<ExtArgs>
+        fields: Prisma.beritaFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ListBukuFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload> | null
+            args: Prisma.beritaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ListBukuFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
+            args: Prisma.beritaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           findFirst: {
-            args: Prisma.ListBukuFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload> | null
+            args: Prisma.beritaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ListBukuFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
+            args: Prisma.beritaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           findMany: {
-            args: Prisma.ListBukuFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>[]
+            args: Prisma.beritaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>[]
           }
           create: {
-            args: Prisma.ListBukuCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
+            args: Prisma.beritaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           createMany: {
-            args: Prisma.ListBukuCreateManyArgs<ExtArgs>
+            args: Prisma.beritaCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.ListBukuDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
+            args: Prisma.beritaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           update: {
-            args: Prisma.ListBukuUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
+            args: Prisma.beritaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           deleteMany: {
-            args: Prisma.ListBukuDeleteManyArgs<ExtArgs>
+            args: Prisma.beritaDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ListBukuUpdateManyArgs<ExtArgs>
+            args: Prisma.beritaUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.ListBukuUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListBukuPayload>
-          }
-          aggregate: {
-            args: Prisma.ListBukuAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateListBuku>
-          }
-          groupBy: {
-            args: Prisma.ListBukuGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ListBukuGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ListBukuCountArgs<ExtArgs>
-            result: $Utils.Optional<ListBukuCountAggregateOutputType> | number
-          }
-        }
-      }
-      Berita: {
-        payload: Prisma.$BeritaPayload<ExtArgs>
-        fields: Prisma.BeritaFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.BeritaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.BeritaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
-          }
-          findFirst: {
-            args: Prisma.BeritaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.BeritaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
-          }
-          findMany: {
-            args: Prisma.BeritaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>[]
-          }
-          create: {
-            args: Prisma.BeritaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
-          }
-          createMany: {
-            args: Prisma.BeritaCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.BeritaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
-          }
-          update: {
-            args: Prisma.BeritaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
-          }
-          deleteMany: {
-            args: Prisma.BeritaDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.BeritaUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.BeritaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BeritaPayload>
+            args: Prisma.beritaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$beritaPayload>
           }
           aggregate: {
             args: Prisma.BeritaAggregateArgs<ExtArgs>
             result: $Utils.Optional<AggregateBerita>
           }
           groupBy: {
-            args: Prisma.BeritaGroupByArgs<ExtArgs>
+            args: Prisma.beritaGroupByArgs<ExtArgs>
             result: $Utils.Optional<BeritaGroupByOutputType>[]
           }
           count: {
-            args: Prisma.BeritaCountArgs<ExtArgs>
+            args: Prisma.beritaCountArgs<ExtArgs>
             result: $Utils.Optional<BeritaCountAggregateOutputType> | number
+          }
+        }
+      }
+      listbuku: {
+        payload: Prisma.$listbukuPayload<ExtArgs>
+        fields: Prisma.listbukuFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.listbukuFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.listbukuFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          findFirst: {
+            args: Prisma.listbukuFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.listbukuFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          findMany: {
+            args: Prisma.listbukuFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>[]
+          }
+          create: {
+            args: Prisma.listbukuCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          createMany: {
+            args: Prisma.listbukuCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.listbukuDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          update: {
+            args: Prisma.listbukuUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          deleteMany: {
+            args: Prisma.listbukuDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.listbukuUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.listbukuUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$listbukuPayload>
+          }
+          aggregate: {
+            args: Prisma.ListbukuAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateListbuku>
+          }
+          groupBy: {
+            args: Prisma.listbukuGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ListbukuGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.listbukuCountArgs<ExtArgs>
+            result: $Utils.Optional<ListbukuCountAggregateOutputType> | number
           }
         }
       }
@@ -930,9 +930,9 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    admin?: AdminOmit
-    listBuku?: ListBukuOmit
-    berita?: BeritaOmit
+    admin?: adminOmit
+    berita?: beritaOmit
+    listbuku?: listbukuOmit
   }
 
   /* Types for Logging */
@@ -1028,7 +1028,7 @@ export namespace Prisma {
    */
 
   /**
-   * Model Admin
+   * Model admin
    */
 
   export type AggregateAdmin = {
@@ -1102,37 +1102,37 @@ export namespace Prisma {
 
   export type AdminAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Admin to aggregate.
+     * Filter which admin to aggregate.
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Admins to fetch.
+     * Determine the order of admins to fetch.
      */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: AdminWhereUniqueInput
+    cursor?: adminWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Admins from the position of the cursor.
+     * Take `±n` admins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Admins.
+     * Skip the first `n` admins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Admins
+     * Count returned admins
     **/
     _count?: true | AdminCountAggregateInputType
     /**
@@ -1172,11 +1172,11 @@ export namespace Prisma {
 
 
 
-  export type AdminGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AdminWhereInput
-    orderBy?: AdminOrderByWithAggregationInput | AdminOrderByWithAggregationInput[]
+  export type adminGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: adminWhereInput
+    orderBy?: adminOrderByWithAggregationInput | adminOrderByWithAggregationInput[]
     by: AdminScalarFieldEnum[] | AdminScalarFieldEnum
-    having?: AdminScalarWhereWithAggregatesInput
+    having?: adminScalarWhereWithAggregatesInput
     take?: number
     skip?: number
     _count?: AdminCountAggregateInputType | true
@@ -1198,7 +1198,7 @@ export namespace Prisma {
     _max: AdminMaxAggregateOutputType | null
   }
 
-  type GetAdminGroupByPayload<T extends AdminGroupByArgs> = Prisma.PrismaPromise<
+  type GetAdminGroupByPayload<T extends adminGroupByArgs> = Prisma.PrismaPromise<
     Array<
       PickEnumerable<AdminGroupByOutputType, T['by']> &
         {
@@ -1212,7 +1212,7 @@ export namespace Prisma {
     >
 
 
-  export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type adminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
     password?: boolean
@@ -1221,17 +1221,17 @@ export namespace Prisma {
 
 
 
-  export type AdminSelectScalar = {
+  export type adminSelectScalar = {
     id?: boolean
     email?: boolean
     password?: boolean
     createdAt?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "createdAt", ExtArgs["result"]["admin"]>
+  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "createdAt", ExtArgs["result"]["admin"]>
 
-  export type $AdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Admin"
+  export type $adminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "admin"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1242,18 +1242,18 @@ export namespace Prisma {
     composites: {}
   }
 
-  type AdminGetPayload<S extends boolean | null | undefined | AdminDefaultArgs> = $Result.GetResult<Prisma.$AdminPayload, S>
+  type adminGetPayload<S extends boolean | null | undefined | adminDefaultArgs> = $Result.GetResult<Prisma.$adminPayload, S>
 
-  type AdminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AdminFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type adminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<adminFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: AdminCountAggregateInputType | true
     }
 
-  export interface AdminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Admin'], meta: { name: 'Admin' } }
+  export interface adminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['admin'], meta: { name: 'admin' } }
     /**
      * Find zero or one Admin that matches the filter.
-     * @param {AdminFindUniqueArgs} args - Arguments to find a Admin
+     * @param {adminFindUniqueArgs} args - Arguments to find a Admin
      * @example
      * // Get one Admin
      * const admin = await prisma.admin.findUnique({
@@ -1262,12 +1262,12 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends AdminFindUniqueArgs>(args: SelectSubset<T, AdminFindUniqueArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends adminFindUniqueArgs>(args: SelectSubset<T, adminFindUniqueArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Admin that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {AdminFindUniqueOrThrowArgs} args - Arguments to find a Admin
+     * @param {adminFindUniqueOrThrowArgs} args - Arguments to find a Admin
      * @example
      * // Get one Admin
      * const admin = await prisma.admin.findUniqueOrThrow({
@@ -1276,13 +1276,13 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AdminFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends adminFindUniqueOrThrowArgs>(args: SelectSubset<T, adminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Admin that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindFirstArgs} args - Arguments to find a Admin
+     * @param {adminFindFirstArgs} args - Arguments to find a Admin
      * @example
      * // Get one Admin
      * const admin = await prisma.admin.findFirst({
@@ -1291,14 +1291,14 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends AdminFindFirstArgs>(args?: SelectSubset<T, AdminFindFirstArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends adminFindFirstArgs>(args?: SelectSubset<T, adminFindFirstArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Admin that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindFirstOrThrowArgs} args - Arguments to find a Admin
+     * @param {adminFindFirstOrThrowArgs} args - Arguments to find a Admin
      * @example
      * // Get one Admin
      * const admin = await prisma.admin.findFirstOrThrow({
@@ -1307,13 +1307,13 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends AdminFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends adminFindFirstOrThrowArgs>(args?: SelectSubset<T, adminFindFirstOrThrowArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Admins that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {adminFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Admins
      * const admins = await prisma.admin.findMany()
@@ -1325,11 +1325,11 @@ export namespace Prisma {
      * const adminWithIdOnly = await prisma.admin.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AdminFindManyArgs>(args?: SelectSubset<T, AdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends adminFindManyArgs>(args?: SelectSubset<T, adminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Admin.
-     * @param {AdminCreateArgs} args - Arguments to create a Admin.
+     * @param {adminCreateArgs} args - Arguments to create a Admin.
      * @example
      * // Create one Admin
      * const Admin = await prisma.admin.create({
@@ -1339,11 +1339,11 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends AdminCreateArgs>(args: SelectSubset<T, AdminCreateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends adminCreateArgs>(args: SelectSubset<T, adminCreateArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Admins.
-     * @param {AdminCreateManyArgs} args - Arguments to create many Admins.
+     * @param {adminCreateManyArgs} args - Arguments to create many Admins.
      * @example
      * // Create many Admins
      * const admin = await prisma.admin.createMany({
@@ -1353,11 +1353,11 @@ export namespace Prisma {
      * })
      *     
      */
-    createMany<T extends AdminCreateManyArgs>(args?: SelectSubset<T, AdminCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends adminCreateManyArgs>(args?: SelectSubset<T, adminCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Admin.
-     * @param {AdminDeleteArgs} args - Arguments to delete one Admin.
+     * @param {adminDeleteArgs} args - Arguments to delete one Admin.
      * @example
      * // Delete one Admin
      * const Admin = await prisma.admin.delete({
@@ -1367,11 +1367,11 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends AdminDeleteArgs>(args: SelectSubset<T, AdminDeleteArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends adminDeleteArgs>(args: SelectSubset<T, adminDeleteArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Admin.
-     * @param {AdminUpdateArgs} args - Arguments to update one Admin.
+     * @param {adminUpdateArgs} args - Arguments to update one Admin.
      * @example
      * // Update one Admin
      * const admin = await prisma.admin.update({
@@ -1384,11 +1384,11 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AdminUpdateArgs>(args: SelectSubset<T, AdminUpdateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends adminUpdateArgs>(args: SelectSubset<T, adminUpdateArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Admins.
-     * @param {AdminDeleteManyArgs} args - Arguments to filter Admins to delete.
+     * @param {adminDeleteManyArgs} args - Arguments to filter Admins to delete.
      * @example
      * // Delete a few Admins
      * const { count } = await prisma.admin.deleteMany({
@@ -1398,13 +1398,13 @@ export namespace Prisma {
      * })
      * 
      */
-    deleteMany<T extends AdminDeleteManyArgs>(args?: SelectSubset<T, AdminDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends adminDeleteManyArgs>(args?: SelectSubset<T, adminDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Admins.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {adminUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
      * // Update many Admins
      * const admin = await prisma.admin.updateMany({
@@ -1417,11 +1417,11 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends AdminUpdateManyArgs>(args: SelectSubset<T, AdminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends adminUpdateManyArgs>(args: SelectSubset<T, adminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Admin.
-     * @param {AdminUpsertArgs} args - Arguments to update or create a Admin.
+     * @param {adminUpsertArgs} args - Arguments to update or create a Admin.
      * @example
      * // Update or create a Admin
      * const admin = await prisma.admin.upsert({
@@ -1436,14 +1436,14 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends AdminUpsertArgs>(args: SelectSubset<T, AdminUpsertArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends adminUpsertArgs>(args: SelectSubset<T, adminUpsertArgs<ExtArgs>>): Prisma__adminClient<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
      * Count the number of Admins.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminCountArgs} args - Arguments to filter Admins to count.
+     * @param {adminCountArgs} args - Arguments to filter Admins to count.
      * @example
      * // Count the number of Admins
      * const count = await prisma.admin.count({
@@ -1452,8 +1452,8 @@ export namespace Prisma {
      *   }
      * })
     **/
-    count<T extends AdminCountArgs>(
-      args?: Subset<T, AdminCountArgs>,
+    count<T extends adminCountArgs>(
+      args?: Subset<T, adminCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
@@ -1492,7 +1492,7 @@ export namespace Prisma {
      * Group by Admin.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminGroupByArgs} args - Group by arguments.
+     * @param {adminGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -1507,14 +1507,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends AdminGroupByArgs,
+      T extends adminGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AdminGroupByArgs['orderBy'] }
-        : { orderBy?: AdminGroupByArgs['orderBy'] },
+        ? { orderBy: adminGroupByArgs['orderBy'] }
+        : { orderBy?: adminGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -1563,20 +1563,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, AdminGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, adminGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Admin model
+   * Fields of the admin model
    */
-  readonly fields: AdminFieldRefs;
+  readonly fields: adminFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Admin.
+   * The delegate class that acts as a "Promise-like" for admin.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__adminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1604,1300 +1604,336 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Admin model
+   * Fields of the admin model
    */
-  interface AdminFieldRefs {
-    readonly id: FieldRef<"Admin", 'Int'>
-    readonly email: FieldRef<"Admin", 'String'>
-    readonly password: FieldRef<"Admin", 'String'>
-    readonly createdAt: FieldRef<"Admin", 'DateTime'>
+  interface adminFieldRefs {
+    readonly id: FieldRef<"admin", 'Int'>
+    readonly email: FieldRef<"admin", 'String'>
+    readonly password: FieldRef<"admin", 'String'>
+    readonly createdAt: FieldRef<"admin", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Admin findUnique
+   * admin findUnique
    */
-  export type AdminFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter, which Admin to fetch.
+     * Filter, which admin to fetch.
      */
-    where: AdminWhereUniqueInput
+    where: adminWhereUniqueInput
   }
 
   /**
-   * Admin findUniqueOrThrow
+   * admin findUniqueOrThrow
    */
-  export type AdminFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter, which Admin to fetch.
+     * Filter, which admin to fetch.
      */
-    where: AdminWhereUniqueInput
+    where: adminWhereUniqueInput
   }
 
   /**
-   * Admin findFirst
+   * admin findFirst
    */
-  export type AdminFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter, which Admin to fetch.
+     * Filter, which admin to fetch.
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Admins to fetch.
+     * Determine the order of admins to fetch.
      */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Admins.
+     * Sets the position for searching for admins.
      */
-    cursor?: AdminWhereUniqueInput
+    cursor?: adminWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Admins from the position of the cursor.
+     * Take `±n` admins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Admins.
+     * Skip the first `n` admins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Admins.
+     * Filter by unique combinations of admins.
      */
     distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
   }
 
   /**
-   * Admin findFirstOrThrow
+   * admin findFirstOrThrow
    */
-  export type AdminFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter, which Admin to fetch.
+     * Filter, which admin to fetch.
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Admins to fetch.
+     * Determine the order of admins to fetch.
      */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Admins.
+     * Sets the position for searching for admins.
      */
-    cursor?: AdminWhereUniqueInput
+    cursor?: adminWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Admins from the position of the cursor.
+     * Take `±n` admins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Admins.
+     * Skip the first `n` admins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Admins.
+     * Filter by unique combinations of admins.
      */
     distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
   }
 
   /**
-   * Admin findMany
+   * admin findMany
    */
-  export type AdminFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter, which Admins to fetch.
+     * Filter, which admins to fetch.
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Admins to fetch.
+     * Determine the order of admins to fetch.
      */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Admins.
+     * Sets the position for listing admins.
      */
-    cursor?: AdminWhereUniqueInput
+    cursor?: adminWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Admins from the position of the cursor.
+     * Take `±n` admins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Admins.
+     * Skip the first `n` admins.
      */
     skip?: number
     distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
   }
 
   /**
-   * Admin create
+   * admin create
    */
-  export type AdminCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * The data needed to create a Admin.
+     * The data needed to create a admin.
      */
-    data: XOR<AdminCreateInput, AdminUncheckedCreateInput>
+    data: XOR<adminCreateInput, adminUncheckedCreateInput>
   }
 
   /**
-   * Admin createMany
+   * admin createMany
    */
-  export type AdminCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Admins.
+     * The data used to create many admins.
      */
-    data: AdminCreateManyInput | AdminCreateManyInput[]
+    data: adminCreateManyInput | adminCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Admin update
+   * admin update
    */
-  export type AdminUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * The data needed to update a Admin.
+     * The data needed to update a admin.
      */
-    data: XOR<AdminUpdateInput, AdminUncheckedUpdateInput>
+    data: XOR<adminUpdateInput, adminUncheckedUpdateInput>
     /**
-     * Choose, which Admin to update.
+     * Choose, which admin to update.
      */
-    where: AdminWhereUniqueInput
+    where: adminWhereUniqueInput
   }
 
   /**
-   * Admin updateMany
+   * admin updateMany
    */
-  export type AdminUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Admins.
+     * The data used to update admins.
      */
-    data: XOR<AdminUpdateManyMutationInput, AdminUncheckedUpdateManyInput>
+    data: XOR<adminUpdateManyMutationInput, adminUncheckedUpdateManyInput>
     /**
-     * Filter which Admins to update
+     * Filter which admins to update
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
-     * Limit how many Admins to update.
+     * Limit how many admins to update.
      */
     limit?: number
   }
 
   /**
-   * Admin upsert
+   * admin upsert
    */
-  export type AdminUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * The filter to search for the Admin to update in case it exists.
+     * The filter to search for the admin to update in case it exists.
      */
-    where: AdminWhereUniqueInput
+    where: adminWhereUniqueInput
     /**
-     * In case the Admin found by the `where` argument doesn't exist, create a new Admin with this data.
+     * In case the admin found by the `where` argument doesn't exist, create a new admin with this data.
      */
-    create: XOR<AdminCreateInput, AdminUncheckedCreateInput>
+    create: XOR<adminCreateInput, adminUncheckedCreateInput>
     /**
-     * In case the Admin was found with the provided `where` argument, update it with this data.
+     * In case the admin was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<AdminUpdateInput, AdminUncheckedUpdateInput>
+    update: XOR<adminUpdateInput, adminUncheckedUpdateInput>
   }
 
   /**
-   * Admin delete
+   * admin delete
    */
-  export type AdminDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
     /**
-     * Filter which Admin to delete.
+     * Filter which admin to delete.
      */
-    where: AdminWhereUniqueInput
+    where: adminWhereUniqueInput
   }
 
   /**
-   * Admin deleteMany
+   * admin deleteMany
    */
-  export type AdminDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Admins to delete
+     * Filter which admins to delete
      */
-    where?: AdminWhereInput
+    where?: adminWhereInput
     /**
-     * Limit how many Admins to delete.
+     * Limit how many admins to delete.
      */
     limit?: number
   }
 
   /**
-   * Admin without action
+   * admin without action
    */
-  export type AdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type adminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Admin
+     * Select specific fields to fetch from the admin
      */
-    select?: AdminSelect<ExtArgs> | null
+    select?: adminSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Admin
+     * Omit specific fields from the admin
      */
-    omit?: AdminOmit<ExtArgs> | null
+    omit?: adminOmit<ExtArgs> | null
   }
 
 
   /**
-   * Model ListBuku
-   */
-
-  export type AggregateListBuku = {
-    _count: ListBukuCountAggregateOutputType | null
-    _avg: ListBukuAvgAggregateOutputType | null
-    _sum: ListBukuSumAggregateOutputType | null
-    _min: ListBukuMinAggregateOutputType | null
-    _max: ListBukuMaxAggregateOutputType | null
-  }
-
-  export type ListBukuAvgAggregateOutputType = {
-    id: number | null
-    tahunTerbit: number | null
-  }
-
-  export type ListBukuSumAggregateOutputType = {
-    id: number | null
-    tahunTerbit: number | null
-  }
-
-  export type ListBukuMinAggregateOutputType = {
-    id: number | null
-    title: string | null
-    penulis: string | null
-    penerbit: string | null
-    tahunTerbit: number | null
-    kategori: string | null
-    sinopsis: string | null
-    coverUrl: string | null
-    createdAt: Date | null
-  }
-
-  export type ListBukuMaxAggregateOutputType = {
-    id: number | null
-    title: string | null
-    penulis: string | null
-    penerbit: string | null
-    tahunTerbit: number | null
-    kategori: string | null
-    sinopsis: string | null
-    coverUrl: string | null
-    createdAt: Date | null
-  }
-
-  export type ListBukuCountAggregateOutputType = {
-    id: number
-    title: number
-    penulis: number
-    penerbit: number
-    tahunTerbit: number
-    kategori: number
-    sinopsis: number
-    coverUrl: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ListBukuAvgAggregateInputType = {
-    id?: true
-    tahunTerbit?: true
-  }
-
-  export type ListBukuSumAggregateInputType = {
-    id?: true
-    tahunTerbit?: true
-  }
-
-  export type ListBukuMinAggregateInputType = {
-    id?: true
-    title?: true
-    penulis?: true
-    penerbit?: true
-    tahunTerbit?: true
-    kategori?: true
-    sinopsis?: true
-    coverUrl?: true
-    createdAt?: true
-  }
-
-  export type ListBukuMaxAggregateInputType = {
-    id?: true
-    title?: true
-    penulis?: true
-    penerbit?: true
-    tahunTerbit?: true
-    kategori?: true
-    sinopsis?: true
-    coverUrl?: true
-    createdAt?: true
-  }
-
-  export type ListBukuCountAggregateInputType = {
-    id?: true
-    title?: true
-    penulis?: true
-    penerbit?: true
-    tahunTerbit?: true
-    kategori?: true
-    sinopsis?: true
-    coverUrl?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ListBukuAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListBuku to aggregate.
-     */
-    where?: ListBukuWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListBukus to fetch.
-     */
-    orderBy?: ListBukuOrderByWithRelationInput | ListBukuOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ListBukuWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListBukus from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListBukus.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ListBukus
-    **/
-    _count?: true | ListBukuCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ListBukuAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ListBukuSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ListBukuMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ListBukuMaxAggregateInputType
-  }
-
-  export type GetListBukuAggregateType<T extends ListBukuAggregateArgs> = {
-        [P in keyof T & keyof AggregateListBuku]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateListBuku[P]>
-      : GetScalarType<T[P], AggregateListBuku[P]>
-  }
-
-
-
-
-  export type ListBukuGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListBukuWhereInput
-    orderBy?: ListBukuOrderByWithAggregationInput | ListBukuOrderByWithAggregationInput[]
-    by: ListBukuScalarFieldEnum[] | ListBukuScalarFieldEnum
-    having?: ListBukuScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ListBukuCountAggregateInputType | true
-    _avg?: ListBukuAvgAggregateInputType
-    _sum?: ListBukuSumAggregateInputType
-    _min?: ListBukuMinAggregateInputType
-    _max?: ListBukuMaxAggregateInputType
-  }
-
-  export type ListBukuGroupByOutputType = {
-    id: number
-    title: string
-    penulis: string
-    penerbit: string
-    tahunTerbit: number
-    kategori: string
-    sinopsis: string
-    coverUrl: string | null
-    createdAt: Date
-    _count: ListBukuCountAggregateOutputType | null
-    _avg: ListBukuAvgAggregateOutputType | null
-    _sum: ListBukuSumAggregateOutputType | null
-    _min: ListBukuMinAggregateOutputType | null
-    _max: ListBukuMaxAggregateOutputType | null
-  }
-
-  type GetListBukuGroupByPayload<T extends ListBukuGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ListBukuGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ListBukuGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ListBukuGroupByOutputType[P]>
-            : GetScalarType<T[P], ListBukuGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ListBukuSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    penulis?: boolean
-    penerbit?: boolean
-    tahunTerbit?: boolean
-    kategori?: boolean
-    sinopsis?: boolean
-    coverUrl?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["listBuku"]>
-
-
-
-  export type ListBukuSelectScalar = {
-    id?: boolean
-    title?: boolean
-    penulis?: boolean
-    penerbit?: boolean
-    tahunTerbit?: boolean
-    kategori?: boolean
-    sinopsis?: boolean
-    coverUrl?: boolean
-    createdAt?: boolean
-  }
-
-  export type ListBukuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "penulis" | "penerbit" | "tahunTerbit" | "kategori" | "sinopsis" | "coverUrl" | "createdAt", ExtArgs["result"]["listBuku"]>
-
-  export type $ListBukuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ListBuku"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      title: string
-      penulis: string
-      penerbit: string
-      tahunTerbit: number
-      kategori: string
-      sinopsis: string
-      coverUrl: string | null
-      createdAt: Date
-    }, ExtArgs["result"]["listBuku"]>
-    composites: {}
-  }
-
-  type ListBukuGetPayload<S extends boolean | null | undefined | ListBukuDefaultArgs> = $Result.GetResult<Prisma.$ListBukuPayload, S>
-
-  type ListBukuCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ListBukuFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ListBukuCountAggregateInputType | true
-    }
-
-  export interface ListBukuDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListBuku'], meta: { name: 'ListBuku' } }
-    /**
-     * Find zero or one ListBuku that matches the filter.
-     * @param {ListBukuFindUniqueArgs} args - Arguments to find a ListBuku
-     * @example
-     * // Get one ListBuku
-     * const listBuku = await prisma.listBuku.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ListBukuFindUniqueArgs>(args: SelectSubset<T, ListBukuFindUniqueArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ListBuku that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ListBukuFindUniqueOrThrowArgs} args - Arguments to find a ListBuku
-     * @example
-     * // Get one ListBuku
-     * const listBuku = await prisma.listBuku.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ListBukuFindUniqueOrThrowArgs>(args: SelectSubset<T, ListBukuFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListBuku that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuFindFirstArgs} args - Arguments to find a ListBuku
-     * @example
-     * // Get one ListBuku
-     * const listBuku = await prisma.listBuku.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ListBukuFindFirstArgs>(args?: SelectSubset<T, ListBukuFindFirstArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListBuku that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuFindFirstOrThrowArgs} args - Arguments to find a ListBuku
-     * @example
-     * // Get one ListBuku
-     * const listBuku = await prisma.listBuku.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ListBukuFindFirstOrThrowArgs>(args?: SelectSubset<T, ListBukuFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ListBukus that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ListBukus
-     * const listBukus = await prisma.listBuku.findMany()
-     * 
-     * // Get first 10 ListBukus
-     * const listBukus = await prisma.listBuku.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const listBukuWithIdOnly = await prisma.listBuku.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ListBukuFindManyArgs>(args?: SelectSubset<T, ListBukuFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ListBuku.
-     * @param {ListBukuCreateArgs} args - Arguments to create a ListBuku.
-     * @example
-     * // Create one ListBuku
-     * const ListBuku = await prisma.listBuku.create({
-     *   data: {
-     *     // ... data to create a ListBuku
-     *   }
-     * })
-     * 
-     */
-    create<T extends ListBukuCreateArgs>(args: SelectSubset<T, ListBukuCreateArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ListBukus.
-     * @param {ListBukuCreateManyArgs} args - Arguments to create many ListBukus.
-     * @example
-     * // Create many ListBukus
-     * const listBuku = await prisma.listBuku.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ListBukuCreateManyArgs>(args?: SelectSubset<T, ListBukuCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a ListBuku.
-     * @param {ListBukuDeleteArgs} args - Arguments to delete one ListBuku.
-     * @example
-     * // Delete one ListBuku
-     * const ListBuku = await prisma.listBuku.delete({
-     *   where: {
-     *     // ... filter to delete one ListBuku
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ListBukuDeleteArgs>(args: SelectSubset<T, ListBukuDeleteArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ListBuku.
-     * @param {ListBukuUpdateArgs} args - Arguments to update one ListBuku.
-     * @example
-     * // Update one ListBuku
-     * const listBuku = await prisma.listBuku.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ListBukuUpdateArgs>(args: SelectSubset<T, ListBukuUpdateArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ListBukus.
-     * @param {ListBukuDeleteManyArgs} args - Arguments to filter ListBukus to delete.
-     * @example
-     * // Delete a few ListBukus
-     * const { count } = await prisma.listBuku.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ListBukuDeleteManyArgs>(args?: SelectSubset<T, ListBukuDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ListBukus.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ListBukus
-     * const listBuku = await prisma.listBuku.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ListBukuUpdateManyArgs>(args: SelectSubset<T, ListBukuUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one ListBuku.
-     * @param {ListBukuUpsertArgs} args - Arguments to update or create a ListBuku.
-     * @example
-     * // Update or create a ListBuku
-     * const listBuku = await prisma.listBuku.upsert({
-     *   create: {
-     *     // ... data to create a ListBuku
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ListBuku we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ListBukuUpsertArgs>(args: SelectSubset<T, ListBukuUpsertArgs<ExtArgs>>): Prisma__ListBukuClient<$Result.GetResult<Prisma.$ListBukuPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ListBukus.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuCountArgs} args - Arguments to filter ListBukus to count.
-     * @example
-     * // Count the number of ListBukus
-     * const count = await prisma.listBuku.count({
-     *   where: {
-     *     // ... the filter for the ListBukus we want to count
-     *   }
-     * })
-    **/
-    count<T extends ListBukuCountArgs>(
-      args?: Subset<T, ListBukuCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ListBukuCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ListBuku.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ListBukuAggregateArgs>(args: Subset<T, ListBukuAggregateArgs>): Prisma.PrismaPromise<GetListBukuAggregateType<T>>
-
-    /**
-     * Group by ListBuku.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListBukuGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ListBukuGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ListBukuGroupByArgs['orderBy'] }
-        : { orderBy?: ListBukuGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ListBukuGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListBukuGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ListBuku model
-   */
-  readonly fields: ListBukuFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ListBuku.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ListBukuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ListBuku model
-   */
-  interface ListBukuFieldRefs {
-    readonly id: FieldRef<"ListBuku", 'Int'>
-    readonly title: FieldRef<"ListBuku", 'String'>
-    readonly penulis: FieldRef<"ListBuku", 'String'>
-    readonly penerbit: FieldRef<"ListBuku", 'String'>
-    readonly tahunTerbit: FieldRef<"ListBuku", 'Int'>
-    readonly kategori: FieldRef<"ListBuku", 'String'>
-    readonly sinopsis: FieldRef<"ListBuku", 'String'>
-    readonly coverUrl: FieldRef<"ListBuku", 'String'>
-    readonly createdAt: FieldRef<"ListBuku", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ListBuku findUnique
-   */
-  export type ListBukuFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter, which ListBuku to fetch.
-     */
-    where: ListBukuWhereUniqueInput
-  }
-
-  /**
-   * ListBuku findUniqueOrThrow
-   */
-  export type ListBukuFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter, which ListBuku to fetch.
-     */
-    where: ListBukuWhereUniqueInput
-  }
-
-  /**
-   * ListBuku findFirst
-   */
-  export type ListBukuFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter, which ListBuku to fetch.
-     */
-    where?: ListBukuWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListBukus to fetch.
-     */
-    orderBy?: ListBukuOrderByWithRelationInput | ListBukuOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListBukus.
-     */
-    cursor?: ListBukuWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListBukus from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListBukus.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListBukus.
-     */
-    distinct?: ListBukuScalarFieldEnum | ListBukuScalarFieldEnum[]
-  }
-
-  /**
-   * ListBuku findFirstOrThrow
-   */
-  export type ListBukuFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter, which ListBuku to fetch.
-     */
-    where?: ListBukuWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListBukus to fetch.
-     */
-    orderBy?: ListBukuOrderByWithRelationInput | ListBukuOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListBukus.
-     */
-    cursor?: ListBukuWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListBukus from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListBukus.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListBukus.
-     */
-    distinct?: ListBukuScalarFieldEnum | ListBukuScalarFieldEnum[]
-  }
-
-  /**
-   * ListBuku findMany
-   */
-  export type ListBukuFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter, which ListBukus to fetch.
-     */
-    where?: ListBukuWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListBukus to fetch.
-     */
-    orderBy?: ListBukuOrderByWithRelationInput | ListBukuOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ListBukus.
-     */
-    cursor?: ListBukuWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListBukus from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListBukus.
-     */
-    skip?: number
-    distinct?: ListBukuScalarFieldEnum | ListBukuScalarFieldEnum[]
-  }
-
-  /**
-   * ListBuku create
-   */
-  export type ListBukuCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * The data needed to create a ListBuku.
-     */
-    data: XOR<ListBukuCreateInput, ListBukuUncheckedCreateInput>
-  }
-
-  /**
-   * ListBuku createMany
-   */
-  export type ListBukuCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ListBukus.
-     */
-    data: ListBukuCreateManyInput | ListBukuCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ListBuku update
-   */
-  export type ListBukuUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * The data needed to update a ListBuku.
-     */
-    data: XOR<ListBukuUpdateInput, ListBukuUncheckedUpdateInput>
-    /**
-     * Choose, which ListBuku to update.
-     */
-    where: ListBukuWhereUniqueInput
-  }
-
-  /**
-   * ListBuku updateMany
-   */
-  export type ListBukuUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ListBukus.
-     */
-    data: XOR<ListBukuUpdateManyMutationInput, ListBukuUncheckedUpdateManyInput>
-    /**
-     * Filter which ListBukus to update
-     */
-    where?: ListBukuWhereInput
-    /**
-     * Limit how many ListBukus to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListBuku upsert
-   */
-  export type ListBukuUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * The filter to search for the ListBuku to update in case it exists.
-     */
-    where: ListBukuWhereUniqueInput
-    /**
-     * In case the ListBuku found by the `where` argument doesn't exist, create a new ListBuku with this data.
-     */
-    create: XOR<ListBukuCreateInput, ListBukuUncheckedCreateInput>
-    /**
-     * In case the ListBuku was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ListBukuUpdateInput, ListBukuUncheckedUpdateInput>
-  }
-
-  /**
-   * ListBuku delete
-   */
-  export type ListBukuDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-    /**
-     * Filter which ListBuku to delete.
-     */
-    where: ListBukuWhereUniqueInput
-  }
-
-  /**
-   * ListBuku deleteMany
-   */
-  export type ListBukuDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListBukus to delete
-     */
-    where?: ListBukuWhereInput
-    /**
-     * Limit how many ListBukus to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListBuku without action
-   */
-  export type ListBukuDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListBuku
-     */
-    select?: ListBukuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListBuku
-     */
-    omit?: ListBukuOmit<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Berita
+   * Model berita
    */
 
   export type AggregateBerita = {
@@ -2977,37 +2013,37 @@ export namespace Prisma {
 
   export type BeritaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Berita to aggregate.
+     * Filter which berita to aggregate.
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beritas to fetch.
+     * Determine the order of beritas to fetch.
      */
-    orderBy?: BeritaOrderByWithRelationInput | BeritaOrderByWithRelationInput[]
+    orderBy?: beritaOrderByWithRelationInput | beritaOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: BeritaWhereUniqueInput
+    cursor?: beritaWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beritas from the position of the cursor.
+     * Take `±n` beritas from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beritas.
+     * Skip the first `n` beritas.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Beritas
+     * Count returned beritas
     **/
     _count?: true | BeritaCountAggregateInputType
     /**
@@ -3047,11 +2083,11 @@ export namespace Prisma {
 
 
 
-  export type BeritaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BeritaWhereInput
-    orderBy?: BeritaOrderByWithAggregationInput | BeritaOrderByWithAggregationInput[]
+  export type beritaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: beritaWhereInput
+    orderBy?: beritaOrderByWithAggregationInput | beritaOrderByWithAggregationInput[]
     by: BeritaScalarFieldEnum[] | BeritaScalarFieldEnum
-    having?: BeritaScalarWhereWithAggregatesInput
+    having?: beritaScalarWhereWithAggregatesInput
     take?: number
     skip?: number
     _count?: BeritaCountAggregateInputType | true
@@ -3074,7 +2110,7 @@ export namespace Prisma {
     _max: BeritaMaxAggregateOutputType | null
   }
 
-  type GetBeritaGroupByPayload<T extends BeritaGroupByArgs> = Prisma.PrismaPromise<
+  type GetBeritaGroupByPayload<T extends beritaGroupByArgs> = Prisma.PrismaPromise<
     Array<
       PickEnumerable<BeritaGroupByOutputType, T['by']> &
         {
@@ -3088,7 +2124,7 @@ export namespace Prisma {
     >
 
 
-  export type BeritaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type beritaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     judul?: boolean
     isi?: boolean
@@ -3098,7 +2134,7 @@ export namespace Prisma {
 
 
 
-  export type BeritaSelectScalar = {
+  export type beritaSelectScalar = {
     id?: boolean
     judul?: boolean
     isi?: boolean
@@ -3106,10 +2142,10 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type BeritaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "judul" | "isi" | "thumbnailUrl" | "createdAt", ExtArgs["result"]["berita"]>
+  export type beritaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "judul" | "isi" | "thumbnailUrl" | "createdAt", ExtArgs["result"]["berita"]>
 
-  export type $BeritaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Berita"
+  export type $beritaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "berita"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3121,18 +2157,18 @@ export namespace Prisma {
     composites: {}
   }
 
-  type BeritaGetPayload<S extends boolean | null | undefined | BeritaDefaultArgs> = $Result.GetResult<Prisma.$BeritaPayload, S>
+  type beritaGetPayload<S extends boolean | null | undefined | beritaDefaultArgs> = $Result.GetResult<Prisma.$beritaPayload, S>
 
-  type BeritaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<BeritaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type beritaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<beritaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: BeritaCountAggregateInputType | true
     }
 
-  export interface BeritaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Berita'], meta: { name: 'Berita' } }
+  export interface beritaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['berita'], meta: { name: 'berita' } }
     /**
      * Find zero or one Berita that matches the filter.
-     * @param {BeritaFindUniqueArgs} args - Arguments to find a Berita
+     * @param {beritaFindUniqueArgs} args - Arguments to find a Berita
      * @example
      * // Get one Berita
      * const berita = await prisma.berita.findUnique({
@@ -3141,12 +2177,12 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends BeritaFindUniqueArgs>(args: SelectSubset<T, BeritaFindUniqueArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends beritaFindUniqueArgs>(args: SelectSubset<T, beritaFindUniqueArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find one Berita that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {BeritaFindUniqueOrThrowArgs} args - Arguments to find a Berita
+     * @param {beritaFindUniqueOrThrowArgs} args - Arguments to find a Berita
      * @example
      * // Get one Berita
      * const berita = await prisma.berita.findUniqueOrThrow({
@@ -3155,13 +2191,13 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends BeritaFindUniqueOrThrowArgs>(args: SelectSubset<T, BeritaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends beritaFindUniqueOrThrowArgs>(args: SelectSubset<T, beritaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Berita that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaFindFirstArgs} args - Arguments to find a Berita
+     * @param {beritaFindFirstArgs} args - Arguments to find a Berita
      * @example
      * // Get one Berita
      * const berita = await prisma.berita.findFirst({
@@ -3170,14 +2206,14 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends BeritaFindFirstArgs>(args?: SelectSubset<T, BeritaFindFirstArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends beritaFindFirstArgs>(args?: SelectSubset<T, beritaFindFirstArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Berita that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaFindFirstOrThrowArgs} args - Arguments to find a Berita
+     * @param {beritaFindFirstOrThrowArgs} args - Arguments to find a Berita
      * @example
      * // Get one Berita
      * const berita = await prisma.berita.findFirstOrThrow({
@@ -3186,13 +2222,13 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends BeritaFindFirstOrThrowArgs>(args?: SelectSubset<T, BeritaFindFirstOrThrowArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends beritaFindFirstOrThrowArgs>(args?: SelectSubset<T, beritaFindFirstOrThrowArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Beritas that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {beritaFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Beritas
      * const beritas = await prisma.berita.findMany()
@@ -3204,11 +2240,11 @@ export namespace Prisma {
      * const beritaWithIdOnly = await prisma.berita.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends BeritaFindManyArgs>(args?: SelectSubset<T, BeritaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends beritaFindManyArgs>(args?: SelectSubset<T, beritaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Berita.
-     * @param {BeritaCreateArgs} args - Arguments to create a Berita.
+     * @param {beritaCreateArgs} args - Arguments to create a Berita.
      * @example
      * // Create one Berita
      * const Berita = await prisma.berita.create({
@@ -3218,11 +2254,11 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends BeritaCreateArgs>(args: SelectSubset<T, BeritaCreateArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends beritaCreateArgs>(args: SelectSubset<T, beritaCreateArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Beritas.
-     * @param {BeritaCreateManyArgs} args - Arguments to create many Beritas.
+     * @param {beritaCreateManyArgs} args - Arguments to create many Beritas.
      * @example
      * // Create many Beritas
      * const berita = await prisma.berita.createMany({
@@ -3232,11 +2268,11 @@ export namespace Prisma {
      * })
      *     
      */
-    createMany<T extends BeritaCreateManyArgs>(args?: SelectSubset<T, BeritaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends beritaCreateManyArgs>(args?: SelectSubset<T, beritaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Berita.
-     * @param {BeritaDeleteArgs} args - Arguments to delete one Berita.
+     * @param {beritaDeleteArgs} args - Arguments to delete one Berita.
      * @example
      * // Delete one Berita
      * const Berita = await prisma.berita.delete({
@@ -3246,11 +2282,11 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends BeritaDeleteArgs>(args: SelectSubset<T, BeritaDeleteArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends beritaDeleteArgs>(args: SelectSubset<T, beritaDeleteArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Berita.
-     * @param {BeritaUpdateArgs} args - Arguments to update one Berita.
+     * @param {beritaUpdateArgs} args - Arguments to update one Berita.
      * @example
      * // Update one Berita
      * const berita = await prisma.berita.update({
@@ -3263,11 +2299,11 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends BeritaUpdateArgs>(args: SelectSubset<T, BeritaUpdateArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends beritaUpdateArgs>(args: SelectSubset<T, beritaUpdateArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Beritas.
-     * @param {BeritaDeleteManyArgs} args - Arguments to filter Beritas to delete.
+     * @param {beritaDeleteManyArgs} args - Arguments to filter Beritas to delete.
      * @example
      * // Delete a few Beritas
      * const { count } = await prisma.berita.deleteMany({
@@ -3277,13 +2313,13 @@ export namespace Prisma {
      * })
      * 
      */
-    deleteMany<T extends BeritaDeleteManyArgs>(args?: SelectSubset<T, BeritaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends beritaDeleteManyArgs>(args?: SelectSubset<T, beritaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Beritas.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {beritaUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
      * // Update many Beritas
      * const berita = await prisma.berita.updateMany({
@@ -3296,11 +2332,11 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends BeritaUpdateManyArgs>(args: SelectSubset<T, BeritaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends beritaUpdateManyArgs>(args: SelectSubset<T, beritaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Berita.
-     * @param {BeritaUpsertArgs} args - Arguments to update or create a Berita.
+     * @param {beritaUpsertArgs} args - Arguments to update or create a Berita.
      * @example
      * // Update or create a Berita
      * const berita = await prisma.berita.upsert({
@@ -3315,14 +2351,14 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends BeritaUpsertArgs>(args: SelectSubset<T, BeritaUpsertArgs<ExtArgs>>): Prisma__BeritaClient<$Result.GetResult<Prisma.$BeritaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends beritaUpsertArgs>(args: SelectSubset<T, beritaUpsertArgs<ExtArgs>>): Prisma__beritaClient<$Result.GetResult<Prisma.$beritaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
      * Count the number of Beritas.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaCountArgs} args - Arguments to filter Beritas to count.
+     * @param {beritaCountArgs} args - Arguments to filter Beritas to count.
      * @example
      * // Count the number of Beritas
      * const count = await prisma.berita.count({
@@ -3331,8 +2367,8 @@ export namespace Prisma {
      *   }
      * })
     **/
-    count<T extends BeritaCountArgs>(
-      args?: Subset<T, BeritaCountArgs>,
+    count<T extends beritaCountArgs>(
+      args?: Subset<T, beritaCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
@@ -3371,7 +2407,7 @@ export namespace Prisma {
      * Group by Berita.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BeritaGroupByArgs} args - Group by arguments.
+     * @param {beritaGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3386,14 +2422,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends BeritaGroupByArgs,
+      T extends beritaGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: BeritaGroupByArgs['orderBy'] }
-        : { orderBy?: BeritaGroupByArgs['orderBy'] },
+        ? { orderBy: beritaGroupByArgs['orderBy'] }
+        : { orderBy?: beritaGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3442,20 +2478,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, BeritaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBeritaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, beritaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBeritaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Berita model
+   * Fields of the berita model
    */
-  readonly fields: BeritaFieldRefs;
+  readonly fields: beritaFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Berita.
+   * The delegate class that acts as a "Promise-like" for berita.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__BeritaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__beritaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3483,332 +2519,1296 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Berita model
+   * Fields of the berita model
    */
-  interface BeritaFieldRefs {
-    readonly id: FieldRef<"Berita", 'Int'>
-    readonly judul: FieldRef<"Berita", 'String'>
-    readonly isi: FieldRef<"Berita", 'String'>
-    readonly thumbnailUrl: FieldRef<"Berita", 'String'>
-    readonly createdAt: FieldRef<"Berita", 'DateTime'>
+  interface beritaFieldRefs {
+    readonly id: FieldRef<"berita", 'Int'>
+    readonly judul: FieldRef<"berita", 'String'>
+    readonly isi: FieldRef<"berita", 'String'>
+    readonly thumbnailUrl: FieldRef<"berita", 'String'>
+    readonly createdAt: FieldRef<"berita", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Berita findUnique
+   * berita findUnique
    */
-  export type BeritaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter, which Berita to fetch.
+     * Filter, which berita to fetch.
      */
-    where: BeritaWhereUniqueInput
+    where: beritaWhereUniqueInput
   }
 
   /**
-   * Berita findUniqueOrThrow
+   * berita findUniqueOrThrow
    */
-  export type BeritaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter, which Berita to fetch.
+     * Filter, which berita to fetch.
      */
-    where: BeritaWhereUniqueInput
+    where: beritaWhereUniqueInput
   }
 
   /**
-   * Berita findFirst
+   * berita findFirst
    */
-  export type BeritaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter, which Berita to fetch.
+     * Filter, which berita to fetch.
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beritas to fetch.
+     * Determine the order of beritas to fetch.
      */
-    orderBy?: BeritaOrderByWithRelationInput | BeritaOrderByWithRelationInput[]
+    orderBy?: beritaOrderByWithRelationInput | beritaOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Beritas.
+     * Sets the position for searching for beritas.
      */
-    cursor?: BeritaWhereUniqueInput
+    cursor?: beritaWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beritas from the position of the cursor.
+     * Take `±n` beritas from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beritas.
+     * Skip the first `n` beritas.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Beritas.
+     * Filter by unique combinations of beritas.
      */
     distinct?: BeritaScalarFieldEnum | BeritaScalarFieldEnum[]
   }
 
   /**
-   * Berita findFirstOrThrow
+   * berita findFirstOrThrow
    */
-  export type BeritaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter, which Berita to fetch.
+     * Filter, which berita to fetch.
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beritas to fetch.
+     * Determine the order of beritas to fetch.
      */
-    orderBy?: BeritaOrderByWithRelationInput | BeritaOrderByWithRelationInput[]
+    orderBy?: beritaOrderByWithRelationInput | beritaOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Beritas.
+     * Sets the position for searching for beritas.
      */
-    cursor?: BeritaWhereUniqueInput
+    cursor?: beritaWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beritas from the position of the cursor.
+     * Take `±n` beritas from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beritas.
+     * Skip the first `n` beritas.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Beritas.
+     * Filter by unique combinations of beritas.
      */
     distinct?: BeritaScalarFieldEnum | BeritaScalarFieldEnum[]
   }
 
   /**
-   * Berita findMany
+   * berita findMany
    */
-  export type BeritaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter, which Beritas to fetch.
+     * Filter, which beritas to fetch.
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Beritas to fetch.
+     * Determine the order of beritas to fetch.
      */
-    orderBy?: BeritaOrderByWithRelationInput | BeritaOrderByWithRelationInput[]
+    orderBy?: beritaOrderByWithRelationInput | beritaOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Beritas.
+     * Sets the position for listing beritas.
      */
-    cursor?: BeritaWhereUniqueInput
+    cursor?: beritaWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Beritas from the position of the cursor.
+     * Take `±n` beritas from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Beritas.
+     * Skip the first `n` beritas.
      */
     skip?: number
     distinct?: BeritaScalarFieldEnum | BeritaScalarFieldEnum[]
   }
 
   /**
-   * Berita create
+   * berita create
    */
-  export type BeritaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * The data needed to create a Berita.
+     * The data needed to create a berita.
      */
-    data: XOR<BeritaCreateInput, BeritaUncheckedCreateInput>
+    data: XOR<beritaCreateInput, beritaUncheckedCreateInput>
   }
 
   /**
-   * Berita createMany
+   * berita createMany
    */
-  export type BeritaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Beritas.
+     * The data used to create many beritas.
      */
-    data: BeritaCreateManyInput | BeritaCreateManyInput[]
+    data: beritaCreateManyInput | beritaCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Berita update
+   * berita update
    */
-  export type BeritaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * The data needed to update a Berita.
+     * The data needed to update a berita.
      */
-    data: XOR<BeritaUpdateInput, BeritaUncheckedUpdateInput>
+    data: XOR<beritaUpdateInput, beritaUncheckedUpdateInput>
     /**
-     * Choose, which Berita to update.
+     * Choose, which berita to update.
      */
-    where: BeritaWhereUniqueInput
+    where: beritaWhereUniqueInput
   }
 
   /**
-   * Berita updateMany
+   * berita updateMany
    */
-  export type BeritaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Beritas.
+     * The data used to update beritas.
      */
-    data: XOR<BeritaUpdateManyMutationInput, BeritaUncheckedUpdateManyInput>
+    data: XOR<beritaUpdateManyMutationInput, beritaUncheckedUpdateManyInput>
     /**
-     * Filter which Beritas to update
+     * Filter which beritas to update
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
-     * Limit how many Beritas to update.
+     * Limit how many beritas to update.
      */
     limit?: number
   }
 
   /**
-   * Berita upsert
+   * berita upsert
    */
-  export type BeritaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * The filter to search for the Berita to update in case it exists.
+     * The filter to search for the berita to update in case it exists.
      */
-    where: BeritaWhereUniqueInput
+    where: beritaWhereUniqueInput
     /**
-     * In case the Berita found by the `where` argument doesn't exist, create a new Berita with this data.
+     * In case the berita found by the `where` argument doesn't exist, create a new berita with this data.
      */
-    create: XOR<BeritaCreateInput, BeritaUncheckedCreateInput>
+    create: XOR<beritaCreateInput, beritaUncheckedCreateInput>
     /**
-     * In case the Berita was found with the provided `where` argument, update it with this data.
+     * In case the berita was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<BeritaUpdateInput, BeritaUncheckedUpdateInput>
+    update: XOR<beritaUpdateInput, beritaUncheckedUpdateInput>
   }
 
   /**
-   * Berita delete
+   * berita delete
    */
-  export type BeritaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
     /**
-     * Filter which Berita to delete.
+     * Filter which berita to delete.
      */
-    where: BeritaWhereUniqueInput
+    where: beritaWhereUniqueInput
   }
 
   /**
-   * Berita deleteMany
+   * berita deleteMany
    */
-  export type BeritaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Beritas to delete
+     * Filter which beritas to delete
      */
-    where?: BeritaWhereInput
+    where?: beritaWhereInput
     /**
-     * Limit how many Beritas to delete.
+     * Limit how many beritas to delete.
      */
     limit?: number
   }
 
   /**
-   * Berita without action
+   * berita without action
    */
-  export type BeritaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type beritaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Berita
+     * Select specific fields to fetch from the berita
      */
-    select?: BeritaSelect<ExtArgs> | null
+    select?: beritaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Berita
+     * Omit specific fields from the berita
      */
-    omit?: BeritaOmit<ExtArgs> | null
+    omit?: beritaOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model listbuku
+   */
+
+  export type AggregateListbuku = {
+    _count: ListbukuCountAggregateOutputType | null
+    _avg: ListbukuAvgAggregateOutputType | null
+    _sum: ListbukuSumAggregateOutputType | null
+    _min: ListbukuMinAggregateOutputType | null
+    _max: ListbukuMaxAggregateOutputType | null
+  }
+
+  export type ListbukuAvgAggregateOutputType = {
+    id: number | null
+    tahunTerbit: number | null
+  }
+
+  export type ListbukuSumAggregateOutputType = {
+    id: number | null
+    tahunTerbit: number | null
+  }
+
+  export type ListbukuMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    penulis: string | null
+    penerbit: string | null
+    tahunTerbit: number | null
+    kategori: string | null
+    sinopsis: string | null
+    coverUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type ListbukuMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    penulis: string | null
+    penerbit: string | null
+    tahunTerbit: number | null
+    kategori: string | null
+    sinopsis: string | null
+    coverUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type ListbukuCountAggregateOutputType = {
+    id: number
+    title: number
+    penulis: number
+    penerbit: number
+    tahunTerbit: number
+    kategori: number
+    sinopsis: number
+    coverUrl: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ListbukuAvgAggregateInputType = {
+    id?: true
+    tahunTerbit?: true
+  }
+
+  export type ListbukuSumAggregateInputType = {
+    id?: true
+    tahunTerbit?: true
+  }
+
+  export type ListbukuMinAggregateInputType = {
+    id?: true
+    title?: true
+    penulis?: true
+    penerbit?: true
+    tahunTerbit?: true
+    kategori?: true
+    sinopsis?: true
+    coverUrl?: true
+    createdAt?: true
+  }
+
+  export type ListbukuMaxAggregateInputType = {
+    id?: true
+    title?: true
+    penulis?: true
+    penerbit?: true
+    tahunTerbit?: true
+    kategori?: true
+    sinopsis?: true
+    coverUrl?: true
+    createdAt?: true
+  }
+
+  export type ListbukuCountAggregateInputType = {
+    id?: true
+    title?: true
+    penulis?: true
+    penerbit?: true
+    tahunTerbit?: true
+    kategori?: true
+    sinopsis?: true
+    coverUrl?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ListbukuAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which listbuku to aggregate.
+     */
+    where?: listbukuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of listbukus to fetch.
+     */
+    orderBy?: listbukuOrderByWithRelationInput | listbukuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: listbukuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` listbukus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` listbukus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned listbukus
+    **/
+    _count?: true | ListbukuCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ListbukuAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ListbukuSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ListbukuMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ListbukuMaxAggregateInputType
+  }
+
+  export type GetListbukuAggregateType<T extends ListbukuAggregateArgs> = {
+        [P in keyof T & keyof AggregateListbuku]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateListbuku[P]>
+      : GetScalarType<T[P], AggregateListbuku[P]>
+  }
+
+
+
+
+  export type listbukuGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: listbukuWhereInput
+    orderBy?: listbukuOrderByWithAggregationInput | listbukuOrderByWithAggregationInput[]
+    by: ListbukuScalarFieldEnum[] | ListbukuScalarFieldEnum
+    having?: listbukuScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ListbukuCountAggregateInputType | true
+    _avg?: ListbukuAvgAggregateInputType
+    _sum?: ListbukuSumAggregateInputType
+    _min?: ListbukuMinAggregateInputType
+    _max?: ListbukuMaxAggregateInputType
+  }
+
+  export type ListbukuGroupByOutputType = {
+    id: number
+    title: string
+    penulis: string
+    penerbit: string
+    tahunTerbit: number
+    kategori: string
+    sinopsis: string
+    coverUrl: string | null
+    createdAt: Date
+    _count: ListbukuCountAggregateOutputType | null
+    _avg: ListbukuAvgAggregateOutputType | null
+    _sum: ListbukuSumAggregateOutputType | null
+    _min: ListbukuMinAggregateOutputType | null
+    _max: ListbukuMaxAggregateOutputType | null
+  }
+
+  type GetListbukuGroupByPayload<T extends listbukuGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ListbukuGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ListbukuGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ListbukuGroupByOutputType[P]>
+            : GetScalarType<T[P], ListbukuGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type listbukuSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    penulis?: boolean
+    penerbit?: boolean
+    tahunTerbit?: boolean
+    kategori?: boolean
+    sinopsis?: boolean
+    coverUrl?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["listbuku"]>
+
+
+
+  export type listbukuSelectScalar = {
+    id?: boolean
+    title?: boolean
+    penulis?: boolean
+    penerbit?: boolean
+    tahunTerbit?: boolean
+    kategori?: boolean
+    sinopsis?: boolean
+    coverUrl?: boolean
+    createdAt?: boolean
+  }
+
+  export type listbukuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "penulis" | "penerbit" | "tahunTerbit" | "kategori" | "sinopsis" | "coverUrl" | "createdAt", ExtArgs["result"]["listbuku"]>
+
+  export type $listbukuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "listbuku"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      penulis: string
+      penerbit: string
+      tahunTerbit: number
+      kategori: string
+      sinopsis: string
+      coverUrl: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["listbuku"]>
+    composites: {}
+  }
+
+  type listbukuGetPayload<S extends boolean | null | undefined | listbukuDefaultArgs> = $Result.GetResult<Prisma.$listbukuPayload, S>
+
+  type listbukuCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<listbukuFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ListbukuCountAggregateInputType | true
+    }
+
+  export interface listbukuDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['listbuku'], meta: { name: 'listbuku' } }
+    /**
+     * Find zero or one Listbuku that matches the filter.
+     * @param {listbukuFindUniqueArgs} args - Arguments to find a Listbuku
+     * @example
+     * // Get one Listbuku
+     * const listbuku = await prisma.listbuku.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends listbukuFindUniqueArgs>(args: SelectSubset<T, listbukuFindUniqueArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Listbuku that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {listbukuFindUniqueOrThrowArgs} args - Arguments to find a Listbuku
+     * @example
+     * // Get one Listbuku
+     * const listbuku = await prisma.listbuku.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends listbukuFindUniqueOrThrowArgs>(args: SelectSubset<T, listbukuFindUniqueOrThrowArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Listbuku that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuFindFirstArgs} args - Arguments to find a Listbuku
+     * @example
+     * // Get one Listbuku
+     * const listbuku = await prisma.listbuku.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends listbukuFindFirstArgs>(args?: SelectSubset<T, listbukuFindFirstArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Listbuku that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuFindFirstOrThrowArgs} args - Arguments to find a Listbuku
+     * @example
+     * // Get one Listbuku
+     * const listbuku = await prisma.listbuku.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends listbukuFindFirstOrThrowArgs>(args?: SelectSubset<T, listbukuFindFirstOrThrowArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Listbukus that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Listbukus
+     * const listbukus = await prisma.listbuku.findMany()
+     * 
+     * // Get first 10 Listbukus
+     * const listbukus = await prisma.listbuku.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const listbukuWithIdOnly = await prisma.listbuku.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends listbukuFindManyArgs>(args?: SelectSubset<T, listbukuFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Listbuku.
+     * @param {listbukuCreateArgs} args - Arguments to create a Listbuku.
+     * @example
+     * // Create one Listbuku
+     * const Listbuku = await prisma.listbuku.create({
+     *   data: {
+     *     // ... data to create a Listbuku
+     *   }
+     * })
+     * 
+     */
+    create<T extends listbukuCreateArgs>(args: SelectSubset<T, listbukuCreateArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Listbukus.
+     * @param {listbukuCreateManyArgs} args - Arguments to create many Listbukus.
+     * @example
+     * // Create many Listbukus
+     * const listbuku = await prisma.listbuku.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends listbukuCreateManyArgs>(args?: SelectSubset<T, listbukuCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Listbuku.
+     * @param {listbukuDeleteArgs} args - Arguments to delete one Listbuku.
+     * @example
+     * // Delete one Listbuku
+     * const Listbuku = await prisma.listbuku.delete({
+     *   where: {
+     *     // ... filter to delete one Listbuku
+     *   }
+     * })
+     * 
+     */
+    delete<T extends listbukuDeleteArgs>(args: SelectSubset<T, listbukuDeleteArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Listbuku.
+     * @param {listbukuUpdateArgs} args - Arguments to update one Listbuku.
+     * @example
+     * // Update one Listbuku
+     * const listbuku = await prisma.listbuku.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends listbukuUpdateArgs>(args: SelectSubset<T, listbukuUpdateArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Listbukus.
+     * @param {listbukuDeleteManyArgs} args - Arguments to filter Listbukus to delete.
+     * @example
+     * // Delete a few Listbukus
+     * const { count } = await prisma.listbuku.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends listbukuDeleteManyArgs>(args?: SelectSubset<T, listbukuDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Listbukus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Listbukus
+     * const listbuku = await prisma.listbuku.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends listbukuUpdateManyArgs>(args: SelectSubset<T, listbukuUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Listbuku.
+     * @param {listbukuUpsertArgs} args - Arguments to update or create a Listbuku.
+     * @example
+     * // Update or create a Listbuku
+     * const listbuku = await prisma.listbuku.upsert({
+     *   create: {
+     *     // ... data to create a Listbuku
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Listbuku we want to update
+     *   }
+     * })
+     */
+    upsert<T extends listbukuUpsertArgs>(args: SelectSubset<T, listbukuUpsertArgs<ExtArgs>>): Prisma__listbukuClient<$Result.GetResult<Prisma.$listbukuPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Listbukus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuCountArgs} args - Arguments to filter Listbukus to count.
+     * @example
+     * // Count the number of Listbukus
+     * const count = await prisma.listbuku.count({
+     *   where: {
+     *     // ... the filter for the Listbukus we want to count
+     *   }
+     * })
+    **/
+    count<T extends listbukuCountArgs>(
+      args?: Subset<T, listbukuCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ListbukuCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Listbuku.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListbukuAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ListbukuAggregateArgs>(args: Subset<T, ListbukuAggregateArgs>): Prisma.PrismaPromise<GetListbukuAggregateType<T>>
+
+    /**
+     * Group by Listbuku.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {listbukuGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends listbukuGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: listbukuGroupByArgs['orderBy'] }
+        : { orderBy?: listbukuGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, listbukuGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListbukuGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the listbuku model
+   */
+  readonly fields: listbukuFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for listbuku.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__listbukuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the listbuku model
+   */
+  interface listbukuFieldRefs {
+    readonly id: FieldRef<"listbuku", 'Int'>
+    readonly title: FieldRef<"listbuku", 'String'>
+    readonly penulis: FieldRef<"listbuku", 'String'>
+    readonly penerbit: FieldRef<"listbuku", 'String'>
+    readonly tahunTerbit: FieldRef<"listbuku", 'Int'>
+    readonly kategori: FieldRef<"listbuku", 'String'>
+    readonly sinopsis: FieldRef<"listbuku", 'String'>
+    readonly coverUrl: FieldRef<"listbuku", 'String'>
+    readonly createdAt: FieldRef<"listbuku", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * listbuku findUnique
+   */
+  export type listbukuFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter, which listbuku to fetch.
+     */
+    where: listbukuWhereUniqueInput
+  }
+
+  /**
+   * listbuku findUniqueOrThrow
+   */
+  export type listbukuFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter, which listbuku to fetch.
+     */
+    where: listbukuWhereUniqueInput
+  }
+
+  /**
+   * listbuku findFirst
+   */
+  export type listbukuFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter, which listbuku to fetch.
+     */
+    where?: listbukuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of listbukus to fetch.
+     */
+    orderBy?: listbukuOrderByWithRelationInput | listbukuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for listbukus.
+     */
+    cursor?: listbukuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` listbukus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` listbukus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of listbukus.
+     */
+    distinct?: ListbukuScalarFieldEnum | ListbukuScalarFieldEnum[]
+  }
+
+  /**
+   * listbuku findFirstOrThrow
+   */
+  export type listbukuFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter, which listbuku to fetch.
+     */
+    where?: listbukuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of listbukus to fetch.
+     */
+    orderBy?: listbukuOrderByWithRelationInput | listbukuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for listbukus.
+     */
+    cursor?: listbukuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` listbukus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` listbukus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of listbukus.
+     */
+    distinct?: ListbukuScalarFieldEnum | ListbukuScalarFieldEnum[]
+  }
+
+  /**
+   * listbuku findMany
+   */
+  export type listbukuFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter, which listbukus to fetch.
+     */
+    where?: listbukuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of listbukus to fetch.
+     */
+    orderBy?: listbukuOrderByWithRelationInput | listbukuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing listbukus.
+     */
+    cursor?: listbukuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` listbukus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` listbukus.
+     */
+    skip?: number
+    distinct?: ListbukuScalarFieldEnum | ListbukuScalarFieldEnum[]
+  }
+
+  /**
+   * listbuku create
+   */
+  export type listbukuCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * The data needed to create a listbuku.
+     */
+    data: XOR<listbukuCreateInput, listbukuUncheckedCreateInput>
+  }
+
+  /**
+   * listbuku createMany
+   */
+  export type listbukuCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many listbukus.
+     */
+    data: listbukuCreateManyInput | listbukuCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * listbuku update
+   */
+  export type listbukuUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * The data needed to update a listbuku.
+     */
+    data: XOR<listbukuUpdateInput, listbukuUncheckedUpdateInput>
+    /**
+     * Choose, which listbuku to update.
+     */
+    where: listbukuWhereUniqueInput
+  }
+
+  /**
+   * listbuku updateMany
+   */
+  export type listbukuUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update listbukus.
+     */
+    data: XOR<listbukuUpdateManyMutationInput, listbukuUncheckedUpdateManyInput>
+    /**
+     * Filter which listbukus to update
+     */
+    where?: listbukuWhereInput
+    /**
+     * Limit how many listbukus to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * listbuku upsert
+   */
+  export type listbukuUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * The filter to search for the listbuku to update in case it exists.
+     */
+    where: listbukuWhereUniqueInput
+    /**
+     * In case the listbuku found by the `where` argument doesn't exist, create a new listbuku with this data.
+     */
+    create: XOR<listbukuCreateInput, listbukuUncheckedCreateInput>
+    /**
+     * In case the listbuku was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<listbukuUpdateInput, listbukuUncheckedUpdateInput>
+  }
+
+  /**
+   * listbuku delete
+   */
+  export type listbukuDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
+    /**
+     * Filter which listbuku to delete.
+     */
+    where: listbukuWhereUniqueInput
+  }
+
+  /**
+   * listbuku deleteMany
+   */
+  export type listbukuDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which listbukus to delete
+     */
+    where?: listbukuWhereInput
+    /**
+     * Limit how many listbukus to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * listbuku without action
+   */
+  export type listbukuDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the listbuku
+     */
+    select?: listbukuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the listbuku
+     */
+    omit?: listbukuOmit<ExtArgs> | null
   }
 
 
@@ -3836,21 +3836,6 @@ export namespace Prisma {
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
-  export const ListBukuScalarFieldEnum: {
-    id: 'id',
-    title: 'title',
-    penulis: 'penulis',
-    penerbit: 'penerbit',
-    tahunTerbit: 'tahunTerbit',
-    kategori: 'kategori',
-    sinopsis: 'sinopsis',
-    coverUrl: 'coverUrl',
-    createdAt: 'createdAt'
-  };
-
-  export type ListBukuScalarFieldEnum = (typeof ListBukuScalarFieldEnum)[keyof typeof ListBukuScalarFieldEnum]
-
-
   export const BeritaScalarFieldEnum: {
     id: 'id',
     judul: 'judul',
@@ -3862,6 +3847,21 @@ export namespace Prisma {
   export type BeritaScalarFieldEnum = (typeof BeritaScalarFieldEnum)[keyof typeof BeritaScalarFieldEnum]
 
 
+  export const ListbukuScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    penulis: 'penulis',
+    penerbit: 'penerbit',
+    tahunTerbit: 'tahunTerbit',
+    kategori: 'kategori',
+    sinopsis: 'sinopsis',
+    coverUrl: 'coverUrl',
+    createdAt: 'createdAt'
+  };
+
+  export type ListbukuScalarFieldEnum = (typeof ListbukuScalarFieldEnum)[keyof typeof ListbukuScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -3870,12 +3870,12 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const AdminOrderByRelevanceFieldEnum: {
+  export const adminOrderByRelevanceFieldEnum: {
     email: 'email',
     password: 'password'
   };
 
-  export type AdminOrderByRelevanceFieldEnum = (typeof AdminOrderByRelevanceFieldEnum)[keyof typeof AdminOrderByRelevanceFieldEnum]
+  export type adminOrderByRelevanceFieldEnum = (typeof adminOrderByRelevanceFieldEnum)[keyof typeof adminOrderByRelevanceFieldEnum]
 
 
   export const NullsOrder: {
@@ -3886,7 +3886,16 @@ export namespace Prisma {
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-  export const ListBukuOrderByRelevanceFieldEnum: {
+  export const beritaOrderByRelevanceFieldEnum: {
+    judul: 'judul',
+    isi: 'isi',
+    thumbnailUrl: 'thumbnailUrl'
+  };
+
+  export type beritaOrderByRelevanceFieldEnum = (typeof beritaOrderByRelevanceFieldEnum)[keyof typeof beritaOrderByRelevanceFieldEnum]
+
+
+  export const listbukuOrderByRelevanceFieldEnum: {
     title: 'title',
     penulis: 'penulis',
     penerbit: 'penerbit',
@@ -3895,16 +3904,7 @@ export namespace Prisma {
     coverUrl: 'coverUrl'
   };
 
-  export type ListBukuOrderByRelevanceFieldEnum = (typeof ListBukuOrderByRelevanceFieldEnum)[keyof typeof ListBukuOrderByRelevanceFieldEnum]
-
-
-  export const BeritaOrderByRelevanceFieldEnum: {
-    judul: 'judul',
-    isi: 'isi',
-    thumbnailUrl: 'thumbnailUrl'
-  };
-
-  export type BeritaOrderByRelevanceFieldEnum = (typeof BeritaOrderByRelevanceFieldEnum)[keyof typeof BeritaOrderByRelevanceFieldEnum]
+  export type listbukuOrderByRelevanceFieldEnum = (typeof listbukuOrderByRelevanceFieldEnum)[keyof typeof listbukuOrderByRelevanceFieldEnum]
 
 
   /**
@@ -3943,72 +3943,127 @@ export namespace Prisma {
    */
 
 
-  export type AdminWhereInput = {
-    AND?: AdminWhereInput | AdminWhereInput[]
-    OR?: AdminWhereInput[]
-    NOT?: AdminWhereInput | AdminWhereInput[]
-    id?: IntFilter<"Admin"> | number
-    email?: StringFilter<"Admin"> | string
-    password?: StringFilter<"Admin"> | string
-    createdAt?: DateTimeFilter<"Admin"> | Date | string
+  export type adminWhereInput = {
+    AND?: adminWhereInput | adminWhereInput[]
+    OR?: adminWhereInput[]
+    NOT?: adminWhereInput | adminWhereInput[]
+    id?: IntFilter<"admin"> | number
+    email?: StringFilter<"admin"> | string
+    password?: StringFilter<"admin"> | string
+    createdAt?: DateTimeFilter<"admin"> | Date | string
   }
 
-  export type AdminOrderByWithRelationInput = {
+  export type adminOrderByWithRelationInput = {
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
-    _relevance?: AdminOrderByRelevanceInput
+    _relevance?: adminOrderByRelevanceInput
   }
 
-  export type AdminWhereUniqueInput = Prisma.AtLeast<{
+  export type adminWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
-    AND?: AdminWhereInput | AdminWhereInput[]
-    OR?: AdminWhereInput[]
-    NOT?: AdminWhereInput | AdminWhereInput[]
-    password?: StringFilter<"Admin"> | string
-    createdAt?: DateTimeFilter<"Admin"> | Date | string
+    AND?: adminWhereInput | adminWhereInput[]
+    OR?: adminWhereInput[]
+    NOT?: adminWhereInput | adminWhereInput[]
+    password?: StringFilter<"admin"> | string
+    createdAt?: DateTimeFilter<"admin"> | Date | string
   }, "id" | "email">
 
-  export type AdminOrderByWithAggregationInput = {
+  export type adminOrderByWithAggregationInput = {
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
-    _count?: AdminCountOrderByAggregateInput
-    _avg?: AdminAvgOrderByAggregateInput
-    _max?: AdminMaxOrderByAggregateInput
-    _min?: AdminMinOrderByAggregateInput
-    _sum?: AdminSumOrderByAggregateInput
+    _count?: adminCountOrderByAggregateInput
+    _avg?: adminAvgOrderByAggregateInput
+    _max?: adminMaxOrderByAggregateInput
+    _min?: adminMinOrderByAggregateInput
+    _sum?: adminSumOrderByAggregateInput
   }
 
-  export type AdminScalarWhereWithAggregatesInput = {
-    AND?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    OR?: AdminScalarWhereWithAggregatesInput[]
-    NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Admin"> | number
-    email?: StringWithAggregatesFilter<"Admin"> | string
-    password?: StringWithAggregatesFilter<"Admin"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  export type adminScalarWhereWithAggregatesInput = {
+    AND?: adminScalarWhereWithAggregatesInput | adminScalarWhereWithAggregatesInput[]
+    OR?: adminScalarWhereWithAggregatesInput[]
+    NOT?: adminScalarWhereWithAggregatesInput | adminScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"admin"> | number
+    email?: StringWithAggregatesFilter<"admin"> | string
+    password?: StringWithAggregatesFilter<"admin"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"admin"> | Date | string
   }
 
-  export type ListBukuWhereInput = {
-    AND?: ListBukuWhereInput | ListBukuWhereInput[]
-    OR?: ListBukuWhereInput[]
-    NOT?: ListBukuWhereInput | ListBukuWhereInput[]
-    id?: IntFilter<"ListBuku"> | number
-    title?: StringFilter<"ListBuku"> | string
-    penulis?: StringFilter<"ListBuku"> | string
-    penerbit?: StringFilter<"ListBuku"> | string
-    tahunTerbit?: IntFilter<"ListBuku"> | number
-    kategori?: StringFilter<"ListBuku"> | string
-    sinopsis?: StringFilter<"ListBuku"> | string
-    coverUrl?: StringNullableFilter<"ListBuku"> | string | null
-    createdAt?: DateTimeFilter<"ListBuku"> | Date | string
+  export type beritaWhereInput = {
+    AND?: beritaWhereInput | beritaWhereInput[]
+    OR?: beritaWhereInput[]
+    NOT?: beritaWhereInput | beritaWhereInput[]
+    id?: IntFilter<"berita"> | number
+    judul?: StringFilter<"berita"> | string
+    isi?: StringFilter<"berita"> | string
+    thumbnailUrl?: StringNullableFilter<"berita"> | string | null
+    createdAt?: DateTimeFilter<"berita"> | Date | string
   }
 
-  export type ListBukuOrderByWithRelationInput = {
+  export type beritaOrderByWithRelationInput = {
+    id?: SortOrder
+    judul?: SortOrder
+    isi?: SortOrder
+    thumbnailUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _relevance?: beritaOrderByRelevanceInput
+  }
+
+  export type beritaWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: beritaWhereInput | beritaWhereInput[]
+    OR?: beritaWhereInput[]
+    NOT?: beritaWhereInput | beritaWhereInput[]
+    judul?: StringFilter<"berita"> | string
+    isi?: StringFilter<"berita"> | string
+    thumbnailUrl?: StringNullableFilter<"berita"> | string | null
+    createdAt?: DateTimeFilter<"berita"> | Date | string
+  }, "id">
+
+  export type beritaOrderByWithAggregationInput = {
+    id?: SortOrder
+    judul?: SortOrder
+    isi?: SortOrder
+    thumbnailUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: beritaCountOrderByAggregateInput
+    _avg?: beritaAvgOrderByAggregateInput
+    _max?: beritaMaxOrderByAggregateInput
+    _min?: beritaMinOrderByAggregateInput
+    _sum?: beritaSumOrderByAggregateInput
+  }
+
+  export type beritaScalarWhereWithAggregatesInput = {
+    AND?: beritaScalarWhereWithAggregatesInput | beritaScalarWhereWithAggregatesInput[]
+    OR?: beritaScalarWhereWithAggregatesInput[]
+    NOT?: beritaScalarWhereWithAggregatesInput | beritaScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"berita"> | number
+    judul?: StringWithAggregatesFilter<"berita"> | string
+    isi?: StringWithAggregatesFilter<"berita"> | string
+    thumbnailUrl?: StringNullableWithAggregatesFilter<"berita"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"berita"> | Date | string
+  }
+
+  export type listbukuWhereInput = {
+    AND?: listbukuWhereInput | listbukuWhereInput[]
+    OR?: listbukuWhereInput[]
+    NOT?: listbukuWhereInput | listbukuWhereInput[]
+    id?: IntFilter<"listbuku"> | number
+    title?: StringFilter<"listbuku"> | string
+    penulis?: StringFilter<"listbuku"> | string
+    penerbit?: StringFilter<"listbuku"> | string
+    tahunTerbit?: IntFilter<"listbuku"> | number
+    kategori?: StringFilter<"listbuku"> | string
+    sinopsis?: StringFilter<"listbuku"> | string
+    coverUrl?: StringNullableFilter<"listbuku"> | string | null
+    createdAt?: DateTimeFilter<"listbuku"> | Date | string
+  }
+
+  export type listbukuOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
     penulis?: SortOrder
@@ -4018,25 +4073,25 @@ export namespace Prisma {
     sinopsis?: SortOrder
     coverUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    _relevance?: ListBukuOrderByRelevanceInput
+    _relevance?: listbukuOrderByRelevanceInput
   }
 
-  export type ListBukuWhereUniqueInput = Prisma.AtLeast<{
+  export type listbukuWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: ListBukuWhereInput | ListBukuWhereInput[]
-    OR?: ListBukuWhereInput[]
-    NOT?: ListBukuWhereInput | ListBukuWhereInput[]
-    title?: StringFilter<"ListBuku"> | string
-    penulis?: StringFilter<"ListBuku"> | string
-    penerbit?: StringFilter<"ListBuku"> | string
-    tahunTerbit?: IntFilter<"ListBuku"> | number
-    kategori?: StringFilter<"ListBuku"> | string
-    sinopsis?: StringFilter<"ListBuku"> | string
-    coverUrl?: StringNullableFilter<"ListBuku"> | string | null
-    createdAt?: DateTimeFilter<"ListBuku"> | Date | string
+    AND?: listbukuWhereInput | listbukuWhereInput[]
+    OR?: listbukuWhereInput[]
+    NOT?: listbukuWhereInput | listbukuWhereInput[]
+    title?: StringFilter<"listbuku"> | string
+    penulis?: StringFilter<"listbuku"> | string
+    penerbit?: StringFilter<"listbuku"> | string
+    tahunTerbit?: IntFilter<"listbuku"> | number
+    kategori?: StringFilter<"listbuku"> | string
+    sinopsis?: StringFilter<"listbuku"> | string
+    coverUrl?: StringNullableFilter<"listbuku"> | string | null
+    createdAt?: DateTimeFilter<"listbuku"> | Date | string
   }, "id">
 
-  export type ListBukuOrderByWithAggregationInput = {
+  export type listbukuOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
     penulis?: SortOrder
@@ -4046,130 +4101,128 @@ export namespace Prisma {
     sinopsis?: SortOrder
     coverUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    _count?: ListBukuCountOrderByAggregateInput
-    _avg?: ListBukuAvgOrderByAggregateInput
-    _max?: ListBukuMaxOrderByAggregateInput
-    _min?: ListBukuMinOrderByAggregateInput
-    _sum?: ListBukuSumOrderByAggregateInput
+    _count?: listbukuCountOrderByAggregateInput
+    _avg?: listbukuAvgOrderByAggregateInput
+    _max?: listbukuMaxOrderByAggregateInput
+    _min?: listbukuMinOrderByAggregateInput
+    _sum?: listbukuSumOrderByAggregateInput
   }
 
-  export type ListBukuScalarWhereWithAggregatesInput = {
-    AND?: ListBukuScalarWhereWithAggregatesInput | ListBukuScalarWhereWithAggregatesInput[]
-    OR?: ListBukuScalarWhereWithAggregatesInput[]
-    NOT?: ListBukuScalarWhereWithAggregatesInput | ListBukuScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"ListBuku"> | number
-    title?: StringWithAggregatesFilter<"ListBuku"> | string
-    penulis?: StringWithAggregatesFilter<"ListBuku"> | string
-    penerbit?: StringWithAggregatesFilter<"ListBuku"> | string
-    tahunTerbit?: IntWithAggregatesFilter<"ListBuku"> | number
-    kategori?: StringWithAggregatesFilter<"ListBuku"> | string
-    sinopsis?: StringWithAggregatesFilter<"ListBuku"> | string
-    coverUrl?: StringNullableWithAggregatesFilter<"ListBuku"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"ListBuku"> | Date | string
+  export type listbukuScalarWhereWithAggregatesInput = {
+    AND?: listbukuScalarWhereWithAggregatesInput | listbukuScalarWhereWithAggregatesInput[]
+    OR?: listbukuScalarWhereWithAggregatesInput[]
+    NOT?: listbukuScalarWhereWithAggregatesInput | listbukuScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"listbuku"> | number
+    title?: StringWithAggregatesFilter<"listbuku"> | string
+    penulis?: StringWithAggregatesFilter<"listbuku"> | string
+    penerbit?: StringWithAggregatesFilter<"listbuku"> | string
+    tahunTerbit?: IntWithAggregatesFilter<"listbuku"> | number
+    kategori?: StringWithAggregatesFilter<"listbuku"> | string
+    sinopsis?: StringWithAggregatesFilter<"listbuku"> | string
+    coverUrl?: StringNullableWithAggregatesFilter<"listbuku"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"listbuku"> | Date | string
   }
 
-  export type BeritaWhereInput = {
-    AND?: BeritaWhereInput | BeritaWhereInput[]
-    OR?: BeritaWhereInput[]
-    NOT?: BeritaWhereInput | BeritaWhereInput[]
-    id?: IntFilter<"Berita"> | number
-    judul?: StringFilter<"Berita"> | string
-    isi?: StringFilter<"Berita"> | string
-    thumbnailUrl?: StringNullableFilter<"Berita"> | string | null
-    createdAt?: DateTimeFilter<"Berita"> | Date | string
-  }
-
-  export type BeritaOrderByWithRelationInput = {
-    id?: SortOrder
-    judul?: SortOrder
-    isi?: SortOrder
-    thumbnailUrl?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    _relevance?: BeritaOrderByRelevanceInput
-  }
-
-  export type BeritaWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: BeritaWhereInput | BeritaWhereInput[]
-    OR?: BeritaWhereInput[]
-    NOT?: BeritaWhereInput | BeritaWhereInput[]
-    judul?: StringFilter<"Berita"> | string
-    isi?: StringFilter<"Berita"> | string
-    thumbnailUrl?: StringNullableFilter<"Berita"> | string | null
-    createdAt?: DateTimeFilter<"Berita"> | Date | string
-  }, "id">
-
-  export type BeritaOrderByWithAggregationInput = {
-    id?: SortOrder
-    judul?: SortOrder
-    isi?: SortOrder
-    thumbnailUrl?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    _count?: BeritaCountOrderByAggregateInput
-    _avg?: BeritaAvgOrderByAggregateInput
-    _max?: BeritaMaxOrderByAggregateInput
-    _min?: BeritaMinOrderByAggregateInput
-    _sum?: BeritaSumOrderByAggregateInput
-  }
-
-  export type BeritaScalarWhereWithAggregatesInput = {
-    AND?: BeritaScalarWhereWithAggregatesInput | BeritaScalarWhereWithAggregatesInput[]
-    OR?: BeritaScalarWhereWithAggregatesInput[]
-    NOT?: BeritaScalarWhereWithAggregatesInput | BeritaScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Berita"> | number
-    judul?: StringWithAggregatesFilter<"Berita"> | string
-    isi?: StringWithAggregatesFilter<"Berita"> | string
-    thumbnailUrl?: StringNullableWithAggregatesFilter<"Berita"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Berita"> | Date | string
-  }
-
-  export type AdminCreateInput = {
+  export type adminCreateInput = {
     email: string
     password: string
     createdAt?: Date | string
   }
 
-  export type AdminUncheckedCreateInput = {
+  export type adminUncheckedCreateInput = {
     id?: number
     email: string
     password: string
     createdAt?: Date | string
   }
 
-  export type AdminUpdateInput = {
+  export type adminUpdateInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminUncheckedUpdateInput = {
+  export type adminUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminCreateManyInput = {
+  export type adminCreateManyInput = {
     id?: number
     email: string
     password: string
     createdAt?: Date | string
   }
 
-  export type AdminUpdateManyMutationInput = {
+  export type adminUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminUncheckedUpdateManyInput = {
+  export type adminUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ListBukuCreateInput = {
+  export type beritaCreateInput = {
+    judul: string
+    isi: string
+    thumbnailUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type beritaUncheckedCreateInput = {
+    id?: number
+    judul: string
+    isi: string
+    thumbnailUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type beritaUpdateInput = {
+    judul?: StringFieldUpdateOperationsInput | string
+    isi?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type beritaUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    judul?: StringFieldUpdateOperationsInput | string
+    isi?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type beritaCreateManyInput = {
+    id?: number
+    judul: string
+    isi: string
+    thumbnailUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type beritaUpdateManyMutationInput = {
+    judul?: StringFieldUpdateOperationsInput | string
+    isi?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type beritaUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    judul?: StringFieldUpdateOperationsInput | string
+    isi?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type listbukuCreateInput = {
     title: string
     penulis: string
     penerbit: string
@@ -4180,42 +4233,7 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ListBukuUncheckedCreateInput = {
-    id?: number
-    title: string
-    penulis: string
-    penerbit: string
-    tahunTerbit: number
-    kategori: string
-    sinopsis: string
-    coverUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ListBukuUpdateInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    penulis?: StringFieldUpdateOperationsInput | string
-    penerbit?: StringFieldUpdateOperationsInput | string
-    tahunTerbit?: IntFieldUpdateOperationsInput | number
-    kategori?: StringFieldUpdateOperationsInput | string
-    sinopsis?: StringFieldUpdateOperationsInput | string
-    coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ListBukuUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    penulis?: StringFieldUpdateOperationsInput | string
-    penerbit?: StringFieldUpdateOperationsInput | string
-    tahunTerbit?: IntFieldUpdateOperationsInput | number
-    kategori?: StringFieldUpdateOperationsInput | string
-    sinopsis?: StringFieldUpdateOperationsInput | string
-    coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ListBukuCreateManyInput = {
+  export type listbukuUncheckedCreateInput = {
     id?: number
     title: string
     penulis: string
@@ -4227,7 +4245,7 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ListBukuUpdateManyMutationInput = {
+  export type listbukuUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
     penulis?: StringFieldUpdateOperationsInput | string
     penerbit?: StringFieldUpdateOperationsInput | string
@@ -4238,7 +4256,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ListBukuUncheckedUpdateManyInput = {
+  export type listbukuUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     penulis?: StringFieldUpdateOperationsInput | string
@@ -4250,56 +4268,38 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BeritaCreateInput = {
-    judul: string
-    isi: string
-    thumbnailUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type BeritaUncheckedCreateInput = {
+  export type listbukuCreateManyInput = {
     id?: number
-    judul: string
-    isi: string
-    thumbnailUrl?: string | null
+    title: string
+    penulis: string
+    penerbit: string
+    tahunTerbit: number
+    kategori: string
+    sinopsis: string
+    coverUrl?: string | null
     createdAt?: Date | string
   }
 
-  export type BeritaUpdateInput = {
-    judul?: StringFieldUpdateOperationsInput | string
-    isi?: StringFieldUpdateOperationsInput | string
-    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+  export type listbukuUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    penulis?: StringFieldUpdateOperationsInput | string
+    penerbit?: StringFieldUpdateOperationsInput | string
+    tahunTerbit?: IntFieldUpdateOperationsInput | number
+    kategori?: StringFieldUpdateOperationsInput | string
+    sinopsis?: StringFieldUpdateOperationsInput | string
+    coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BeritaUncheckedUpdateInput = {
+  export type listbukuUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    judul?: StringFieldUpdateOperationsInput | string
-    isi?: StringFieldUpdateOperationsInput | string
-    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BeritaCreateManyInput = {
-    id?: number
-    judul: string
-    isi: string
-    thumbnailUrl?: string | null
-    createdAt?: Date | string
-  }
-
-  export type BeritaUpdateManyMutationInput = {
-    judul?: StringFieldUpdateOperationsInput | string
-    isi?: StringFieldUpdateOperationsInput | string
-    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BeritaUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    judul?: StringFieldUpdateOperationsInput | string
-    isi?: StringFieldUpdateOperationsInput | string
-    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    penulis?: StringFieldUpdateOperationsInput | string
+    penerbit?: StringFieldUpdateOperationsInput | string
+    tahunTerbit?: IntFieldUpdateOperationsInput | number
+    kategori?: StringFieldUpdateOperationsInput | string
+    sinopsis?: StringFieldUpdateOperationsInput | string
+    coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4340,38 +4340,38 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type AdminOrderByRelevanceInput = {
-    fields: AdminOrderByRelevanceFieldEnum | AdminOrderByRelevanceFieldEnum[]
+  export type adminOrderByRelevanceInput = {
+    fields: adminOrderByRelevanceFieldEnum | adminOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type AdminCountOrderByAggregateInput = {
+  export type adminCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type AdminAvgOrderByAggregateInput = {
+  export type adminAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type AdminMaxOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AdminMinOrderByAggregateInput = {
+  export type adminMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type AdminSumOrderByAggregateInput = {
+  export type adminMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type adminSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
@@ -4443,56 +4443,42 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type ListBukuOrderByRelevanceInput = {
-    fields: ListBukuOrderByRelevanceFieldEnum | ListBukuOrderByRelevanceFieldEnum[]
+  export type beritaOrderByRelevanceInput = {
+    fields: beritaOrderByRelevanceFieldEnum | beritaOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type ListBukuCountOrderByAggregateInput = {
+  export type beritaCountOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    penulis?: SortOrder
-    penerbit?: SortOrder
-    tahunTerbit?: SortOrder
-    kategori?: SortOrder
-    sinopsis?: SortOrder
-    coverUrl?: SortOrder
+    judul?: SortOrder
+    isi?: SortOrder
+    thumbnailUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type ListBukuAvgOrderByAggregateInput = {
+  export type beritaAvgOrderByAggregateInput = {
     id?: SortOrder
-    tahunTerbit?: SortOrder
   }
 
-  export type ListBukuMaxOrderByAggregateInput = {
+  export type beritaMaxOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    penulis?: SortOrder
-    penerbit?: SortOrder
-    tahunTerbit?: SortOrder
-    kategori?: SortOrder
-    sinopsis?: SortOrder
-    coverUrl?: SortOrder
+    judul?: SortOrder
+    isi?: SortOrder
+    thumbnailUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type ListBukuMinOrderByAggregateInput = {
+  export type beritaMinOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    penulis?: SortOrder
-    penerbit?: SortOrder
-    tahunTerbit?: SortOrder
-    kategori?: SortOrder
-    sinopsis?: SortOrder
-    coverUrl?: SortOrder
+    judul?: SortOrder
+    isi?: SortOrder
+    thumbnailUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type ListBukuSumOrderByAggregateInput = {
+  export type beritaSumOrderByAggregateInput = {
     id?: SortOrder
-    tahunTerbit?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4513,42 +4499,56 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BeritaOrderByRelevanceInput = {
-    fields: BeritaOrderByRelevanceFieldEnum | BeritaOrderByRelevanceFieldEnum[]
+  export type listbukuOrderByRelevanceInput = {
+    fields: listbukuOrderByRelevanceFieldEnum | listbukuOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type BeritaCountOrderByAggregateInput = {
+  export type listbukuCountOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
-    isi?: SortOrder
-    thumbnailUrl?: SortOrder
+    title?: SortOrder
+    penulis?: SortOrder
+    penerbit?: SortOrder
+    tahunTerbit?: SortOrder
+    kategori?: SortOrder
+    sinopsis?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type BeritaAvgOrderByAggregateInput = {
+  export type listbukuAvgOrderByAggregateInput = {
     id?: SortOrder
+    tahunTerbit?: SortOrder
   }
 
-  export type BeritaMaxOrderByAggregateInput = {
+  export type listbukuMaxOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
-    isi?: SortOrder
-    thumbnailUrl?: SortOrder
+    title?: SortOrder
+    penulis?: SortOrder
+    penerbit?: SortOrder
+    tahunTerbit?: SortOrder
+    kategori?: SortOrder
+    sinopsis?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type BeritaMinOrderByAggregateInput = {
+  export type listbukuMinOrderByAggregateInput = {
     id?: SortOrder
-    judul?: SortOrder
-    isi?: SortOrder
-    thumbnailUrl?: SortOrder
+    title?: SortOrder
+    penulis?: SortOrder
+    penerbit?: SortOrder
+    tahunTerbit?: SortOrder
+    kategori?: SortOrder
+    sinopsis?: SortOrder
+    coverUrl?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type BeritaSumOrderByAggregateInput = {
+  export type listbukuSumOrderByAggregateInput = {
     id?: SortOrder
+    tahunTerbit?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {

@@ -127,7 +127,15 @@ exports.Prisma.AdminScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.ListBukuScalarFieldEnum = {
+exports.Prisma.BeritaScalarFieldEnum = {
+  id: 'id',
+  judul: 'judul',
+  isi: 'isi',
+  thumbnailUrl: 'thumbnailUrl',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ListbukuScalarFieldEnum = {
   id: 'id',
   title: 'title',
   penulis: 'penulis',
@@ -139,20 +147,12 @@ exports.Prisma.ListBukuScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.BeritaScalarFieldEnum = {
-  id: 'id',
-  judul: 'judul',
-  isi: 'isi',
-  thumbnailUrl: 'thumbnailUrl',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
-exports.Prisma.AdminOrderByRelevanceFieldEnum = {
+exports.Prisma.adminOrderByRelevanceFieldEnum = {
   email: 'email',
   password: 'password'
 };
@@ -162,7 +162,13 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
-exports.Prisma.ListBukuOrderByRelevanceFieldEnum = {
+exports.Prisma.beritaOrderByRelevanceFieldEnum = {
+  judul: 'judul',
+  isi: 'isi',
+  thumbnailUrl: 'thumbnailUrl'
+};
+
+exports.Prisma.listbukuOrderByRelevanceFieldEnum = {
   title: 'title',
   penulis: 'penulis',
   penerbit: 'penerbit',
@@ -171,17 +177,11 @@ exports.Prisma.ListBukuOrderByRelevanceFieldEnum = {
   coverUrl: 'coverUrl'
 };
 
-exports.Prisma.BeritaOrderByRelevanceFieldEnum = {
-  judul: 'judul',
-  isi: 'isi',
-  thumbnailUrl: 'thumbnailUrl'
-};
-
 
 exports.Prisma.ModelName = {
-  Admin: 'Admin',
-  ListBuku: 'ListBuku',
-  Berita: 'Berita'
+  admin: 'admin',
+  berita: 'berita',
+  listbuku: 'listbuku'
 };
 
 /**
