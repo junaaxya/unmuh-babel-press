@@ -26,7 +26,7 @@ export default function Seo({ title, description, image, url }) {
       <meta name="twitter:image" content={defaultImage} />
 
       {/* Favicon (optional) */}
-      {/* <link rel="icon" href="/favicon.ico" /> */}
+      <link rel="icon" href="/favicon.ico" />
     </Head>
   );
 }

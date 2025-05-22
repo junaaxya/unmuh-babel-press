@@ -56,8 +56,8 @@ export default function CatalogPage() {
             <Seo
                 title="Katalog Buku"
                 description="Lihat koleksi buku terbaru dari Unmuh Press."
-                image="https://unmuhbabelpress.com/og-katalog.jpg"
-                url="https://unmuhbabelpress.com/katalog"
+                image="https://unmuhbabelpress.com/og-catalog.jpg"
+                url="https://unmuhbabelpress.com/catalog"
             />
 
             <div className="bg-gray-50 min-h-screen py-12">
