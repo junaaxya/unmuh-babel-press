@@ -1,8 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+
+// ✅ src/app/api/books/addBooks/route.js
+
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
+
 
 export async function POST(req) {
   try {
