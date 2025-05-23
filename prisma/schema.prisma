@@ -1,5 +1,7 @@
+
 generator client {
   provider = "prisma-client-js"
+
 }
 
 datasource db {
@@ -7,12 +9,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model admin {
   id        Int      @id @default(autoincrement())
   email     String   @unique(map: "Admin_email_key")
+
   password  String
   createdAt DateTime @default(now())
 }
+
 
 model berita {
   id           Int      @id @default(autoincrement())
@@ -23,6 +28,7 @@ model berita {
 }
 
 model listbuku {
+
   id          Int      @id @default(autoincrement())
   title       String
   penulis     String
@@ -33,3 +39,4 @@ model listbuku {
   coverUrl    String?
   createdAt   DateTime @default(now())
 }
+

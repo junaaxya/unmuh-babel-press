@@ -41,7 +41,7 @@ Response:
 🚪 3. Logout Admin
 Endpoint: /api/admin/logout
 Method: POST
-=================================================
+
 api-books
 
 ## 📁 Struktur Folder
@@ -184,4 +184,4 @@ GET /api/books/search?title=next&penulis=andi&tahun_min=2020&tahun_max=2025
 }
 ```
 
----
+
