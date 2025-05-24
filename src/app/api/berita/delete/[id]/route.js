@@ -2,17 +2,16 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function DELETE(request) {
+  const url = new URL(request.url);
+  const id = parseInt(url.pathname.split("/").pop());
   try {
-    const { searchParams } = new URL(request.url);
-    const judul = searchParams.get("judul");
-
-    if (!judul) {
-      return NextResponse.json({ error: "Parameter judul wajib diisi" }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: `Berita dengan id=${id} tidak ditemukan` }, { status: 400 });
     }
 
     // Cari berita berdasarkan judul
     const beritaExist = await prisma.berita.findUnique({
-      where: { judul },
+      where: { id },
     });
 
     if (!beritaExist) {
@@ -21,7 +20,7 @@ export async function DELETE(request) {
 
     // Hapus berita
     await prisma.berita.delete({
-      where: { judul },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Berita berhasil dihapus" }, { status: 200 });
