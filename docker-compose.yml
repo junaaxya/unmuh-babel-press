@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        env_file:
+            - .env
+        depends_on:
+            mysql:
+                condition: service_healthy
+        volumes:
+            - .:/app
+            - /app/node_modules
+        command: npm run dev
+        networks:
+            - app-network
+
+    mysql:
+        image: mysql:8
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_ROOT_HOST: '%' # Allow root access from any host
+        volumes:
+            - mysql-data:/var/lib/mysql
+        healthcheck:
+            test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+            interval: 5s
+            timeout: 10s
+            retries: 10
+        networks:
+            - app-network
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: unless-stopped
+        ports:
+            - '8080:80'
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: ${PMA_USER:-root}
+            PMA_PASSWORD: ${PMA_PASSWORD:-${DB_ROOT_PASSWORD}}
+            PMA_ARBITRARY: 0
+        depends_on:
+            - mysql
+        networks:
+            - app-network
+
+volumes:
+    mysql-data:
+
+networks:
+    app-network:
+        driver: bridge
