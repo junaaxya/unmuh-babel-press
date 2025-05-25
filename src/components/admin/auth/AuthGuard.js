@@ -5,54 +5,46 @@ import { useRouter } from "next/navigation";
 
 const AuthGuard = ({ children }) => {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [authStatus, setAuthStatus] = useState("checking");
 
   useEffect(() => {
-    // Cek token di localStorage atau cookies
-    const adminToken = localStorage.getItem("adminToken");
-    
-    if (!adminToken) {
-      router.push("/admin/login");
-    } else {
-      // Opsional: Validasi token dengan backend
-      const validateToken = async () => {
-        try {
-          const response = await fetch("/api/auth/validate", {
-            headers: {
-              Authorization: `Bearer ${adminToken}`,
-            },
-          });
-          
-          if (!response.ok) {
-            throw new Error("Token tidak valid");
-          }
-          
-          setIsAuthenticated(true);
-        } catch (error) {
-          console.error("Token validation error:", error);
-          localStorage.removeItem("adminToken");
-          router.push("/admin/login");
-        } finally {
-          setIsLoading(false);
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/validate", {
+          credentials: "include",
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          throw new Error("Not authenticated");
         }
-      };
-      
-      validateToken();
-    }
+
+        setAuthStatus("authenticated");
+      } catch (error) {
+        setAuthStatus("unauthenticated");
+        // Hanya redirect jika tidak di halaman login
+        if (!window.location.pathname.includes("/login")) {
+          router.push("/admin/login");
+        }
+      }
+    };
+
+    checkAuth();
   }, [router]);
 
   // Tampilkan loading state
-  if (isLoading) {
+  if (authStatus === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
+  if (authStatus === "unauthenticated" && !window.location.pathname.includes("/login")) {
+    return null; // Sedang di-redirect ke login
+  }
 
-  // Tampilkan children hanya jika sudah terautentikasi
-  return isAuthenticated ? children : null;
+  return children;
 };
 
 export default AuthGuard;
