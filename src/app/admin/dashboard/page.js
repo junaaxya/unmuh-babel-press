@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import StatisticsCard from "@/components/admin/dashboard/StatisticsCard";
@@ -34,7 +34,7 @@ export default function Dashboard() {
             { id: 1, title: "Peluncuran Buku Terbaru", date: "2023-07-01", views: 120 },
             { id: 2, title: "Seminar Nasional Pendidikan", date: "2023-06-28", views: 195 },
             { id: 3, title: "Workshop Penulisan Karya Ilmiah", date: "2023-06-25", views: 87 },
-          ]
+          ],
         };
 
         setStatsData(data);
@@ -69,15 +69,13 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DashboardCard title="Buku Terbaru">
               <div className="divide-y">
-                {statsData.recentBooks.map(book => (
+                {statsData.recentBooks.map((book) => (
                   <div key={book.id} className="py-3 flex justify-between">
                     <div>
                       <p className="font-medium">{book.title}</p>
                       <p className="text-sm text-gray-500">{book.author}</p>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(book.publishDate).toLocaleDateString("id-ID")}
-                    </div>
+                    <div className="text-sm text-gray-500">{new Date(book.publishDate).toLocaleDateString("id-ID")}</div>
                   </div>
                 ))}
               </div>
@@ -90,7 +88,7 @@ export default function Dashboard() {
 
             <DashboardCard title="Berita Terbaru">
               <div className="divide-y">
-                {statsData.recentNews.map(news => (
+                {statsData.recentNews.map((news) => (
                   <div key={news.id} className="py-3 flex justify-between">
                     <div>
                       <p className="font-medium">{news.title}</p>
@@ -98,9 +96,7 @@ export default function Dashboard() {
                         <i className="fas fa-eye mr-1"></i> {news.views} views
                       </p>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(news.date).toLocaleDateString("id-ID")}
-                    </div>
+                    <div className="text-sm text-gray-500">{new Date(news.date).toLocaleDateString("id-ID")}</div>
                   </div>
                 ))}
               </div>

@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
-
 import { serialize } from "cookie";
 
 if (!process.env.JWT_SECRET) {
@@ -24,6 +22,7 @@ export async function POST(req) {
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: "Format email tidak valid" }, { status: 400 });
     }
+
     // Cari admin berdasarkan email
     const admin = await prisma.admin.findUnique({
       where: { email },
@@ -39,8 +38,9 @@ export async function POST(req) {
       return NextResponse.json({ error: "Password salah" }, { status: 401 });
     }
 
-    // Generate token JWT
-    const token = jwt.sign({ id: admin.id, email: admin.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    // Generate token JWT menggunakan jose
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const token = await new SignJWT({ id: admin.id, email: admin.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("1d").sign(secret);
 
     const serialized = serialize("token", token, {
       httpOnly: true,
@@ -49,6 +49,7 @@ export async function POST(req) {
       maxAge: 60 * 60 * 24, // 1 hari
       path: "/",
     });
+
     // Return token
     const response = NextResponse.json({
       message: "Login berhasil",
