@@ -28,7 +28,7 @@ export default function NewsCard({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300 border border-gray-100 dark:border-gray-700"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300 "
         >
             <div className="relative aspect-video w-full mb-4 overflow-hidden rounded-lg">
                 <Image
@@ -57,7 +57,7 @@ export default function NewsCard({
                 })}
             </div>
 
-            <h3 className="font-bold text-xl mb-3 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+            <h3 className="font-bold text-xl mb-3 line-clamp-2 text-white hover:text-blue-600 transition-colors duration-200">
                 {title}
             </h3>
 

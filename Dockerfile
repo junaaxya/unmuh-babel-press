@@ -1,27 +1,20 @@
-# Gunakan image Node.js ringan
+# Gunakan base image Node.js Alpine (ringan)
 FROM node:20-alpine
 
-# Set direktori kerja
+# Buat direktori kerja di dalam container
 WORKDIR /app
 
-# Pasang dependensi dulu (lebih cepat caching)
+# Salin file package.json dan package-lock.json
 COPY package*.json ./
 
 # Install dependensi
 RUN npm install
 
-# Copy seluruh project
+# Salin semua file project ke dalam container
 COPY . .
 
-# Salin environment variables agar tersedia saat build
-# Perlu ditempatkan SEBELUM `npm run build`
-COPY .env .env
-
-# Generate Prisma Client
+# Generate Prisma client
 RUN npx prisma generate
 
-# Build Next.js
-RUN npm run build
-
-# Jalankan server (gunakan start untuk produksi, dev untuk lokal)
-CMD ["npm", "start"]
+# Jalankan aplikasi dalam mode development
+CMD ["npm", "run", "dev"]
