@@ -9,7 +9,7 @@ export default function Home() {
             <HeroSection />
             <Section2Books />
             <Section3Books />
-            {/* <Section4NewsEvent /> */}
+            <Section4NewsEvent />
         </main>
     );
 }

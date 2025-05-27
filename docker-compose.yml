@@ -9,9 +9,10 @@ services:
             - '3000:3000'
         env_file:
             - .env
+        environment:
+            - WATCHPACK_POLLING=true
         depends_on:
-            mysql:
-                condition: service_healthy
+            - mysql
         volumes:
             - .:/app
             - /app/node_modules
