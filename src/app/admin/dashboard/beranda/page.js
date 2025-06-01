@@ -331,8 +331,8 @@ const DeleteModal = ({ isOpen, onConfirm, onCancel, itemTitle }) => {
                     Konfirmasi Hapus
                 </h3>
                 <p className="text-gray-600 mb-6">
-                    Apakah Anda yakin ingin menghapus "{itemTitle}"? Tindakan
-                    ini tidak dapat dibatalkan.
+                    Apakah Anda yakin ingin menghapus {itemTitle}? Tindakan ini
+                    tidak dapat dibatalkan.
                 </p>
                 <div className="flex justify-end space-x-4">
                     <button
