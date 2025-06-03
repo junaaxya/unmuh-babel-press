@@ -8,7 +8,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 // Import komponen UI yang sudah dibuat
 import Button from '@/components/ui/button/Button';
 import Card, { VideoCard } from '@/components/ui/card/card';
-import Title from '@/components/ui/title/title';
+import Title from '@/components/ui/title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Konfigurasi YouTube Channel
