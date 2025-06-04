@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '@/components/ui/button/Button';
-import { updateHeroText } from '../../../../services/api';
+import { updateHeroText } from '@/app/services/api';
 
 export default function HeroTextEditor({ headline, subheadline, onSuccess, setNotification }) {
   const [head, setHead] = useState(headline);
