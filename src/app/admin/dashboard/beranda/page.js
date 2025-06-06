@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import LogoUploader from './components/LogoUploader';
 import HeroImageUploader from './components/HeroImageUploader';
 import HeroTextEditor from './components/HeroTextEditor';
-// import Notification from '@/components/ui/Notification';
 import { getHomeContent } from '../../../services/api';
+import Notification from '@/components/ui/Notification/Notification';
 
 export default function BerandaPage() {
     const [data, setData] = useState(null);
