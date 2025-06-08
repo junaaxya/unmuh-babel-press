@@ -4,13 +4,16 @@ import { authorize } from "@/lib/authorize";
 import { z } from "zod";
 
 const bookSchema = z.object({
-  title: z.string().min(3, "Judul minimal 3 karakter"),
-  penulis: z.string().min(3),
-  penerbit: z.string().min(2),
-  tahunTerbit: z.number().int().min(1900).max(new Date().getFullYear()),
-  kategori: z.string().optional(),
-  sinopsis: z.string().max(500).optional(),
-  coverUrl: z.string().optional(),
+  Kode_Buku: z.string().min(3, "Kode Buku minimal 3 karakter"),
+  ISBN: z.string().min(10, "ISBN minimal 10 karakter"),
+  Penerbit: z.string().min(2, "Penerbit minimal 2 karakter"),
+  Penulis: z.string().min(3, "Penulis minimal 3 karakter"),
+  Editor: z.string().min(3, "Editor minimal 3 karakter"),
+  Ukuran: z.string().min(2, "Ukuran minimal 2 karakter"),
+  Halaman: z.number().int().min(1, "Halaman minimal 1"),
+  image: z.string().url("URL tidak valid"),
+  kategori: z.string().min(3, "Kategori minimal 3 karakter"),
+  sinopsis: z.string().max(1000, "Sinopsis maksimal 1000 karakter"),
 });
 
 export async function POST(request) {
