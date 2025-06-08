@@ -319,3 +319,84 @@ Semua endpoint menggunakan validasi dengan library `zod` dan akan mengembalikan 
 ```
 
 ---
+
+````markdown
+# Endpoint API-BERANDA
+
+## GET `/api/beranda`
+
+Mengambil data untuk beranda (logo, hero image, dan hero text).
+
+**Contoh respons:**
+
+```json
+{
+  "logo": "/uploads/logo.png",
+  "heroImage": "/uploads/hero-image.png",
+  "herotext": {
+    "title": "Judul Hero",
+    "subtitle": "Subjudul Hero"
+  }
+}
+```
+````
+
+**Catatan:** Endpoint ini memerlukan token authorization. Jika tidak disertakan token, akan mendapat respons `401 Unauthorized`.
+
+## GET `/api/beranda/hero-text`
+
+Mengambil data hero text dari file JSON.
+
+**Contoh respons:**
+
+```json
+{
+  "title": "Judul Hero",
+  "subtitle": "Subjudul Hero"
+}
+```
+
+## PUT `/api/beranda/hero-text`
+
+Memperbarui file heroText.json.
+
+**Request body (JSON):**
+
+```json
+{
+  "title": "Judul baru",
+  "subtitle": "Subjudul baru"
+}
+```
+
+**Persyaratan:** Wajib menyertakan token authorization.
+
+## POST `/api/beranda/logo`
+
+Mengunggah file logo.
+
+**Format request:** Form-data dengan field `file`  
+**File akan disimpan di:** `public/uploads/logo.png`
+
+## DELETE `/api/beranda/logo`
+
+Menghapus file logo.  
+**Lokasi file yang dihapus:** `uploads/logo.png`
+
+## POST `/api/beranda/hero-image`
+
+Mengunggah file hero image.
+
+**Format request:** Form-data dengan field `file`  
+**File akan disimpan di:** `public/uploads/hero-image.png`
+
+## DELETE `/api/beranda/hero-image`
+
+Menghapus file hero image.  
+**Lokasi file yang dihapus:** `public/uploads/hero-image.png`
+
+**Catatan:** Semua endpoint yang mengubah data (PUT, POST, DELETE) memerlukan token authorization.
+
+```
+
+```
