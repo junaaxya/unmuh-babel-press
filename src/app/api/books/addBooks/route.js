@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { authorize } from "@/lib/authorize";
 import { z } from "zod";
 
 const bookSchema = z.object({
@@ -13,6 +14,8 @@ const bookSchema = z.object({
 });
 
 export async function POST(request) {
+  const authError = await authorize(request);
+  if (authError) return authError;
   try {
     const body = await request.json();
 

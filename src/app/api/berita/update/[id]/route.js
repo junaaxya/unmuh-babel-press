@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { authorize } from "@/lib/authorize";
 import { z } from "zod";
 
 const updateBeritaSchema = z
@@ -12,6 +13,8 @@ const updateBeritaSchema = z
     message: "Minimal satu field harus diisi untuk update",
   });
 export async function PUT(request) {
+  const authError = await authorize(request);
+  if (authError) return authError;
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop());
   try {
