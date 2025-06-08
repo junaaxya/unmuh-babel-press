@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { authorize } from "@/lib/authorize";
 
 export async function DELETE(request) {
+  const authError = await authorize(request);
+  if (authError) return authError;
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop());
   try {

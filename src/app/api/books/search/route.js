@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { authorize } from "@/lib/authorize";
 
 export async function GET(request) {
+  const authError = await authorize(request);
+  if (authError) return authError;
   try {
     const { searchParams } = new URL(request.url);
 

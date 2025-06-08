@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { authorize } from "@/lib/authorize";
 import { z } from "zod";
 
 const beritaSchema = z.object({
@@ -9,6 +10,8 @@ const beritaSchema = z.object({
 });
 
 export async function POST(request) {
+  const authError = await authorize(request);
+  if (authError) return authError;
   try {
     const body = await request.json();
     const validated = beritaSchema.parse(body);
