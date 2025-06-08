@@ -29,14 +29,17 @@ model berita {
 
 model listbuku {
 
-  id          Int      @id @default(autoincrement())
-  title       String
-  penulis     String
-  penerbit    String
-  tahunTerbit Int
-  kategori    String
-  sinopsis    String   @db.Text
-  coverUrl    String?
-  createdAt   DateTime @default(now())
+ id Int @id @default(autoincrement())
+Kode_Buku String @unique
+ISBN String @unique
+Penerbit String
+Penulis String
+Editor String
+Ukuran String
+Halaman Int
+image String? // URL gambar sampul
+kategori String
+sinopsis String @db.Text
+createdAt DateTime @default(now())
 }
 
