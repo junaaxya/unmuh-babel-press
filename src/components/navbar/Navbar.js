@@ -20,11 +20,27 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
+    const [logoUrl, setLogoUrl] = useState('/uploads/logo.png');
+    // Ambil logo dari API
+    useEffect(() => {
+        const fetchLogo = async () => {
+            try {
+                const res = await fetch('/api/beranda', {
+                    credentials: 'include',
+                });
+                if (!res.ok) throw new Error('Gagal memuat logo');
+                const data = await res.json();
+                if (data.logo) setLogoUrl(`${data.logo}?t=${Date.now()}`);
+            } catch (err) {
+                console.error('Gagal mengambil logo:', err);
+            }
+        };
+        fetchLogo();
+    }, []);
 
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // If menu is open and click is outside of menu and not on the toggle button
             if (
                 menuOpen &&
                 menuRef.current &&
@@ -36,11 +52,9 @@ export default function Navbar() {
             }
         };
 
-        // Add event listener when component mounts
         document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('touchstart', handleClickOutside); // For mobile touch
+        document.addEventListener('touchstart', handleClickOutside);
 
-        // Clean up event listener when component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('touchstart', handleClickOutside);
@@ -53,8 +67,7 @@ export default function Navbar() {
                 {/* Logo + Title */}
                 <Link href="/" className="flex items-center space-x-4">
                     <Image
-                        src="/unmuhpress.png"
-                        href="/"
+                        src={logoUrl}
                         alt="Logo"
                         width={90}
                         height={90}
@@ -102,7 +115,7 @@ export default function Navbar() {
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >
-                            <FontAwesomeIcon icon={faHouse} className="mr-2" />
+                            <FontAwesomeIcon icon={faHouse} className="mr-2" />{' '}
                             Beranda
                         </Link>
                     </li>
@@ -115,7 +128,7 @@ export default function Navbar() {
                             <FontAwesomeIcon
                                 icon={faCircleUser}
                                 className="mr-2"
-                            />
+                            />{' '}
                             Profil
                         </Link>
                     </li>
@@ -125,7 +138,7 @@ export default function Navbar() {
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >
-                            <FontAwesomeIcon icon={faBook} className="mr-2" />
+                            <FontAwesomeIcon icon={faBook} className="mr-2" />{' '}
                             Katalog
                         </Link>
                     </li>
@@ -139,7 +152,7 @@ export default function Navbar() {
                                 icon={faNewspaper}
                                 className="mr-2 w-4 text-center"
                                 fixedWidth
-                            />
+                            />{' '}
                             Berita & Event
                         </Link>
                     </li>
@@ -152,7 +165,7 @@ export default function Navbar() {
                             <FontAwesomeIcon
                                 icon={faHandshake}
                                 className="mr-2"
-                            />
+                            />{' '}
                             Layanan
                         </Link>
                     </li>
@@ -165,7 +178,7 @@ export default function Navbar() {
                             <FontAwesomeIcon
                                 icon={faEnvelope}
                                 className="mr-2"
-                            />
+                            />{' '}
                             Kontak
                         </Link>
                     </li>

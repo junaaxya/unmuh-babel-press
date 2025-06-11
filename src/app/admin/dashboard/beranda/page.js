@@ -8,14 +8,6 @@ import Notification from '@/components/ui/Notification/Notification';
 
 export default function BerandaPage() {
     const [data, setData] = useState(null);
-    useEffect(() => {
-        setData({
-            logoUrl: '/unmuhpress.png',
-            heroImageUrl: '/unmuhpress.png',
-            headline: 'Selamat Datang!',
-            subheadline: 'Ini adalah subheadline contoh',
-        });
-    }, []);
     const [notification, setNotification] = useState(null);
 
     const fetchData = async () => {
@@ -31,7 +23,14 @@ export default function BerandaPage() {
         <div className="p-4 space-y-6">
             <h1 className="text-2xl font-bold">Kelola Halaman Beranda</h1>
 
-            {notification && <Notification {...notification} />}
+            {notification && (
+  <Notification
+    key={notification.id}
+    {...notification}
+    onClose={() => setNotification(null)}
+  />
+)}
+
 
             {data && (
                 <>
