@@ -1,3 +1,4 @@
+
 export const dummyNewBook = [
   {
     id: 12,
@@ -30,3 +31,4 @@ export const dummyNewBook = [
       "Buku ini hadir sebagai solusi inovatif untuk mengatasi tantangan pembelajaran daring dengan menyajikan panduan pengembangan media interaktif yang menarik dan efektif. Dirancang khusus bagi pendidik, buku ini tidak hanya mengidentifikasi masalah umum dalam pembelajaran online tetapi juga memberikan strategi praktis menciptakan media pembelajaran yang menyenangkan dan interaktif. Melalui pendekatan yang aplikatif, penulis membimbing pembaca untuk mengoptimalkan teknologi guna meningkatkan kualitas pengajaran daring, sekaligus menjaga engagement peserta didik. Cocok digunakan sebagai referensi bagi guru, dosen, maupun praktisi pendidikan yang ingin mentransformasi pembelajaran online menjadi lebih dinamis dan bermakna.",
   },
 ];
+

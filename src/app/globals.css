@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 /* @import "tailwindcss/preflight";
 @tailwind utilities; */
@@ -61,3 +62,4 @@ body {
     transform: scale(1);
   }
 }
+
