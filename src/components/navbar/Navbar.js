@@ -90,7 +90,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
+            <Link href="/kontak" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
               Kontak
             </Link>
