@@ -8,7 +8,6 @@ import dummyBooks from '@/data/dummyBooks';
 import { dummyNewBook } from '@/data/dummyNewBook';
 import Seo from '@/components/common/Seo';
 
-
 export default function CatalogPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
@@ -56,8 +55,8 @@ export default function CatalogPage() {
             <Seo
                 title="Katalog Buku"
                 description="Lihat koleksi buku terbaru dari Unmuh Press."
-                image="https://unmuhbabelpress.com/og-katalog.jpg"
-                url="https://unmuhbabelpress.com/katalog"
+                image="https://unmuhbabelpress.com/unmuhpress.png"
+                url="https://unmuhbabelpress.com/catalog"
             />
 
             <div className="bg-gray-50 min-h-screen py-12">
@@ -95,7 +94,7 @@ export default function CatalogPage() {
                                 <FontAwesomeIcon
                                     icon={faFilter}
                                     className="w-4 text-gray-700"
-fixedWidth
+                                    fixedWidth
                                 />
                                 <select
                                     className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
