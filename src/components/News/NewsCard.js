@@ -1,79 +1,170 @@
+// src/components/News/NewsCard.js
 import {
-    faCalendarDays,
+    faCalendarAlt,
+    faClock,
+    faUser,
     faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '@/components/ui/button/Button';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 
-export default function NewsCard({
-    title,
-    date,
-    description,
-    image,
-    link,
-    category = 'Berita',
-}) {
-    // Truncate description if it's too long
-    const truncatedDescription =
-        description.length > 120
-            ? `${description.substring(0, 120)}...`
-            : description;
+const NewsCard = ({ item, type = 'news' }) => {
+    const formatDate = (dateString) => {
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            timeZone: 'Asia/Jakarta',
+        };
+        return new Date(dateString).toLocaleDateString('id-ID', options);
+    };
+
+    const getStatusBadge = (status) => {
+        const statusConfig = {
+            upcoming: {
+                text: 'Akan Datang',
+                class: 'bg-blue-100 text-blue-800',
+            },
+            completed: { text: 'Selesai', class: 'bg-gray-100 text-gray-800' },
+            ongoing: {
+                text: 'Berlangsung',
+                class: 'bg-green-100 text-green-800',
+            },
+        };
+
+        return (
+            statusConfig[status] || {
+                text: status,
+                class: 'bg-gray-100 text-gray-800',
+            }
+        );
+    };
 
     return (
-        <motion.article
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300 border border-gray-100 dark:border-gray-700"
-        >
-            <div className="relative aspect-video w-full mb-4 overflow-hidden rounded-lg">
+        <div className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200">
+            {/* Image Container */}
+            <div className="relative overflow-hidden">
                 <Image
-                    src={image}
-                    alt={title}
-                    width={600}
-                    height={400}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    priority
+                    src={item.image}
+                    alt={item.title}
+                    width={800}
+                    height={600}
+                    className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                        e.target.src = '/unmuhpress.png';
+                    }}
                 />
-                <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-medium px-2.5 py-1 rounded">
-                    {category}
-                </span>
+
+                {/* Category Badge */}
+                <div className="absolute top-3 left-3">
+                    <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            type === 'event'
+                                ? 'bg-purple-100 text-purple-800'
+                                : 'bg-blue-100 text-blue-800'
+                        }`}
+                    >
+                        {item.category}
+                    </span>
+                </div>
+
+                {/* Status Badge (for events) */}
+                {type === 'event' && item.status && (
+                    <div className="absolute top-3 right-3">
+                        <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                getStatusBadge(item.status).class
+                            }`}
+                        >
+                            {getStatusBadge(item.status).text}
+                        </span>
+                    </div>
+                )}
             </div>
 
-            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                <FontAwesomeIcon
-                    icon={faCalendarDays}
-                    className="mr-2 text-blue-600 dark:text-blue-400"
-                    size="sm"
-                />
-                {new Date(date).toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                })}
+            {/* Content */}
+            <div className="p-5">
+                {/* Title */}
+                <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
+                    {item.title}
+                </h3>
+
+                {/* Meta Information */}
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                        <FontAwesomeIcon
+                            icon={faCalendarAlt}
+                            className="w-4 h-4"
+                        />
+                        <span>{formatDate(item.date)}</span>
+                    </div>
+
+                    {type === 'news' && item.readTime && (
+                        <div className="flex items-center gap-1">
+                            <FontAwesomeIcon
+                                icon={faClock}
+                                className="w-4 h-4"
+                            />
+                            <span>{item.readTime}</span>
+                        </div>
+                    )}
+
+                    {type === 'news' && item.author && (
+                        <div className="flex items-center gap-1">
+                            <FontAwesomeIcon
+                                icon={faUser}
+                                className="w-4 h-4"
+                            />
+                            <span>{item.author}</span>
+                        </div>
+                    )}
+
+                    {type === 'event' && item.time && (
+                        <div className="flex items-center gap-1">
+                            <FontAwesomeIcon
+                                icon={faClock}
+                                className="w-4 h-4"
+                            />
+                            <span>{item.time}</span>
+                        </div>
+                    )}
+                </div>
+
+                {/* Event Location (for events only) */}
+                {type === 'event' && item.location && (
+                    <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                        <FontAwesomeIcon
+                            icon={faCalendarAlt}
+                            className="w-4 h-4"
+                        />
+                        <span>{item.location}</span>
+                    </div>
+                )}
+
+                {/* Excerpt */}
+                <p className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-3">
+                    {item.excerpt}
+                </p>
+
+                {/* Action Button */}
+                <div className="flex justify-between items-center">
+                    <button className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200 group-hover:translate-x-1 transform transition-transform">
+                        {type === 'event' && item.status === 'upcoming'
+                            ? 'Daftar Sekarang'
+                            : 'Baca Selengkapnya'}
+                        <FontAwesomeIcon
+                            icon={faArrowRight}
+                            className="w-4 h-4"
+                        />
+                    </button>
+
+                    {type === 'event' && item.status === 'upcoming' && (
+                        <span className="text-xs text-gray-500">Gratis</span>
+                    )}
+                </div>
             </div>
-
-            <h3 className="font-bold text-xl mb-3 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
-                {title}
-            </h3>
-
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-grow line-clamp-3">
-                {truncatedDescription}
-            </p>
-
-            <Link href={link} className="mt-auto">
-                <Button className="w-full flex items-center justify-center gap-2 group">
-                    <span>Baca Selengkapnya</span>
-                    <FontAwesomeIcon
-                        icon={faArrowRight}
-                        className="transform transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                </Button>
-            </Link>
-        </motion.article>
+        </div>
     );
-}
+};
+
+export default NewsCard;
