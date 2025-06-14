@@ -1,0 +1,45 @@
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique(map: "Admin_email_key")
+
+  password  String
+  createdAt DateTime @default(now())
+}
+
+
+model berita {
+  id           Int      @id @default(autoincrement())
+  judul        String
+  isi          String   @db.Text
+  thumbnailUrl String?
+  createdAt    DateTime @default(now())
+}
+
+model listbuku {
+
+ id Int @id @default(autoincrement())
+Kode_Buku String @unique
+ISBN String @unique
+Penerbit String
+Penulis String
+Editor String
+Ukuran String
+Halaman Int
+image String? // URL gambar sampul
+kategori String
+sinopsis String @db.Text
+createdAt DateTime @default(now())
+}
+

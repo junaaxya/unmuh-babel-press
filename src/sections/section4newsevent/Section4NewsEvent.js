@@ -1,7 +1,7 @@
 'use client';
 import SectionHeading from '@/components/common/SectionHeading';
 import { NewsList, NewsLoading, NewsEmpty } from '@/components/News';
-import { dummyNewBook } from '@/data/dummyNewBook';
+import { dummyNews } from '@/data/dummyNews';
 
 export default function Section4NewsEvent() {
     const newsData = dummyNews;
@@ -12,7 +12,7 @@ export default function Section4NewsEvent() {
     return (
         <section className="py-16 bg-gray-50">
             <SectionHeading title="Update Berita & Event" />
-            <NewsList items={dummyNewBook} />
+            <NewsList items={dummyNews} />
         </section>
     );
 }
