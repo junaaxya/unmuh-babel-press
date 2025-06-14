@@ -7,10 +7,11 @@ body {
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #7c2d12 0%, #991b1b 50%, #dc2626 100%);
+  /* background: linear-gradient(135deg, #7c2d12 0%, #991b1b 50%, #dc2626 100%); */
+  background: #0b1e3f;
 }
 .cta {
-  background: #7c2d12;
+  background: #101933;
 }
 
 .card-hover {
