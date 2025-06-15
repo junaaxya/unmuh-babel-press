@@ -1,5 +1,67 @@
 @import "tailwindcss";
+/* @import "tailwindcss/preflight";
+@tailwind utilities; */
 
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.gradient-bg {
+  /* background: linear-gradient(135deg, #7c2d12 0%, #991b1b 50%, #dc2626 100%); */
+  background: #0b1e3f;
+}
+.cta {
+  background: #101933;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feature-item {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.feature-item::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
 
 /* Line clamp utilities */
@@ -72,3 +134,4 @@
 .gradient-bg-3 {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
+

@@ -1,21 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faFacebookF,
-    faTwitter,
-    faInstagram,
-    faYoutube,
-    faLinkedinIn,
-} from '@fortawesome/free-brands-svg-icons';
-import {
-    faMapMarkerAlt,
-    faPhone,
-    faEnvelope,
-    faClock,
-} from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-import Image from 'next/image';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookF, faTwitter, faInstagram, faYoutube, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import { faMapMarkerAlt, faPhone, faEnvelope, faClock } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
+
     return (
         <footer className="bg-gray-900 text-gray-300">
             {/* Main Footer Content */}
@@ -187,72 +177,47 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Column 3 - Services */}
-                    <div className="mb-6 lg:mb-0">
-                        <h3 className="text-white font-bold text-lg mb-4">
-                            Layanan Unmuh Press
-                        </h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link
-                                    href="/paket-penerbitan"
-                                    className="hover:text-blue-400 transition-colors duration-300"
-                                >
-                                    Paket Penerbitan
-                                </Link>
-                            </li>
-                            {/* Add other services here as needed */}
-                        </ul>
-                    </div>
 
-                    {/* Column 4 - Contact */}
-                    <div>
-                        <h3 className="text-white font-bold text-lg mb-4">
-                            Kontak Kami
-                        </h3>
-                        <ul className="space-y-3">
-                            <li className="flex">
-                                <FontAwesomeIcon
-                                    icon={faMapMarkerAlt}
-                                    className="text-blue-400 mr-3 mt-1 w-5"
-                                />
-                                <span>
-                                    Gedung Rektorat Lt.3, Universitas
-                                    Muhammadiyah Bangka Belitung, Jl. KH Ahmad
-                                    Dahlan, Keramat, Rangkui, Pangkal Pinang,
-                                    Bangka Belitung
-                                </span>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faPhone}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <span>(+62) 821-7122-2017</span>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faEnvelope}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <Link
-                                    href="mailto:haki@univ.edu"
-                                    className="hover:text-blue-400 transition-colors duration-300"
-                                >
-                                    ubp@unmuhbabel.ac.id
-                                </Link>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faClock}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <span>Senin-Jumat: 08.00-16.00 WIB</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+          {/* Column 3 - Services */}
+          <div className="mb-6 lg:mb-0">
+            <h3 className="text-white font-bold text-lg mb-4">Layanan Unmuh Press</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/layanan" className="hover:text-blue-400 transition-colors duration-300">
+                  Paket Penerbitan
+                </Link>
+              </li>
+              {/* Add other services here as needed */}
+            </ul>
+          </div>
+
+          {/* Column 4 - Contact */}
+          <div>
+            <h3 className="text-white font-bold text-lg mb-4">Kontak Kami</h3>
+            <ul className="space-y-3">
+              <li className="flex">
+                <FontAwesomeIcon icon={faMapMarkerAlt} className="text-blue-400 mr-3 mt-1 w-5" />
+                <span>Gedung Rektorat Lt.3, Universitas Muhammadiyah Bangka Belitung, Jl. KH Ahmad Dahlan, Keramat, Rangkui, Pangkal Pinang, Bangka Belitung</span>
+              </li>
+              <li className="flex items-center">
+                <FontAwesomeIcon icon={faPhone} className="text-blue-400 mr-3 w-5" />
+                <span>(+62) 821-7122-2017</span>
+              </li>
+              <li className="flex items-center">
+                <FontAwesomeIcon icon={faEnvelope} className="text-blue-400 mr-3 w-5" />
+                <Link href="mailto:haki@univ.edu" className="hover:text-blue-400 transition-colors duration-300">
+                  ubp@unmuhbabel.ac.id
+                </Link>
+              </li>
+              <li className="flex items-center">
+                <FontAwesomeIcon icon={faClock} className="text-blue-400 mr-3 w-5" />
+                <span>Senin-Jumat: 08.00-16.00 WIB</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
 
             {/* Footer Bottom - Copyright */}
             <div className="border-t border-gray-800">
@@ -284,7 +249,11 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
+
             </div>
-        </footer>
-    );
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }
