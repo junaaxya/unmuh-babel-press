@@ -56,46 +56,90 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Menu Items */}
-      <div ref={menuRef} className={`bg-blue-700 shadow-sm/50 md:flex md:items-center md:justify-center transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}>
-        <ul className="flex flex-col md:flex-row md:space-x-6 text-sm p-4 md:p-2">
-          <li>
-            <Link href="/" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faHouse} className="mr-2" />
-              Beranda
-            </Link>
-          </li>
-          <li>
-            <Link href="#" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faCircleUser} className="mr-2" />
-              Profil
-            </Link>
-          </li>
-          <li>
-            <Link href="/catalog" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faBook} className="mr-2" />
-              Katalog
-            </Link>
-          </li>
-          <li>
-            <Link href="#" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faNewspaper} className="mr-2 w-4 text-center" fixedWidth />
-              Berita & Event
-            </Link>
-          </li>
-          <li>
-            <Link href="/layanan" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faHandshake} className="mr-2" />
-              Paket Penerbitan
-            </Link>
-          </li>
-          <li>
-            <Link href="/kontak" className="flex items-center py-2" onClick={() => setMenuOpen(false)}>
-              <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-              Kontak
-            </Link>
-          </li>
-        </ul>
+
+            {/* Menu Items */}
+            <div
+                ref={menuRef}
+                className={`bg-blue-700 shadow-sm/50 md:flex md:items-center md:justify-center transition-all duration-300 ${
+                    menuOpen ? 'block' : 'hidden'
+                }`}
+            >
+                <ul className="flex flex-col md:flex-row md:space-x-6 text-sm p-4 md:p-2">
+                    <li>
+                        <Link
+                            href="/"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon icon={faHouse} className="mr-2" />
+                            Beranda
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/profil"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faCircleUser}
+                                className="mr-2"
+                            />
+                            Profil
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/catalog"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon icon={faBook} className="mr-2" />
+                            Katalog
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/berita-event"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faNewspaper}
+                                className="mr-2 w-4 text-center"
+                                fixedWidth
+                            />
+                            Berita & Event
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/layanan"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faHandshake}
+                                className="mr-2"
+                            />
+                           Paket Penerbitan
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/"
+                            className="flex items-center py-2"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faEnvelope}
+                                className="mr-2"
+                            />
+                            Kontak
+                        </Link>
+                    </li>
+                </ul>
+
 
         {/* Search Mobile */}
         <div className="block md:hidden px-4 pb-4">
