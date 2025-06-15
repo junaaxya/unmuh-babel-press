@@ -114,7 +114,7 @@ export default function Navbar() {
                     </li>
                     <li>
                         <Link
-                            href="#"
+                            href="/layanan"
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >
@@ -127,7 +127,7 @@ export default function Navbar() {
                     </li>
                     <li>
                         <Link
-                            href="#"
+                            href="/"
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >
