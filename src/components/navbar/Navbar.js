@@ -108,7 +108,7 @@ export default function Navbar() {
                     </li>
                     <li>
                         <Link
-                            href="#"
+                            href="/profil"
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >

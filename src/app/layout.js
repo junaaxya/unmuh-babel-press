@@ -38,7 +38,7 @@ export const metadata = {
         card: 'summary_large_image',
         title: 'Unmuh Press - Penerbit Buku Digital Muhammadiyah Babel',
         description: 'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
-        images: ['https://unmuhbabelpress.com/unmuhpress.ong'],
+        images: ['https://unmuhbabelpress.com/unmuhpress.png'],
     },
     icons: {
         icon: '/favicon.ico', 
