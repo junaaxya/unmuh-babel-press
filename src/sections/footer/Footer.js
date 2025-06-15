@@ -5,95 +5,178 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Footer() {
-  return (
-    <footer className="bg-gray-900 text-gray-300">
-      {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Column 1 - About */}
-          <div className="mb-6 lg:mb-0">
-            <div className="flex items-center mb-4">
-              <Image src="/unmuhpress.png" alt="Unmuh Press Logo" width={90} height={90} className="mr-2" />
-              <div>
-                <h2 className="text-white font-bold text-lg leading-tight">
-                  BADAN PENERBIT
-                  <br />
-                  DAN PUBLIKASI
-                </h2>
-              </div>
-            </div>
-            <p className="text-sm mb-4">Badan Penerbit dan Publikasi Universitas Muhammadiyah Bangka Belitung</p>
-            <div className="flex space-x-3">
-              <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <div className="bg-gray-700 hover:bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                  <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
-                </div>
-              </Link>
-              <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <div className="bg-gray-700 hover:bg-blue-400 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                  <FontAwesomeIcon icon={faTwitter} className="w-4 h-4" />
-                </div>
-              </Link>
-              <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <div className="bg-gray-700 hover:bg-pink-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                  <FontAwesomeIcon icon={faInstagram} className="w-4 h-4" />
-                </div>
-              </Link>
-              <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                <div className="bg-gray-700 hover:bg-red-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                  <FontAwesomeIcon icon={faYoutube} className="w-4 h-4" />
-                </div>
-              </Link>
-              <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <div className="bg-gray-700 hover:bg-blue-700 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                  <FontAwesomeIcon icon={faLinkedinIn} className="w-4 h-4" />
-                </div>
-              </Link>
-            </div>
-          </div>
 
-          {/* Column 2 - Quick Links */}
-          <div className="mb-6 lg:mb-0">
-            <h3 className="text-white font-bold text-lg mb-4">Tautan Cepat</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/Beranda" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Beranda</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/profil" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Profil</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/catalog" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Katalog</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/berita-event" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Berita & Event</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/layanan" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Layanan</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/kontak" className="hover:text-blue-400 transition-colors duration-300 flex items-center">
-                  <span className="text-blue-500 mr-2">›</span>
-                  <span>Kontak</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+    return (
+        <footer className="bg-gray-900 text-gray-300">
+            {/* Main Footer Content */}
+            <div className="container mx-auto px-4 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {/* Column 1 - About */}
+                    <div className="mb-6 lg:mb-0">
+                        <div className="flex items-center mb-4">
+                            <Image
+                                src="/unmuhpress.png"
+                                alt="Unmuh Press Logo"
+                                width={90}
+                                height={90}
+                                className="mr-2"
+                            />
+                            <div>
+                                <h2 className="text-white font-bold text-lg leading-tight">
+                                    BADAN PENERBIT
+                                    <br />
+                                    DAN PUBLIKASI
+                                </h2>
+                            </div>
+                        </div>
+                        <p className="text-sm mb-4">
+                            Badan Penerbit dan Publikasi Universitas
+                            Muhammadiyah Bangka Belitung
+                        </p>
+                        <div className="flex space-x-3">
+                            <Link
+                                href="https://facebook.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Facebook"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faFacebookF}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://twitter.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Twitter"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-400 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faTwitter}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://instagram.com/unmuhbabelpress"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Instagram"
+                            >
+                                <div className="bg-gray-700 hover:bg-pink-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faInstagram}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://youtube.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="YouTube"
+                            >
+                                <div className="bg-gray-700 hover:bg-red-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faYoutube}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                            <Link
+                                href="https://linkedin.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="LinkedIn"
+                            >
+                                <div className="bg-gray-700 hover:bg-blue-700 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
+                                    <FontAwesomeIcon
+                                        icon={faLinkedinIn}
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Column 2 - Quick Links */}
+                    <div className="mb-6 lg:mb-0">
+                        <h3 className="text-white font-bold text-lg mb-4">
+                            Tautan Cepat
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href="/#"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Beranda</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/profil"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Profil</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/catalog"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Katalog</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/berita-event"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Berita & Event</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/layanan"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Layanan</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/kontak"
+                                    className="hover:text-blue-400 transition-colors duration-300 flex items-center"
+                                >
+                                    <span className="text-blue-500 mr-2">
+                                        ›
+                                    </span>
+                                    <span>Kontak</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
 
           {/* Column 3 - Services */}
           <div className="mb-6 lg:mb-0">
@@ -135,21 +218,38 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer Bottom - Copyright */}
-      <div className="border-t border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm mb-4 md:mb-0">© {new Date().getFullYear()} Unmuh Babel Press. Seluruh hak cipta dilindungi.</p>
-            <div className="flex space-x-4 text-sm">
-              <Link href="/kebijakan-privasi" className="hover:text-blue-400 transition-colors duration-300">
-                Kebijakan Privasi
-              </Link>
-              <Link href="/syarat-ketentuan" className="hover:text-blue-400 transition-colors duration-300">
-                Syarat & Ketentuan
-              </Link>
-              <Link href="/peta-situs" className="hover:text-blue-400 transition-colors duration-300">
-                Beranda
-              </Link>
+
+            {/* Footer Bottom - Copyright */}
+            <div className="border-t border-gray-800">
+                <div className="container mx-auto px-4 py-6">
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <p className="text-sm mb-4 md:mb-0">
+                            © {new Date().getFullYear()} Unmuh Babel Press.
+                            Seluruh hak cipta dilindungi.
+                        </p>
+                        <div className="flex space-x-4 text-sm">
+                            <Link
+                                href="/"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Kebijakan Privasi
+                            </Link>
+                            <Link
+                                href="/"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Syarat & Ketentuan
+                            </Link>
+                            <Link
+                                href="/"
+                                className="hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Beranda
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
             </div>
           </div>
         </div>
