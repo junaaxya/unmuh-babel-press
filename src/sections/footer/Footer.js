@@ -195,7 +195,7 @@ export default function Footer() {
                         <ul className="space-y-2">
                             <li>
                                 <Link
-                                    href="/paket-penerbitan"
+                                    href="/layanan"
                                     className="hover:text-blue-400 transition-colors duration-300"
                                 >
                                     Paket Penerbitan
