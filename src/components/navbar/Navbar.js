@@ -131,7 +131,7 @@ export default function Navbar() {
                     </li>
                     <li>
                         <Link
-                            href="#"
+                            href="/berita-event"
                             className="flex items-center py-2"
                             onClick={() => setMenuOpen(false)}
                         >
