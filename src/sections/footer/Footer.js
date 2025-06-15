@@ -71,7 +71,7 @@ export default function Footer() {
                                 </div>
                             </Link>
                             <Link
-                                href="https://instagram.com"
+                                href="https://instagram.com/unmuhbabelpress"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"
@@ -120,7 +120,7 @@ export default function Footer() {
                         <ul className="space-y-2">
                             <li>
                                 <Link
-                                    href="/Beranda"
+                                    href="/#"
                                     className="hover:text-blue-400 transition-colors duration-300 flex items-center"
                                 >
                                     <span className="text-blue-500 mr-2">
@@ -264,19 +264,19 @@ export default function Footer() {
                         </p>
                         <div className="flex space-x-4 text-sm">
                             <Link
-                                href="/kebijakan-privasi"
+                                href="/"
                                 className="hover:text-blue-400 transition-colors duration-300"
                             >
                                 Kebijakan Privasi
                             </Link>
                             <Link
-                                href="/syarat-ketentuan"
+                                href="/"
                                 className="hover:text-blue-400 transition-colors duration-300"
                             >
                                 Syarat & Ketentuan
                             </Link>
                             <Link
-                                href="/peta-situs"
+                                href="/"
                                 className="hover:text-blue-400 transition-colors duration-300"
                             >
                                 Beranda
