@@ -238,7 +238,7 @@ export default function DashboardPage() {
               title="Tambah Buku Baru"
               description="Upload dan kelola katalog buku terbaru"
               icon={faBook}
-              href="/admin/dashboard/katalog/add"
+              href="/admin/dashboard/catalog"
               color="blue"
             />
             <QuickActionCard

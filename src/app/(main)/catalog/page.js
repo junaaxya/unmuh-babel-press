@@ -21,7 +21,7 @@ export default function CatalogPage() {
                 title: book.title || 'Judul Tidak Tersedia',
                 Penulis: book.Penulis || 'Penulis Tidak Diketahui',
                 kategori: book.kategori || 'Umum',
-                image: book.image || '/default-book-cover.jpg',
+                image: book.image || '/cover1.jpg',
                 tahun_terbit: book.tahun_terbit || '-',
                 harga: book.harga || 'N/A',
             })),

@@ -16,6 +16,7 @@ import {
     faPhone,
     faClock,
     faPlay,
+   faThLarge
     
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -43,6 +44,7 @@ library.add(
     faCalendarDays,
     faFacebookF,
     faTwitter,
+    faThLarge,
     faInstagram,
     faYoutube,
     faLinkedinIn,
