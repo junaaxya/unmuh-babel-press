@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/navbar/Navbar';
-import Footer from './../sections/footer/Footer';
+import { ThemeProvider } from 'next-themes';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -14,13 +13,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-    title: 'Unmuh Babel Press - Penerbit Buku Digital Muhammadiyah Babel',
-    description: 'Unmuh Babel Press adalah platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
-    keywords: 'buku, penerbitan, digital, universitas muhammadiyah bangka belitung, unmuhpress',
+    title: 'UNMUH BABEL PRESS - Penerbit Buku Digital Muhammadiyah Babel',
+    description:
+        'Unmuh Babel Press adalah platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
+    keywords:
+        'buku, penerbitan, digital, universitas muhammadiyah bangka belitung, unmuhpress, UNMUH BABEL PRESS, babelpress, unmuh press, babel press',
     authors: [{ name: 'Unmuh Press Team', url: 'https://unmuhbabelpress.com' }],
     openGraph: {
-        title: 'Unmuh Babel Press - Penerbit Buku Digital Muhammadiyah Babel',
-        description: 'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
+        title: 'UNMUH BABEL PRESS - Penerbit Buku Digital Muhammadiyah Babel',
+        description:
+            'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
         url: 'https://unmuhbabelpress.com',
         siteName: 'Unmuh Press',
         images: [
@@ -36,22 +38,29 @@ export const metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Unmuh Press - Penerbit Buku Digital Muhammadiyah Babel',
-        description: 'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
-        images: ['https://unmuhbabelpress.com/unmuhpress.ong'],
+        title: 'UNMUH BABEL PRESS - Penerbit Buku Digital Muhammadiyah Babel',
+        description:
+            'Platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
+        images: ['https://unmuhbabelpress.com/unmuhpress.png'],
     },
     icons: {
-        icon: '/favicon.ico', 
+        icon: '/favicon.ico',
     },
 };
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="id">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <Navbar />
-                <main>{children}</main>
-                <Footer />
+        <html lang="id" suppressHydrationWarning>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem={true}
+                >
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     );

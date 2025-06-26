@@ -1,3 +1,5 @@
+'use client';
+
 import {
     faCalendarDays,
     faArrowRight,
@@ -16,7 +18,6 @@ export default function NewsCard({
     link,
     category = 'Berita',
 }) {
-    // Truncate description if it's too long
     const truncatedDescription =
         description.length > 120
             ? `${description.substring(0, 120)}...`
@@ -28,7 +29,7 @@ export default function NewsCard({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300 border border-gray-100 dark:border-gray-700"
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-xl p-5 flex flex-col h-full transition-all duration-300"
         >
             <div className="relative aspect-video w-full mb-4 overflow-hidden rounded-lg">
                 <Image
@@ -44,7 +45,7 @@ export default function NewsCard({
                 </span>
             </div>
 
-            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
                 <FontAwesomeIcon
                     icon={faCalendarDays}
                     className="mr-2 text-blue-600 dark:text-blue-400"
@@ -57,20 +58,22 @@ export default function NewsCard({
                 })}
             </div>
 
-            <h3 className="font-bold text-xl mb-3 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+            <h3 className="font-bold text-xl mb-3 line-clamp-2 text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
                 {title}
             </h3>
 
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-grow line-clamp-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 flex-grow line-clamp-3">
                 {truncatedDescription}
             </p>
 
             <Link href={link} className="mt-auto">
                 <Button className="w-full flex items-center justify-center gap-2 group">
-                    <span>Baca Selengkapnya</span>
+                    <span className="text-gray-900 dark:text-white">
+                        Baca Selengkapnya
+                    </span>
                     <FontAwesomeIcon
                         icon={faArrowRight}
-                        className="transform transition-transform duration-300 group-hover:translate-x-1"
+                        className="transform transition-transform duration-300 group-hover:translate-x-1 text-blue-600 dark:text-blue-400"
                     />
                 </Button>
             </Link>
