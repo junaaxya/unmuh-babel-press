@@ -29,4 +29,19 @@ export const dummyNewBook = [
     sinopsis:
       "Buku ini hadir sebagai solusi inovatif untuk mengatasi tantangan pembelajaran daring dengan menyajikan panduan pengembangan media interaktif yang menarik dan efektif. Dirancang khusus bagi pendidik, buku ini tidak hanya mengidentifikasi masalah umum dalam pembelajaran online tetapi juga memberikan strategi praktis menciptakan media pembelajaran yang menyenangkan dan interaktif. Melalui pendekatan yang aplikatif, penulis membimbing pembaca untuk mengoptimalkan teknologi guna meningkatkan kualitas pengajaran daring, sekaligus menjaga engagement peserta didik. Cocok digunakan sebagai referensi bagi guru, dosen, maupun praktisi pendidikan yang ingin mentransformasi pembelajaran online menjadi lebih dinamis dan bermakna.",
   },
+  {
+    id: 14,
+    Kode_Buku: "-",
+    title: "MENGENAL DIRI, MENGEMBANGKAN KARIR PANDUAN PRAKTIS PENGEMBANGAN DIRI UNTUK SUKSES DI DUNIA KERJA",
+    ISBN: "-",
+    Penerbit: "UNMUH BABEL Press",
+    Penulis: "Sumarno, S.E., М.М.",
+    Editor: "Yurdayanti, M.Pd.",
+    Ukuran: "14,8 x 21 cm",
+    Halaman: "76",
+    image: "/cover14.jpg",
+    kategori: "Pengembangan Diri",
+    sinopsis:
+      "Buku Mengenal Diri, Mengembangkan Karir: Panduan Praktis Pengembangan Diri untuk Sukses di Dunia Kerja oleh Sumarno, S.E., M.M., adalah panduan praktis yang bertujuan membantu mahasiswa mengembangkan potensi diri secara menyeluruh untuk sukses di dunia kerja. Buku ini fokus pada delapan area kunci: analisis SWOT pribadi, identifikasi nilai dan keyakinan, keterampilan kepemimpinan individu, komunikasi pribadi efektif, manajemen waktu dan stres, pengembangan keterampilan berbasis pekerjaan, pengelolaan emosi dan keseimbangan hidup, serta pengembangan pikiran kreatif. Dengan pendekatan teori dan praktik, dilengkapi studi kasus dan latihan, buku ini membekali pembaca untuk menjadi pribadi yang terampil, resilient, dan siap menghadapi tantangan masa depan di era digital.",
+  },
 ];
