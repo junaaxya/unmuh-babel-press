@@ -38,9 +38,9 @@ export const dummyNewBook = [
     Penulis: "Sumarno, S.E., М.М.",
     Editor: "Yurdayanti, M.Pd.",
     Ukuran: "14,8 x 21 cm",
-    Halaman: "76",
+    Halaman: "111",
     image: "/cover14.jpg",
-    kategori: "Pengembangan Diri",
+    kategori: "Buku Ajar",
     sinopsis:
       "Buku Mengenal Diri, Mengembangkan Karir: Panduan Praktis Pengembangan Diri untuk Sukses di Dunia Kerja oleh Sumarno, S.E., M.M., adalah panduan praktis yang bertujuan membantu mahasiswa mengembangkan potensi diri secara menyeluruh untuk sukses di dunia kerja. Buku ini fokus pada delapan area kunci: analisis SWOT pribadi, identifikasi nilai dan keyakinan, keterampilan kepemimpinan individu, komunikasi pribadi efektif, manajemen waktu dan stres, pengembangan keterampilan berbasis pekerjaan, pengelolaan emosi dan keseimbangan hidup, serta pengembangan pikiran kreatif. Dengan pendekatan teori dan praktik, dilengkapi studi kasus dan latihan, buku ini membekali pembaca untuk menjadi pribadi yang terampil, resilient, dan siap menghadapi tantangan masa depan di era digital.",
   },
