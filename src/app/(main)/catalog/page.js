@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -7,7 +8,6 @@ import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons';
 import dummyBooks from '@/data/dummyBooks';
 import { dummyNewBook } from '@/data/dummyNewBook';
 import Seo from '@/components/common/Seo';
-
 
 export default function CatalogPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -56,7 +56,7 @@ export default function CatalogPage() {
             <Seo
                 title="Katalog Buku"
                 description="Lihat koleksi buku terbaru dari Unmuh Press."
-                image="https://unmuhbabelpress.com/og-catalog.jpg"
+                image="https://unmuhbabelpress.com/unmuhpress.png"
                 url="https://unmuhbabelpress.com/catalog"
             />
 
@@ -95,7 +95,7 @@ export default function CatalogPage() {
                                 <FontAwesomeIcon
                                     icon={faFilter}
                                     className="w-4 text-gray-700"
-fixedWidth
+                                    fixedWidth
                                 />
                                 <select
                                     className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
