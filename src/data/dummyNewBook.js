@@ -29,4 +29,19 @@ export const dummyNewBook = [
     sinopsis:
       "Buku ini hadir sebagai solusi inovatif untuk mengatasi tantangan pembelajaran daring dengan menyajikan panduan pengembangan media interaktif yang menarik dan efektif. Dirancang khusus bagi pendidik, buku ini tidak hanya mengidentifikasi masalah umum dalam pembelajaran online tetapi juga memberikan strategi praktis menciptakan media pembelajaran yang menyenangkan dan interaktif. Melalui pendekatan yang aplikatif, penulis membimbing pembaca untuk mengoptimalkan teknologi guna meningkatkan kualitas pengajaran daring, sekaligus menjaga engagement peserta didik. Cocok digunakan sebagai referensi bagi guru, dosen, maupun praktisi pendidikan yang ingin mentransformasi pembelajaran online menjadi lebih dinamis dan bermakna.",
   },
+  {
+    id: 14,
+    Kode_Buku: "-",
+    title: "Perencanaan Pajak",
+    ISBN: "-",
+    Penerbit: "UNMUH BABEL Press",
+    Penulis: "Fahry Reza, S.E., M.Ak., CIRB & Fatimah Aliiyah",
+    Editor: "Yudayanti, M.Pd.",
+    Ukuran: "14,8 x 21 cm",
+    Halaman: "294",
+    image: "/cover14.jpg",
+    kategori: "Buku Teks Perpajakan",
+    sinopsis:
+      "Buku ini disusun sebagai panduan praktis dan komprehensif untuk mendukung mahasiswa dalam memahahi konsep dan strategi perencanaan pajak secara mendalam. Dengan mengacu pada kurikulum berbasis kompetensi dan pendekatan OBE, buku ini dirancang agar mampu memenuhi kebutuhan pembelajaran yang relevan dan aplikatif. Setiap bab disusung secara sistematis, mulai dari dasar-dasar perpajakan hingga strategi pengelolaan pajak yang kompleks, termasuk aspek internasional dan etika perpajakan. ",
+  },
 ];
