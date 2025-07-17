@@ -59,4 +59,19 @@ export const dummyNewBook = [
     sinopsis:
       "Buku ini disusun sebagai panduan praktis dan komprehensif untuk mendukung mahasiswa dalam memahahi konsep dan strategi perencanaan pajak secara mendalam. Dengan mengacu pada kurikulum berbasis kompetensi dan pendekatan OBE, buku ini dirancang agar mampu memenuhi kebutuhan pembelajaran yang relevan dan aplikatif. Setiap bab disusung secara sistematis, mulai dari dasar-dasar perpajakan hingga strategi pengelolaan pajak yang kompleks, termasuk aspek internasional dan etika perpajakan. ",
   },
+  {
+    id: 16,
+    Kode_Buku: "-",
+    title: "Perpajakan Internasional",
+    ISBN: "-",
+    Penerbit: "UNMUH BABEL Press",
+    Penulis: "Fahry Reza, S.E., M.Ak., CIRB & Seli Putri Yanti",
+    Editor: "Silvio Juliana Nabela, M.Pd.",
+    Ukuran: "14,8 x 21 cm",
+    Halaman: "-",
+    image: "/cover16.jpg",
+    kategori: "Buku keuangan",
+    sinopsis:
+      "Buku ini disusun sebagai panduan praktis dan komprehensif untuk mahasiswa program studi kewirausahaan dalam mempelajari akuntansi dan laporan keuangan. Dengan mengikuti outline yang sistematis, buku ini memudahkan mahasiswa memahami proses pencatatan transaksi, penyusunan laporan keuangan, serta penggunaan software akuntansi sederhana. Diharapkan, buku ini dapat meningkatkan pemahaman dan keterampilan mahasiswa dalam mengelola keuangan usaha secara mandiri dan profesional. Selain itu, buku ini juga dilengkapi dengan studi kasus dan latihan praktis agar mahasiswa mampu mengaplikasikan teori dalam situasi nyata. Semoga buku ini dapat menjadi sumber belajar yang bermanfaat dan mendukung keberhasilan mahasiswa dalam mengembangkan usaha mereka di masa depan.",
+  },
 ];
