@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faUsers, faCalendar, faHandshake } from '@fortawesome/free-solid-svg-icons'
 import AnimatedCounter from '../ui/AnimatedCounter'
 
+
+
 const iconMap = {
   'fa-book': faBook,
   'fa-users': faUsers,

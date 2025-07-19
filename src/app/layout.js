@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
     return (
         <html lang="id">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <Navbar />
+                
                 <main>{children}</main>
                 <Footer />
             </body>

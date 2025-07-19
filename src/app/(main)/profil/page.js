@@ -15,15 +15,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Components
-import ProfileHero from '../../components/common/ProfileHero';
-import ProfileSection from '../../components/common/ProfileSection';
-import ProfileCard from '../../components/common/ProfileCard';
-import TabNavigation from '../../components/common/TabNavigation';
-import ContactInfo from '../../components/common/ContactInfo';
-import Timeline from '../../components/ui/Timeline';
+import ProfileHero from '@/components/common/ProfileHero';
+import ProfileSection from '@/components/common/ProfileSection';
+import ProfileCard from '@/components/common/ProfileCard';
+import TabNavigation from '@/components/common/TabNavigation';
+import ContactInfo from '@/components/common/ContactInfo';
+import Timeline from '@/components/ui/Timeline';
 
 // Data
-import { profileData } from '../../data/profileData';
+import { profileData } from '@/data/profileData';
 
 export default function ProfilPage() {
     const [activeTab, setActiveTab] = useState('sejarah');

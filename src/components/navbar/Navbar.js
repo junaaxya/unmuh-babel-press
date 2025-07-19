@@ -121,7 +121,7 @@ export default function Navbar() {
                         >
                             <FontAwesomeIcon
                                 icon={faHandshake}
-                                className="mr-2"
+                                className="mr-2 w-4 text-center"
                             />
                            Paket Penerbitan
                         </Link>
