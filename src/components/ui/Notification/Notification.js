@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Notification({
+    id,
     type,
     message,
     onClose,
@@ -20,6 +21,12 @@ export default function Notification({
             return () => clearTimeout(timer);
         }
     }, [autoClose, duration]);
+
+    useEffect(() => {
+    setIsVisible(true);
+    setIsClosing(false);
+}, [id]);
+
 
     const handleClose = () => {
         setIsClosing(true);

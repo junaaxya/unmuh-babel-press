@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef,useEffect } from 'react';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import Button from '@/components/ui/button/Button';
 import { uploadHeroImage, deleteHeroImage } from '@/app/services/api';
@@ -19,7 +19,13 @@ export default function HeroImageUploader({
     const [isUploading, setIsUploading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+    const [currentHero, setCurrentHero] = useState(imageUrl);
     const fileInputRef = useRef(null);
+
+useEffect(() => {
+        setCurrentHero(imageUrl);
+    }, [imageUrl]);
+
 
     const validateFile = (selectedFile) => {
         if (!selectedFile)
@@ -53,6 +59,7 @@ export default function HeroImageUploader({
 
         if (!validation.valid) {
             setNotification({
+                id: Date.now(),
                 type: 'error',
                 message: validation.error,
             });
@@ -98,6 +105,7 @@ export default function HeroImageUploader({
     const handleUpload = async () => {
         if (!file) {
             setNotification({
+                id: Date.now(),
                 type: 'error',
                 message: 'Pilih file gambar terlebih dahulu',
             });
@@ -121,11 +129,18 @@ export default function HeroImageUploader({
 
             await uploadHeroImage(file);
 
+             const reader = new FileReader();
+            reader.onload = (e) => {
+                setCurrentHero(e.target.result); // preview update
+            };
+            reader.readAsDataURL(file);
+
             clearInterval(progressInterval);
             setUploadProgress(100);
 
             setTimeout(() => {
                 setNotification({
+                    id: Date.now(),
                     type: 'success',
                     message: 'Gambar hero berhasil diperbarui!',
                 });
@@ -136,6 +151,7 @@ export default function HeroImageUploader({
             }, 500);
         } catch (error) {
             setNotification({
+                id: Date.now(),
                 type: 'error',
                 message: 'Gagal memperbarui gambar hero. Silakan coba lagi.',
             });
@@ -150,13 +166,16 @@ export default function HeroImageUploader({
         try {
             await deleteHeroImage();
             setNotification({
+                id: Date.now(),
                 type: 'success',
                 message: 'Gambar hero berhasil dihapus!',
             });
             onSuccess();
+            setCurrentHero(null);
             setConfirmOpen(false);
         } catch (error) {
             setNotification({
+                id: Date.now(),
                 type: 'error',
                 message: 'Gagal menghapus gambar hero. Silakan coba lagi.',
             });
@@ -173,7 +192,7 @@ export default function HeroImageUploader({
         }
     };
 
-    const currentImage = preview || imageUrl;
+    const currentImage = preview || currentHero;
 
     return (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
@@ -214,6 +233,7 @@ export default function HeroImageUploader({
                             <Image
                                 src={currentImage}
                                 alt="Hero Preview"
+                                onError={() => setCurrentHero(null)}
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -384,7 +404,7 @@ export default function HeroImageUploader({
                         </>
                     )}
 
-                    {imageUrl && !file && (
+                    {currentHero && !file && (
                         <Button
                             variant="danger"
                             onClick={() => setConfirmOpen(true)}
