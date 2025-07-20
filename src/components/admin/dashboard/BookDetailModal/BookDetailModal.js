@@ -10,7 +10,7 @@ import {
   faFileText,
   faBarcode,
   faLayerGroup,
-  faFileAlt
+  faFileAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 const BookDetailModal = ({ isOpen, onClose, book }) => {
@@ -59,6 +59,12 @@ const BookDetailModal = ({ isOpen, onClose, book }) => {
 
         {/* Book Details */}
         <div className="md:col-span-2 space-y-1">
+          <DetailItem 
+            icon={faBarcode} 
+            label="Kode Buku" 
+            value={book.Kode_Buku} 
+          />
+
           <DetailItem 
             icon={faBook} 
             label="Judul Buku" 
