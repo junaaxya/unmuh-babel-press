@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import FormInput from '@/components/ui/FormInput';
-import TextArea from '@/components/ui/TextArea';
+
+import TextArea from '@/components/ui/TextArea/Textarea';
+import FormInput from '@/components/ui/FormInput/FormInput';
 
 const ItemForm = ({ item, onSave, onCancel, itemType }) => {
     const [formData, setFormData] = useState({
