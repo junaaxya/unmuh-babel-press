@@ -135,3 +135,11 @@ body {
 .gradient-bg-3 {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
+
+.btn {
+  @apply px-2 py-1 border rounded hover:bg-gray-200;
+}
+
+.btn-active {
+  @apply px-2 py-1 border rounded bg-gray-300;
+}
