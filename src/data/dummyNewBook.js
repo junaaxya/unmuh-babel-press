@@ -62,7 +62,7 @@ export const dummyNewBook = [
   {
     id: 16,
     Kode_Buku: "-",
-    title: "Perpajakan Internasional",
+    title: "Akuntansi dan Laporan Keuangan",
     ISBN: "-",
     Penerbit: "UNMUH BABEL Press",
     Penulis: "Fahry Reza, S.E., M.Ak., CIRB & Seli Putri Yanti",
