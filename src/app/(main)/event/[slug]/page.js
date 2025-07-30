@@ -11,7 +11,8 @@ import {
   faTag, 
   faShare, 
   faArrowLeft,
-  faTicketAlt
+  faTicketAlt,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 
@@ -39,6 +40,17 @@ export default async function EventDetailPage({ params }) {
     return new Date(dateString).toLocaleDateString('id-ID', options);
   };
 
+  const formatDateTime = (dateTimeString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    return new Date(dateTimeString).toLocaleDateString('id-ID', options);
+  };
+
   const getStatusBadge = (status) => {
     const statusConfig = {
       'Upcoming': { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Akan Datang' },
@@ -54,6 +66,31 @@ export default async function EventDetailPage({ params }) {
         {config.label}
       </span>
     );
+  };
+
+  // Check if registration is still open
+  const isRegistrationOpen = () => {
+    if (!event.registrationEnabled || event.status !== 'Upcoming') {
+      return false;
+    }
+    
+    if (event.registrationDeadline) {
+      return new Date() < new Date(event.registrationDeadline);
+    }
+    
+    return true;
+  };
+
+  // Check if registration deadline is approaching (within 24 hours)
+  const isDeadlineApproaching = () => {
+    if (!event.registrationDeadline) return false;
+    
+    const now = new Date();
+    const deadline = new Date(event.registrationDeadline);
+    const timeDiff = deadline.getTime() - now.getTime();
+    const hoursDiff = timeDiff / (1000 * 3600);
+    
+    return hoursDiff > 0 && hoursDiff <= 24;
   };
 
   return (
@@ -133,23 +170,70 @@ export default async function EventDetailPage({ params }) {
           {/* Event Content */}
           <div className="p-8">
             <div 
-              className="prose prose-lg max-w-none"
+              className="ProseMirror"
               dangerouslySetInnerHTML={{ __html: event.content }}
             />
           </div>
 
-          {/* Registration/Action Section */}
-          {event.status === 'Upcoming' && (
-            <div className="px-8 py-6 border-t border-gray-200 bg-blue-50">
+          {/* Dynamic Registration Section */}
+          {event.registrationEnabled && event.status === 'Upcoming' && (
+            <div className={`px-8 py-6 border-t border-gray-200 ${
+              isRegistrationOpen() ? 'bg-blue-50' : 'bg-red-50'
+            }`}>
+              {/* Registration Deadline Warning */}
+              {isDeadlineApproaching() && isRegistrationOpen() && (
+                <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
+                  <div className="flex items-center text-yellow-800">
+                    <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />
+                    <span className="font-medium">Perhatian!</span>
+                  </div>
+                  <p className="text-yellow-700 mt-1">
+                    Batas waktu pendaftaran: {formatDateTime(event.registrationDeadline)}
+                  </p>
+                </div>
+              )}
+
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900">Tertarik mengikuti event ini?</h3>
-                  <p className="text-gray-600">Daftarkan diri Anda sekarang juga!</p>
+                  <h3 className="font-semibold text-gray-900">
+                    {event.registrationTitle || 'Tertarik mengikuti event ini?'}
+                  </h3>
+                  <p className="text-gray-600">
+                    {event.registrationDescription || 'Daftarkan diri Anda sekarang juga!'}
+                  </p>
+                  
+                  {/* Show registration deadline if set */}
+                  {event.registrationDeadline && isRegistrationOpen() && !isDeadlineApproaching() && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Batas pendaftaran: {formatDateTime(event.registrationDeadline)}
+                    </p>
+                  )}
                 </div>
-                <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center">
-                  <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
-                  Daftar Sekarang
-                </button>
+
+                {/* Registration Button */}
+                {isRegistrationOpen() ? (
+                  <a 
+                    href={event.registrationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
+                    {event.registrationButtonText || 'Daftar Sekarang'}
+                  </a>
+                ) : (
+                  <div className="text-center">
+                    <div className="px-6 py-3 bg-gray-400 text-white rounded-lg font-medium flex items-center cursor-not-allowed">
+                      <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
+                      Pendaftaran Ditutup
+                    </div>
+                    {event.registrationDeadline && new Date() > new Date(event.registrationDeadline) && (
+                      <p className="text-sm text-red-600 mt-2">
+                        Batas waktu pendaftaran telah berakhir
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -6,11 +6,12 @@ import {
     faCalendarAlt,
     faUser,
     faTag,
-    faShare,
     faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import ClientImage from '@/components/admin/berita-event/ClientImage';
+// Impor komponen baru
+import ShareButtons from '@/components/ShareButtons/ShareButtons';
 
 export async function generateStaticParams() {
     return newsData.map((news) => ({
@@ -93,34 +94,13 @@ export default async function BeritaDetailPage({ params }) {
                     {/* Article Content */}
                     <div className="p-8">
                         <div
-                            className="prose prose-lg max-w-none"
+                            className="ProseMirror"
                             dangerouslySetInnerHTML={{ __html: news.content }}
                         />
                     </div>
 
-                    {/* Share Section */}
-                    <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
-                        <div className="flex items-center justify-between">
-                            <span className="text-gray-600 font-medium">
-                                <FontAwesomeIcon
-                                    icon={faShare}
-                                    className="mr-2"
-                                />
-                                Bagikan Berita
-                            </span>
-                            <div className="flex space-x-3">
-                                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                    Facebook
-                                </button>
-                                <button className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors">
-                                    Twitter
-                                </button>
-                                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                    WhatsApp
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Share Section - Ganti bagian ini */}
+                    <ShareButtons title={news.title} />
                 </div>
 
                 {/* Related News */}

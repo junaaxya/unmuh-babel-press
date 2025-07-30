@@ -54,7 +54,7 @@ const eventData = [
     time: "09:00 - 11:00 WIB",
     location: "Online Via Zoom",
     category: "Seminar",
-    status: "Completed",
+    status: "Upcoming",
     organizer: "LPPMPP Unmuh Babel",
     slug: "sosialisasi-kkn-unmuh-babel-2024",
     content: `
@@ -100,7 +100,14 @@ const eventData = [
       </blockquote>
       
       <p>Pendaftaran dapat dilakukan melalui portal akademik dengan kapasitas terbatas 50 peserta. Prioritas akan diberikan kepada dosen yang memiliki draft manuscript siap untuk dikembangkan.</p>
-    `
+    `,
+    // Registration settings
+    registrationEnabled: true,
+    registrationTitle: "Bergabung dengan 1000+ Tech Enthusiasts!",
+    registrationDescription: "Early bird discount 50% hingga 20 Februari 2024. Jangan sampai terlewat!",
+    registrationButtonText: "Beli Tiket Sekarang",
+    registrationLink: "https://techconf2024.eventbrite.com",
+    registrationDeadline: "2024-03-08T23:59:00",
   },
 ];
 

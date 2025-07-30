@@ -12,6 +12,10 @@ import {
     faUser,
     faTag,
     faFileText,
+    faLink,
+    faTicketAlt,
+    faToggleOn,
+    faToggleOff,
 } from '@fortawesome/free-solid-svg-icons';
 import FormInput from '@/components/ui/FormInput/FormInput';
 import TextArea from '@/components/ui/TextArea/Textarea';
@@ -37,6 +41,13 @@ export default function NewsEventForm({
         organizer: '', // for events
         slug: '',
         content: '',
+        // Registration fields for events
+        registrationEnabled: false,
+        registrationTitle: 'Tertarik mengikuti event ini?',
+        registrationDescription: 'Daftarkan diri Anda sekarang juga!',
+        registrationButtonText: 'Daftar Sekarang',
+        registrationLink: '',
+        registrationDeadline: '',
     });
 
     const [errors, setErrors] = useState({});
@@ -124,6 +135,26 @@ export default function NewsEventForm({
             if (!formData.location.trim()) {
                 newErrors.location = 'Lokasi wajib diisi';
             }
+
+            // Registration validation for events
+            if (formData.registrationEnabled) {
+                if (!formData.registrationLink.trim()) {
+                    newErrors.registrationLink = 'Link registrasi wajib diisi jika registrasi diaktifkan';
+                }
+                
+                // Validate URL format
+                if (formData.registrationLink && !isValidUrl(formData.registrationLink)) {
+                    newErrors.registrationLink = 'Format URL tidak valid';
+                }
+
+                if (!formData.registrationTitle.trim()) {
+                    newErrors.registrationTitle = 'Judul registrasi wajib diisi';
+                }
+
+                if (!formData.registrationButtonText.trim()) {
+                    newErrors.registrationButtonText = 'Teks tombol wajib diisi';
+                }
+            }
         }
 
         // Length validation
@@ -135,8 +166,25 @@ export default function NewsEventForm({
             newErrors.excerpt = 'Ringkasan maksimal 500 karakter';
         }
 
+        if (formData.registrationTitle.length > 100) {
+            newErrors.registrationTitle = 'Judul registrasi maksimal 100 karakter';
+        }
+
+        if (formData.registrationDescription.length > 200) {
+            newErrors.registrationDescription = 'Deskripsi registrasi maksimal 200 karakter';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const isValidUrl = (string) => {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -336,6 +384,108 @@ export default function NewsEventForm({
                         required
                         icon={faMapMarkerAlt}
                     />
+
+                    {/* Registration Section */}
+                    <div className="border border-gray-200 rounded-lg p-6 bg-blue-50">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                                <FontAwesomeIcon icon={faTicketAlt} className="mr-2 text-blue-600" />
+                                Pengaturan Registrasi
+                            </h3>
+                            <button
+                                type="button"
+                                onClick={() => handleInputChange('registrationEnabled', !formData.registrationEnabled)}
+                                className={`flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                                    formData.registrationEnabled
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'bg-gray-100 text-gray-600'
+                                }`}
+                            >
+                                <FontAwesomeIcon 
+                                    icon={formData.registrationEnabled ? faToggleOn : faToggleOff} 
+                                    className="mr-1" 
+                                />
+                                {formData.registrationEnabled ? 'Aktif' : 'Nonaktif'}
+                            </button>
+                        </div>
+
+                        {formData.registrationEnabled && (
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <FormInput
+                                        label="Judul Registrasi"
+                                        value={formData.registrationTitle}
+                                        onChange={(value) => handleInputChange('registrationTitle', value)}
+                                        placeholder="Tertarik mengikuti event ini?"
+                                        error={errors.registrationTitle}
+                                        required
+                                        maxLength={100}
+                                    />
+
+                                    <FormInput
+                                        label="Teks Tombol"
+                                        value={formData.registrationButtonText}
+                                        onChange={(value) => handleInputChange('registrationButtonText', value)}
+                                        placeholder="Daftar Sekarang"
+                                        error={errors.registrationButtonText}
+                                        required
+                                        maxLength={50}
+                                    />
+                                </div>
+
+                                <TextArea
+                                    label="Deskripsi Registrasi"
+                                    value={formData.registrationDescription}
+                                    onChange={(value) => handleInputChange('registrationDescription', value)}
+                                    placeholder="Daftarkan diri Anda sekarang juga!"
+                                    error={errors.registrationDescription}
+                                    rows={2}
+                                    maxLength={200}
+                                />
+
+                                <FormInput
+                                    label="Link Registrasi"
+                                    value={formData.registrationLink}
+                                    onChange={(value) => handleInputChange('registrationLink', value)}
+                                    placeholder="https://example.com/register"
+                                    error={errors.registrationLink}
+                                    required
+                                    icon={faLink}
+                                    helpText="Masukkan URL lengkap untuk link registrasi"
+                                />
+
+                                <FormInput
+                                    label="Batas Waktu Registrasi"
+                                    type="datetime-local"
+                                    value={formData.registrationDeadline}
+                                    onChange={(value) => handleInputChange('registrationDeadline', value)}
+                                    error={errors.registrationDeadline}
+                                    icon={faCalendarAlt}
+                                    helpText="Opsional - Batas waktu pendaftaran"
+                                />
+
+                                {/* Preview */}
+                                <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
+                                    <h4 className="text-sm font-medium text-gray-700 mb-2">Preview:</h4>
+                                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-blue-50 rounded-lg">
+                                        <div>
+                                            <h5 className="font-semibold text-gray-900">{formData.registrationTitle}</h5>
+                                            <p className="text-gray-600">{formData.registrationDescription}</p>
+                                            {formData.registrationDeadline && (
+                                                <p className="text-sm text-red-600 mt-1">
+                                                    Batas pendaftaran: {new Date(formData.registrationDeadline).toLocaleString('id-ID')}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium flex items-center">
+                                            <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
+                                            {formData.registrationButtonText}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </>
             )}
 
