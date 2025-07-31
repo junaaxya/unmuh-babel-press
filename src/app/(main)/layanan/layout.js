@@ -1,5 +1,5 @@
 // // app/layanan/layout.js
-import "../globals.css";
+import "../../globals.css";
 export const metadata = {
   title: "Paket Penerbitan | Unmuh Babel Press",
   description: "Hubungi tim Unmuh Babel Press untuk konsultasi, layanan penerbitan, atau kerja sama. Kami siap melayani Anda dengan profesionalisme dan kecepatan tanggapan.",
