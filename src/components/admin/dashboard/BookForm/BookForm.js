@@ -1,6 +1,7 @@
 // src/components/admin/BookForm/BookForm.js
 import { useState, useEffect } from 'react';
 import FormInput from '@/components/ui/FormInput/FormInput';
+import Image from 'next/image';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -251,9 +252,10 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                                 Preview Cover:
                             </p>
                             <div className="relative w-32 h-40 bg-gray-100 rounded-lg overflow-hidden">
-                                <img
+                                <Image
                                     src={previewImage}
                                     alt="Preview"
+                                    width={200} height={300}
                                     className="w-full h-full object-cover"
                                 />
                             </div>

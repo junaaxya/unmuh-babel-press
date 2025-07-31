@@ -1,6 +1,7 @@
 // src/components/admin/BookCard/BookCard.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye, faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 const BookCard = ({ book, onEdit, onDelete, onView }) => {
   const defaultCover = "/cover1.jpg";
@@ -9,9 +10,10 @@ const BookCard = ({ book, onEdit, onDelete, onView }) => {
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       {/* Book Cover */}
       <div className="relative h-48 bg-gray-100">
-        <img
+        <Image
           src={book.image || defaultCover}
           alt={book.title}
+          width={200} height={300}
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.src = defaultCover;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -79,32 +79,44 @@ export default function AdminLayout({ children }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile screen size and set initial sidebar state
+  // 1. Deteksi ukuran layar (mobile vs desktop)
   useEffect(() => {
     const checkIsMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      // On mobile, sidebar should be closed by default
-      if (mobile && sidebarOpen) {
-        setSidebarOpen(false);
-      }
-      // On desktop, sidebar should be open by default
-      if (!mobile && !sidebarOpen) {
-        setSidebarOpen(true);
-      }
     };
-    
     checkIsMobile();
     window.addEventListener('resize', checkIsMobile);
-    
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
+
+  // di dalam component, tambahkan:
+  const prevIsMobileRef = useRef(isMobile);
+
+  useEffect(() => {
+    const prevIsMobile = prevIsMobileRef.current;
+
+    // Kalau berubah dari desktop ke mobile: tutup sidebar
+    if (!prevIsMobile && isMobile) {
+      setSidebarOpen(false);
+    }
+    // Kalau berubah dari mobile ke desktop: buka sidebar
+    else if (prevIsMobile && !isMobile) {
+      setSidebarOpen(true);
+    }
+
+    prevIsMobileRef.current = isMobile;
+  }, [isMobile]);
 
   // Close sidebar when clicking on link in mobile only
   useEffect(() => {
     if (isMobile && sidebarOpen) {
       setSidebarOpen(false);
     }
+    // PERBAIKAN: Menambahkan comment di bawah ini untuk menonaktifkan peringatan ESLint
+    // Kita sengaja tidak menambahkan `sidebarOpen` sebagai dependensi untuk menghindari bug
+    // di mana sidebar akan langsung tertutup setelah dibuka secara manual.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, isMobile]);
 
   const toggleSidebar = () => {
@@ -188,7 +200,7 @@ export default function AdminLayout({ children }) {
         {/* Sidebar */}
         <aside
           className={`${
-            isMobile 
+            isMobile
               ? `fixed z-40 inset-y-0 left-0 w-64 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`
               : `${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 ease-in-out flex-shrink-0`
           } bg-gradient-to-b from-blue-800 to-blue-900 text-white shadow-xl`}
@@ -203,7 +215,7 @@ export default function AdminLayout({ children }) {
                 <div className="text-xl font-bold">UNMUH PRESS</div>
                 <div className="text-xs text-blue-200 mt-1">Admin Dashboard</div>
               </div>
-              
+
               {/* Collapsed logo for desktop */}
               {!sidebarOpen && !isMobile && (
                 <div className="w-full flex justify-center">
@@ -212,7 +224,7 @@ export default function AdminLayout({ children }) {
                   </div>
                 </div>
               )}
-              
+
               {/* Close button for mobile */}
               {isMobile && (
                 <button
@@ -239,16 +251,18 @@ export default function AdminLayout({ children }) {
                     } ${!sidebarOpen && !isMobile ? 'justify-center px-2' : ''}`}
                     title={!sidebarOpen && !isMobile ? item.title : ''}
                   >
-                    <FontAwesomeIcon 
-                      icon={item.icon} 
-                      className="w-5 h-5 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" 
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="w-5 h-5 group-hover:scale-110 transition-transform duration-200 flex-shrink-0"
                     />
-                    <span className={`ml-3 font-medium transition-opacity duration-200 ${
-                      !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-                    }`}>
+                    <span
+                      className={`ml-3 font-medium transition-opacity duration-200 ${
+                        !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+                      }`}
+                    >
                       {item.title}
                     </span>
-                    
+
                     {/* Tooltip for collapsed state */}
                     {!sidebarOpen && !isMobile && (
                       <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
@@ -268,17 +282,19 @@ export default function AdminLayout({ children }) {
                       title={!sidebarOpen && !isMobile ? item.title : ''}
                     >
                       <div className="flex items-center">
-                        <FontAwesomeIcon 
-                          icon={item.icon} 
-                          className="w-5 h-5 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" 
+                        <FontAwesomeIcon
+                          icon={item.icon}
+                          className="w-5 h-5 group-hover:scale-110 transition-transform duration-200 flex-shrink-0"
                         />
-                        <span className={`ml-3 font-medium transition-opacity duration-200 ${
-                          !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-                        }`}>
+                        <span
+                          className={`ml-3 font-medium transition-opacity duration-200 ${
+                            !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+                          }`}
+                        >
                           {item.title}
                         </span>
                       </div>
-                      
+
                       {sidebarOpen || isMobile ? (
                         <FontAwesomeIcon
                           icon={expandedMenus[index] ? faChevronDown : faChevronRight}
@@ -287,7 +303,7 @@ export default function AdminLayout({ children }) {
                           }`}
                         />
                       ) : null}
-                      
+
                       {/* Tooltip for collapsed state */}
                       {!sidebarOpen && !isMobile && (
                         <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
@@ -295,13 +311,13 @@ export default function AdminLayout({ children }) {
                         </div>
                       )}
                     </button>
-                    
+
                     {/* Submenu */}
                     {(sidebarOpen || isMobile) && (
                       <div
                         className={`ml-4 mt-1 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                          expandedMenus[index] 
-                            ? 'max-h-96 opacity-100 transform translate-y-0' 
+                          expandedMenus[index]
+                            ? 'max-h-96 opacity-100 transform translate-y-0'
                             : 'max-h-0 opacity-0 transform -translate-y-2'
                         }`}
                       >
@@ -316,11 +332,13 @@ export default function AdminLayout({ children }) {
                                 : 'text-blue-100 hover:text-white'
                             }`}
                           >
-                            <div className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
-                              pathname.startsWith(sub.path)
-                                ? 'bg-white'
-                                : 'bg-blue-300 group-hover:bg-white'
-                            }`} />
+                            <div
+                              className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
+                                pathname.startsWith(sub.path)
+                                  ? 'bg-white'
+                                  : 'bg-blue-300 group-hover:bg-white'
+                              }`}
+                            />
                             {sub.title}
                           </Link>
                         ))}
@@ -338,22 +356,24 @@ export default function AdminLayout({ children }) {
               onClick={handleLogout}
               disabled={isLoggingOut}
               className={`flex items-center w-full px-4 py-3 rounded-lg transition-all duration-200 group relative ${
-                isLoggingOut 
-                  ? 'bg-red-600/20 text-red-300 cursor-not-allowed' 
+                isLoggingOut
+                  ? 'bg-red-600/20 text-red-300 cursor-not-allowed'
                   : 'hover:bg-red-600/20 text-red-200 hover:text-white'
               } ${!sidebarOpen && !isMobile ? 'justify-center px-2' : ''}`}
               title={!sidebarOpen && !isMobile ? 'Keluar' : ''}
             >
-              <FontAwesomeIcon 
-                icon={faSignOutAlt} 
-                className={`w-5 h-5 ${isLoggingOut ? 'animate-spin' : 'group-hover:scale-110'} transition-transform duration-200 flex-shrink-0`} 
+              <FontAwesomeIcon
+                icon={faSignOutAlt}
+                className={`w-5 h-5 ${isLoggingOut ? 'animate-spin' : 'group-hover:scale-110'} transition-transform duration-200 flex-shrink-0`}
               />
-              <span className={`ml-3 font-medium transition-opacity duration-200 ${
-                !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-              }`}>
+              <span
+                className={`ml-3 font-medium transition-opacity duration-200 ${
+                  !sidebarOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+                }`}
+              >
                 {isLoggingOut ? 'Logging out...' : 'Keluar'}
               </span>
-              
+
               {/* Tooltip for collapsed state */}
               {!sidebarOpen && !isMobile && (
                 <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
@@ -372,15 +392,15 @@ export default function AdminLayout({ children }) {
             <button
               onClick={toggleSidebar}
               className={`mr-4 p-2 rounded-lg transition-all duration-200 ${
-                sidebarOpen 
-                  ? 'text-blue-600 bg-blue-50' 
+                sidebarOpen
+                  ? 'text-blue-600 bg-blue-50'
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
               aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
             >
-              <FontAwesomeIcon 
-                icon={sidebarOpen ? faTimes : faBars} 
-                className="w-5 h-5 transition-transform duration-200" 
+              <FontAwesomeIcon
+                icon={sidebarOpen ? faTimes : faBars}
+                className="w-5 h-5 transition-transform duration-200"
               />
             </button>
 
@@ -407,9 +427,7 @@ export default function AdminLayout({ children }) {
 
           {/* Main Content Area */}
           <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-50">
-            <div className="max-w-7xl mx-auto">
-              {children}
-            </div>
+            <div className="max-w-7xl mx-auto">{children}</div>
           </main>
         </div>
       </div>

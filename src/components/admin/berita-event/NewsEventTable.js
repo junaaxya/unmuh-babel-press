@@ -2,6 +2,7 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import { 
   faEdit, 
   faTrash, 
@@ -180,10 +181,11 @@ export default function NewsEventTable({
                 <td className="px-6 py-4">
                   <div className="flex items-start">
                     <div className="flex-shrink-0 h-16 w-16">
-                      <img
+                      <Image
                         className="h-16 w-16 rounded-lg object-cover"
                         src={item.image}
                         alt={item.title}
+                        width={200} height={300}
                         onError={(e) => {
                           e.target.src = '/placeholder.jpg';
                         }}
@@ -264,10 +266,11 @@ export default function NewsEventTable({
             <div key={item.id} className="p-4">
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <img
+                  <Image
                     className="h-16 w-16 rounded-lg object-cover"
                     src={item.image}
                     alt={item.title}
+                    width={200} height={300}
                     onError={(e) => {
                       e.target.src = '/placeholder.jpg';
                     }}

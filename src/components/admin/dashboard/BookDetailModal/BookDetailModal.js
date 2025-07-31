@@ -1,5 +1,6 @@
 // src/components/admin/BookDetailModal/BookDetailModal.js
 import Modal from '@/components/ui/Modal/Modal';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBook, 
@@ -41,9 +42,10 @@ const BookDetailModal = ({ isOpen, onClose, book }) => {
         {/* Book Cover */}
         <div className="md:col-span-1">
           <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
-            <img
+            <Image
               src={book.image || defaultCover}
               alt={book.title}
+              width={200} height={300}
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.target.src = defaultCover;

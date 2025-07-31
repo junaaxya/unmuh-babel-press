@@ -11,6 +11,7 @@ import {
   faCheck,
   faExclamationTriangle 
 } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 export default function ImageUploader({ currentImage, onUpload, error }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -142,10 +143,11 @@ export default function ImageUploader({ currentImage, onUpload, error }) {
       {previewImage ? (
         <div className="relative">
           <div className="relative bg-gray-100 rounded-lg overflow-hidden">
-            <img
+            <Image
               src={previewImage}
               alt="Preview"
               className="w-full h-48 object-cover"
+              width={200} height={300}
             />
             
             {/* Overlay with actions */}

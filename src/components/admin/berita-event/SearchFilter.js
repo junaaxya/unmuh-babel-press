@@ -133,7 +133,7 @@ export default function SearchFilter({
             
             {searchTerm && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                Pencarian: "{searchTerm}"
+                Pencarian: &quot;{searchTerm}&quot;
                 <button
                   onClick={clearSearch}
                   className="ml-1 hover:text-blue-600"
