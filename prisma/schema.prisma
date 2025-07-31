@@ -43,3 +43,62 @@ sinopsis String @db.Text
 createdAt DateTime @default(now())
 }
 
+model News {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(200)
+  slug      String   @unique @db.VarChar(255)
+  excerpt   String   @db.Text
+  content   String   @db.LongText
+  image     String?  @db.VarChar(500)
+  date      DateTime @db.Date
+  category  NewsCategory @default(Berita)
+  author    String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum NewsCategory {
+  Berita
+  Pengumuman
+  Artikel
+  Press_Release
+}
+
+model Event {
+  id                       Int      @id @default(autoincrement())
+  title                    String   @db.VarChar(200)
+  slug                     String   @unique @db.VarChar(255)
+  excerpt                  String   @db.Text
+  content                  String   @db.LongText
+  image                    String?  @db.VarChar(500)
+  date                     DateTime @db.Date
+  time                     String   @db.VarChar(50)
+  location                 String   @db.VarChar(200)
+  category                 EventCategory @default(Event)
+  status                   EventStatus   @default(Upcoming)
+  organizer                String   @db.VarChar(100)
+  registrationEnabled      Boolean  @default(false)
+  registrationTitle        String?  @db.VarChar(100)
+  registrationDescription  String?  @db.Text
+  registrationButtonText   String?  @db.VarChar(50)
+  registrationLink         String?  @db.VarChar(500)
+  registrationDeadline     DateTime?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum EventCategory {
+  Event
+  Seminar
+  Workshop
+  Konferensi
+  Pelatihan
+}
+
+enum EventStatus {
+  Upcoming
+  Ongoing
+  Completed
+  Cancelled
+}

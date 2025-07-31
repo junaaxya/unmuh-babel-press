@@ -1,0 +1,383 @@
+openapi: 3.0.0
+info:
+  title: API HAKI
+  description: Dokumentasi API untuk pengelolaan berita, event, dan unggah gambar ke Cloudinary pada sistem HAKI.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:3000/api
+    description: Server lokal
+
+paths:
+  /news:
+    get:
+      summary: Ambil daftar berita
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: date_filter
+          in: query
+          schema:
+            type: string
+            enum: [today, week, month, all]
+      responses:
+        "200":
+          description: Daftar berita berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsListResponse"
+
+    post:
+      summary: Tambah berita baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsInput"
+      responses:
+        "201":
+          description: Berita berhasil dibuat
+
+  /news/{id}:
+    get:
+      summary: Ambil detail berita berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Detail berita ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsDetailResponse"
+        "404":
+          description: Berita tidak ditemukan
+
+    put:
+      summary: Update berita berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsInput"
+      responses:
+        "200":
+          description: Berita diperbarui
+
+    delete:
+      summary: Hapus berita berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Berita berhasil dihapus
+
+  /news/slug/{slug}:
+    get:
+      summary: Ambil berita berdasarkan slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Berita ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsDetailResponse"
+        "404":
+          description: Berita tidak ditemukan
+
+  /events:
+    get:
+      summary: Ambil daftar event
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [Upcoming, Ongoing, Completed, Cancelled]
+        - name: date_filter
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Daftar event berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventListResponse"
+
+    post:
+      summary: Tambah event baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventInput"
+      responses:
+        "201":
+          description: Event berhasil dibuat
+
+  /events/{id}:
+    get:
+      summary: Ambil detail event berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Detail event ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventDetailResponse"
+        "404":
+          description: Event tidak ditemukan
+
+    put:
+      summary: Update event berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventInput"
+      responses:
+        "200":
+          description: Event berhasil diperbarui
+
+    delete:
+      summary: Hapus event berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Event berhasil dihapus
+
+  /events/slug/{slug}:
+    get:
+      summary: Ambil event berdasarkan slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Event ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventDetailResponse"
+        "404":
+          description: Event tidak ditemukan
+
+  /upload-signature:
+    get:
+      summary: Menghasilkan signature upload Cloudinary
+      responses:
+        "200":
+          description: Signature berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signature: { type: string }
+                  timestamp: { type: integer }
+                  apiKey: { type: string }
+                  cloudName: { type: string }
+                  folder: { type: string }
+        "500":
+          description: Gagal menghasilkan signature
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  message: { type: string }
+
+components:
+  schemas:
+    NewsInput:
+      type: object
+      required: [title, excerpt, content, image, date, category, author]
+      properties:
+        title: { type: string }
+        excerpt: { type: string }
+        content: { type: string }
+        image: { type: string }
+        date: { type: string, format: date }
+        category: { type: string }
+        author: { type: string }
+
+    NewsItem:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        excerpt: { type: string }
+        image: { type: string }
+        date: { type: string }
+        category: { type: string }
+        author: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    NewsDetail:
+      allOf:
+        - $ref: "#/components/schemas/NewsItem"
+        - type: object
+          properties:
+            content: { type: string }
+
+    NewsListResponse:
+      type: object
+      properties:
+        status: { type: string }
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: "#/components/schemas/NewsItem" }
+            pagination:
+              type: object
+              properties:
+                current_page: { type: integer }
+                total_pages: { type: integer }
+                total_items: { type: integer }
+                items_per_page: { type: integer }
+
+    NewsDetailResponse:
+      type: object
+      properties:
+        status: { type: string }
+        data: { $ref: "#/components/schemas/NewsDetail" }
+
+    EventInput:
+      type: object
+      required: [title, excerpt, content, image, date, time, location, category, status, organizer]
+      properties:
+        title: { type: string }
+        excerpt: { type: string }
+        content: { type: string }
+        image: { type: string }
+        date: { type: string, format: date }
+        time: { type: string }
+        location: { type: string }
+        category: { type: string }
+        status: { type: string, enum: [Upcoming, Ongoing, Completed, Cancelled] }
+        organizer: { type: string }
+        registration_enabled: { type: boolean }
+        registration_title: { type: string }
+        registration_description: { type: string }
+        registration_button_text: { type: string }
+        registration_link: { type: string }
+        registration_deadline: { type: string, format: date-time }
+
+    EventItem:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        excerpt: { type: string }
+        image: { type: string }
+        date: { type: string }
+        time: { type: string }
+        location: { type: string }
+        category: { type: string }
+        status: { type: string }
+        organizer: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    EventDetail:
+      allOf:
+        - $ref: "#/components/schemas/EventItem"
+        - type: object
+          properties:
+            content: { type: string }
+            registration_enabled: { type: boolean }
+            registration_title: { type: string }
+            registration_description: { type: string }
+            registration_button_text: { type: string }
+            registration_link: { type: string }
+            registration_deadline: { type: string, format: date-time }
+
+    EventListResponse:
+      type: object
+      properties:
+        status: { type: string }
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: "#/components/schemas/EventItem" }
+            pagination:
+              type: object
+              properties:
+                current_page: { type: integer }
+                total_pages: { type: integer }
+                total_items: { type: integer }
+                items_per_page: { type: integer }
+
+    EventDetailResponse:
+      type: object
+      properties:
+        status: { type: string }
+        data: { $ref: "#/components/schemas/EventDetail" }

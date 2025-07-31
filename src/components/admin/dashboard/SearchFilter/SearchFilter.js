@@ -1,28 +1,20 @@
 // src/components/admin/SearchFilter/SearchFilter.js
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const SearchFilter = ({ 
-  searchTerm, 
-  onSearchChange, 
-  selectedCategory, 
-  onCategoryChange,
-  onClearFilters,
-  totalBooks,
-  filteredBooks 
-}) => {
+const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategoryChange, onClearFilters, totalBooks, filteredBooks }) => {
   const categories = [
-    { value: '', label: 'Semua Kategori' },
-    { value: 'Pendidikan', label: 'Pendidikan' },
-    { value: 'Agama', label: 'Agama' },
-    { value: 'Teknologi', label: 'Teknologi' },
-    { value: 'Sejarah', label: 'Sejarah' },
-    { value: 'Sastra', label: 'Sastra' },
-    { value: 'Sains', label: 'Sains' },
-    { value: 'Ekonomi', label: 'Ekonomi' },
-    { value: 'Politik', label: 'Politik' },
-    { value: 'Budaya', label: 'Budaya' },
-    { value: 'Lainnya', label: 'Lainnya' }
+    { value: "", label: "Semua Kategori" },
+    { value: "Pendidikan", label: "Pendidikan" },
+    { value: "Agama", label: "Agama" },
+    { value: "Teknologi", label: "Teknologi" },
+    { value: "Sejarah", label: "Sejarah" },
+    { value: "Sastra", label: "Sastra" },
+    { value: "Sains", label: "Sains" },
+    { value: "Ekonomi", label: "Ekonomi" },
+    { value: "Politik", label: "Politik" },
+    { value: "Budaya", label: "Budaya" },
+    { value: "Lainnya", label: "Lainnya" },
   ];
 
   const hasActiveFilters = searchTerm || selectedCategory;
@@ -68,10 +60,7 @@ const SearchFilter = ({
 
         {/* Clear Filters Button */}
         {hasActiveFilters && (
-          <button
-            onClick={onClearFilters}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors flex items-center"
-          >
+          <button onClick={onClearFilters} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors flex items-center">
             <FontAwesomeIcon icon={faTimes} className="h-4 w-4 mr-2" />
             Bersihkan Filter
           </button>
@@ -82,16 +71,13 @@ const SearchFilter = ({
       <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
         <div>
           Menampilkan {filteredBooks} dari {totalBooks} buku
-          {hasActiveFilters && (
-            <span className="ml-2 text-blue-600">
-              (dengan filter aktif)
-            </span>
-          )}
+          {hasActiveFilters && <span className="ml-2 text-blue-600">(dengan filter aktif)</span>}
         </div>
-        
+
         {hasActiveFilters && (
           <div className="flex items-center space-x-2">
             <span>Filter aktif:</span>
+
             {searchTerm && (
               <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                 &quot;{searchTerm}&quot;
@@ -102,6 +88,7 @@ const SearchFilter = ({
                 {selectedCategory}
               </span>
             )}
+
           </div>
         )}
       </div>
