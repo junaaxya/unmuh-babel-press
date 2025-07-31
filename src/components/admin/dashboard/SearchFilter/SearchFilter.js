@@ -77,8 +77,18 @@ const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategory
         {hasActiveFilters && (
           <div className="flex items-center space-x-2">
             <span>Filter aktif:</span>
-            {searchTerm && <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">&quot{searchTerm}&quot</span>}
-            {selectedCategory && <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">{selectedCategory}</span>}
+
+            {searchTerm && (
+              <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                &quot;{searchTerm}&quot;
+              </span>
+            )}
+            {selectedCategory && (
+              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                {selectedCategory}
+              </span>
+            )}
+
           </div>
         )}
       </div>

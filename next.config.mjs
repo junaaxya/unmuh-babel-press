@@ -4,7 +4,8 @@ const nextConfig = {
     domains: ["images.unsplash.com"],
   },
   reactStrictMode: true,
-  // swcMinify: true,
+
+
 };
 
 export default nextConfig;

@@ -4,8 +4,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import NewsCard from '@/components/News/NewsCard';
 import SearchFilter from '@/components/News/SearchFilter';
-import { newsData } from '@/data/news';
-import { eventData } from '@/data/event';
+import  newsData  from '@/data/news';
+import  eventData  from '@/data/event';
 import {
     faNewspaper,
     faCalendarCheck,
