@@ -52,9 +52,12 @@ model News {
   image     String?  @db.VarChar(500)
   date      DateTime @db.Date
   category  NewsCategory @default(Berita)
+  status    Status       @default(draft)
   author    String   @db.VarChar(100)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  published_at DateTime?  @db.Timestamp(6)
+
 }
 
 enum NewsCategory {
@@ -101,4 +104,29 @@ enum EventStatus {
   Ongoing
   Completed
   Cancelled
+}
+
+model Book {
+  id           BigInt     @id @default(autoincrement())
+  kode_buku    String?    @db.VarChar(50)
+  title        String     @db.VarChar(255)
+  isbn         String?    @db.VarChar(50)
+  penerbit     String?    @db.VarChar(255)
+  penulis      String?    @db.Text
+  editor       String?    @db.VarChar(255)
+  ukuran       String?    @db.VarChar(50)
+  halaman      String?    @db.VarChar(10)
+  image        String?    @db.VarChar(500) // URL Cloudinary
+  kategori     String?    @db.VarChar(100)
+  sinopsis     String?    @db.Text
+  status       Status     @default(draft)
+  published_at DateTime?  @db.Timestamp(6)
+  created_at   DateTime   @default(now()) @db.Timestamp(6)
+  updated_at   DateTime   @updatedAt
+
+}
+
+enum Status {
+  draft
+  published
 }
