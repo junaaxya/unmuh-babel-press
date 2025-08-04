@@ -1,6 +1,6 @@
 // src/app/(main)/berita/[slug]/page.js
 import { notFound } from 'next/navigation';
-import newsData from '@/data/news';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarAlt,
@@ -9,29 +9,61 @@ import {
     faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import ClientImage from '@/components/admin/berita-event/ClientImage';
-// Impor komponen baru
+import Image from 'next/image'
 import ShareButtons from '@/components/ShareButtons/ShareButtons';
+import { getNews,getNewsBySlug } from '@/app/services/api';
 
+// Fungsi ini mengambil data utama dan data terkait dari API
+async function getNewsData(slug) {
+    try {
+        const newsResponse = await getNewsBySlug(slug);
+        const news = newsResponse.data;
+
+        if (!news) return { news: null, relatedNews: [] };
+
+        // Ambil berita terkait (3 item, untuk disaring menjadi 2)
+        const relatedNewsResponse = await getNews({
+            category: news.category,
+            limit: 3,
+        });
+        
+        const relatedNews = relatedNewsResponse.data.items
+            .filter((item) => item.slug !== slug) // Pastikan berita saat ini tidak masuk daftar
+            .slice(0, 2);
+
+        return { news, relatedNews };
+    } catch (error) {
+        // Jika slug tidak ditemukan, API akan error (misal: 404), dan kita tangkap di sini
+        console.error(`Gagal mengambil data untuk slug: ${slug}`, error);
+        return { news: null, relatedNews: [] };
+    }
+}
+
+// Fungsi ini membuat halaman statis untuk setiap berita saat build
 export async function generateStaticParams() {
-    return newsData.map((news) => ({
-        slug: news.slug,
-    }));
+    try {
+        // Ambil semua berita (misal, hingga 1000) untuk mendapatkan slug-nya
+        const response = await getNews({ limit: 1000 });
+        return response.data.items.map((news) => ({
+            slug: news.slug,
+        }));
+    } catch (error) {
+        console.error("Gagal membuat parameter statis untuk berita:", error);
+        return [];
+    }
 }
 
 export default async function BeritaDetailPage({ params }) {
-    const { slug } = params;
+    const { slug } = await params;
+    const { news, relatedNews } = await getNewsData(slug);
 
-    const news = newsData.find((item) => item.slug === slug);
-
-    if (!news) notFound();
+    // Jika data berita tidak ditemukan, tampilkan halaman 404
+    if (!news) {
+        notFound();
+    }
 
     const formatDate = (dateString) => {
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        };
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('id-ID', options);
     };
 
@@ -82,68 +114,58 @@ export default async function BeritaDetailPage({ params }) {
             {/* Content */}
             <div className="max-w-4xl mx-auto px-4 py-8">
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                    {/* Featured Image */}
-                    <div className="aspect-video bg-gray-200">
-                        <ClientImage
-                            src={news.image}
-                            alt={news.title}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
+                     {news.image && (
+                        <div className="relative aspect-video bg-gray-200">
+                            <Image
+                                src={news.image}
+                                alt={news.title}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                priority // Prioritaskan gambar utama untuk dimuat
+                            />
+                        </div>
+                    )}
 
                     {/* Article Content */}
                     <div className="p-8">
                         <div
-                            className="ProseMirror"
+                            className="ProseMirror max-w-none"
                             dangerouslySetInnerHTML={{ __html: news.content }}
                         />
                     </div>
 
                     {/* Share Section - Ganti bagian ini */}
-                    <ShareButtons title={news.title} />
+                    <ShareButtons title={news.title} type="berita" />
                 </div>
 
                 {/* Related News */}
-                <div className="mt-12">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        Berita Terkait
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {newsData
-                            .filter(
-                                (item) =>
-                                    item.id !== news.id &&
-                                    item.category === news.category
-                            )
-                            .slice(0, 2)
-                            .map((relatedNews) => (
-                                <Link
-                                    key={relatedNews.id}
-                                    href={`/berita/${relatedNews.slug}`}
-                                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                                >
-                                    <div className="aspect-video bg-gray-200">
-                                        <ClientImage
-                                            src={relatedNews.image}
-                                            alt={relatedNews.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-gray-900 mb-2">
-                                            {relatedNews.title}
-                                        </h3>
-                                        <p className="text-gray-600 text-sm mb-2">
-                                            {relatedNews.excerpt}
-                                        </p>
-                                        <div className="text-xs text-gray-500">
-                                            {formatDate(relatedNews.date)}
+                {relatedNews.length > 0 && (
+                    <div className="mt-12">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Berita Terkait</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {relatedNews.map((relatedNewsItem) => (
+                                <Link key={relatedNewsItem.id} href={`/berita/${relatedNewsItem.slug}`} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+                                    {relatedNewsItem.image && (
+                                        <div className="relative aspect-video bg-gray-200 overflow-hidden">
+                                            <Image
+                                                src={relatedNewsItem.image}
+                                                alt={relatedNewsItem.title}
+                                                fill
+                                                style={{ objectFit: 'cover' }}
+                                                className="group-hover:scale-105 transition-transform duration-300"
+                                            />
                                         </div>
+                                    )}
+                                    <div className="p-4">
+                                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{relatedNewsItem.title}</h3>
+                                        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{relatedNewsItem.excerpt}</p>
+                                        <div className="text-xs text-gray-500">{formatDate(relatedNewsItem.date)}</div>
                                     </div>
                                 </Link>
                             ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

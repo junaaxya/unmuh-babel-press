@@ -1,7 +1,7 @@
 // src/app/admin/dashboard/berita/page.js
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import NewsEventTable from '@/components/admin/berita-event/NewsEventTable';
 import NewsEventForm from '@/components/admin/berita-event/NewsEventForm';
 import SearchFilter from '@/components/admin/berita-event/SearchFilter';
@@ -9,114 +9,138 @@ import Modal from '@/components/ui/Modal/Modal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal/ConfirmationModal';
 import Notification from '@/components/ui/Notification/Notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faNewspaper } from '@fortawesome/free-solid-svg-icons';
-
-// Import dummy data
-import newsData from '@/data/news';
+import { faPlus, faNewspaper, faSpinner } from '@fortawesome/free-solid-svg-icons';
+// Import fungsi API yang sesungguhnya
+import { getNews, createNews, updateNews, deleteNews } from '../../../services/api';
 
 export default function BeritaPage() {
-  // State management (hanya untuk berita)
+  // State untuk data dan UI
   const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [deletingItem, setDeletingItem] = useState(null);
+  
+  // State untuk filter dan pagination, sesuai dengan respons API
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
-  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_items: 0,
+    items_per_page: 10,
+  });
 
-  // Inisialisasi data
+  const [notification, setNotification] = useState(null);
+
+  // Fungsi untuk menampilkan notifikasi
+  const showNotification = (message, type = 'success') => {
+    // Buat notifikasi baru dengan ID unik (timestamp)
+    setNotification({ id: Date.now(), message, type });
+};
+
+  // Fungsi untuk mengambil data dari API
+  const fetchBerita = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        page: pagination.current_page,
+        limit: pagination.items_per_page,
+        search: searchTerm,
+        // Kirim string kosong jika filter 'all'
+        category: categoryFilter === 'all' ? '' : categoryFilter,
+        date_filter: dateFilter === 'all' ? '' : dateFilter,
+      };
+      // Hapus parameter kosong agar URL lebih bersih
+      Object.keys(params).forEach(key => (params[key] === '' || params[key] === null) && delete params[key]);
+
+      const response = await getNews(params);
+      setItems(response.data.items);
+      setPagination(response.data.pagination);
+    } catch (error) {
+      console.error("Failed to fetch news:", error);
+      showNotification(error.message || 'Gagal memuat data berita.', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [pagination.current_page, pagination.items_per_page, searchTerm, categoryFilter, dateFilter]);
+
+  // Panggil fetchBerita saat komponen dimuat atau dependensi berubah
   useEffect(() => {
-    setItems(newsData);
-  }, []);
+    fetchBerita();
+  }, [fetchBerita]);
 
-  // Filter items (disederhanakan)
-  const getFilteredItems = () => {
-    let filtered = items;
+  // Fungsi untuk membuat berita baru
+  const handleCreate = async (newItemData) => {
+    try {
+      await createNews(newItemData);
+      showNotification('Berita berhasil ditambahkan!', 'success');
+      handleCloseFormModal();
+      fetchBerita(); // Muat ulang data untuk menampilkan item baru
+    } catch (error) {
+      console.error("Failed to create news:", error);
+      showNotification(error.message || 'Gagal menambahkan berita.', 'error');
+    }
+  };
 
-    if (searchTerm) {
-      filtered = filtered.filter(item =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.author.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  // Fungsi untuk memperbarui berita
+  const handleUpdate = async (updatedItemData) => {
+    if (!editingItem) return;
+    try {
+      await updateNews(editingItem.id, updatedItemData);
+      showNotification('Berita berhasil diperbarui!', 'success');
+      handleCloseFormModal();
+      fetchBerita(); // Muat ulang data untuk menampilkan perubahan
+    } catch (error) {
+      console.error("Failed to update news:", error);
+      showNotification(error.message || 'Gagal memperbarui berita.', 'error');
     }
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(item => item.category === categoryFilter);
-    }
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      const filterDate = new Date();
-      switch (dateFilter) {
-        case 'today':
-          filterDate.setHours(0, 0, 0, 0);
-          break;
-        case 'week':
-          filterDate.setDate(now.getDate() - 7);
-          break;
-        case 'month':
-          filterDate.setMonth(now.getMonth() - 1);
-          break;
+  };
+
+  // Fungsi untuk menghapus berita
+  const handleDelete = async () => {
+    if (!deletingItem) return;
+    try {
+      await deleteNews(deletingItem.id);
+      showNotification('Berita berhasil dihapus!', 'success');
+      handleCloseDeleteModal();
+      // Cek jika item terakhir di halaman ini dihapus, pindah ke halaman sebelumnya
+      if (items.length === 1 && pagination.current_page > 1) {
+        setPagination(p => ({ ...p, current_page: p.current_page - 1 }));
+      } else {
+        fetchBerita(); // Muat ulang data
       }
-      filtered = filtered.filter(item => new Date(item.date) >= filterDate);
+    } catch (error) {
+      console.error("Failed to delete news:", error);
+      showNotification(error.message || 'Gagal menghapus berita.', 'error');
     }
-    return filtered;
+  };
+  
+  // Handler untuk UI
+  const handlePageChange = (page) => {
+    setPagination(p => ({ ...p, current_page: page }));
   };
 
-  // Pagination
-  const getPaginatedItems = () => {
-    const filteredItems = getFilteredItems();
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredItems.slice(startIndex, startIndex + itemsPerPage);
-  };
-  const getTotalPages = () => Math.ceil(getFilteredItems().length / itemsPerPage);
-
-  // CRUD (disederhanakan)
-  const handleCreate = (newItem) => {
-    const itemWithId = { ...newItem, id: Date.now() };
-    setItems(prev => [...prev, itemWithId]);
-    setIsFormModalOpen(false);
-    showNotification('Berita berhasil ditambahkan!', 'success');
-  };
-
-  const handleUpdate = (updatedItem) => {
-    setItems(prev => prev.map(item => item.id === updatedItem.id ? updatedItem : item));
-    setIsFormModalOpen(false);
-    setEditingItem(null);
-    showNotification('Berita berhasil diperbarui!', 'success');
-  };
-
-  const handleDelete = () => {
-    setItems(prev => prev.filter(item => item.id !== deletingItem.id));
-    setIsDeleteModalOpen(false);
-    setDeletingItem(null);
-    showNotification('Berita berhasil dihapus!', 'success');
-  };
-
-  // Event handlers
-  const handleEdit = (item) => {
+  const handleOpenFormModal = (item = null) => {
     setEditingItem(item);
     setIsFormModalOpen(true);
   };
 
-  const handleDeleteClick = (item) => {
+  const handleCloseFormModal = () => {
+    setIsFormModalOpen(false);
+    setEditingItem(null);
+  };
+  
+  const handleOpenDeleteModal = (item) => {
     setDeletingItem(item);
     setIsDeleteModalOpen(true);
   };
-  
-  const showNotification = (message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
-  };
-  
-  const resetFilters = () => {
-    setSearchTerm('');
-    setCategoryFilter('all');
-    setDateFilter('all');
-    setCurrentPage(1);
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeletingItem(null);
   };
 
   return (
@@ -135,23 +159,12 @@ export default function BeritaPage() {
       {/* Action Bar */}
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <button
-          onClick={() => {
-            setEditingItem(null);
-            setIsFormModalOpen(true);
-          }}
+          onClick={() => handleOpenFormModal()}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
         >
           <FontAwesomeIcon icon={faPlus} />
           Tambah Berita
         </button>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span>Total: {getFilteredItems().length} berita</span>
-            {(searchTerm || categoryFilter !== 'all' || dateFilter !== 'all') && (
-              <button onClick={resetFilters} className="text-blue-600 hover:text-blue-800 underline">
-                Reset Filter
-              </button>
-            )}
-          </div>
       </div>
       
       {/* Search and Filters */}
@@ -162,52 +175,61 @@ export default function BeritaPage() {
         setCategoryFilter={setCategoryFilter}
         dateFilter={dateFilter}
         setDateFilter={setDateFilter}
-        activeTab="berita" // Hardcoded
+        activeTab="berita"
       />
 
-      {/* Table */}
-      <NewsEventTable
-        items={getPaginatedItems()}
-        activeTab="berita" // Hardcoded
-        onEdit={handleEdit}
-        onDelete={handleDeleteClick}
-        currentPage={currentPage}
-        totalPages={getTotalPages()}
-        onPageChange={setCurrentPage}
-        totalItems={getFilteredItems().length}
-        itemsPerPage={itemsPerPage}
-      />
+      {/* Table atau Loading Spinner */}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64 bg-white rounded-lg shadow-sm border border-gray-200">
+          <FontAwesomeIcon icon={faSpinner} className="text-blue-500 text-4xl animate-spin" />
+        </div>
+      ) : (
+        <NewsEventTable
+          items={items}
+          activeTab="berita"
+          onEdit={handleOpenFormModal}
+          onDelete={handleOpenDeleteModal}
+          currentPage={pagination.current_page}
+          totalPages={pagination.total_pages}
+          onPageChange={handlePageChange}
+          totalItems={pagination.total_items}
+          itemsPerPage={pagination.items_per_page}
+        />
+      )}
 
       {/* Modals */}
       <Modal
         isOpen={isFormModalOpen}
-        onClose={() => { setIsFormModalOpen(false); setEditingItem(null); }}
+        onClose={handleCloseFormModal}
         title={`${editingItem ? 'Edit' : 'Tambah'} Berita`}
-        size="xl"
+        size="2xl"
       >
         <NewsEventForm
-          type="berita" // Hardcoded
+          type="berita"
           initialData={editingItem}
           onSubmit={editingItem ? handleUpdate : handleCreate}
-          onCancel={() => { setIsFormModalOpen(false); setEditingItem(null); }}
+          onCancel={handleCloseFormModal}
         />
       </Modal>
 
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
-        onClose={() => { setIsDeleteModalOpen(false); setDeletingItem(null); }}
+        onClose={handleCloseDeleteModal}
         onConfirm={handleDelete}
         title="Konfirmasi Hapus Berita"
-        message={`Apakah Anda yakin ingin menghapus berita "${deletingItem?.title}"?`}
+        message={`Apakah Anda yakin ingin menghapus berita "${deletingItem?.title}"? Tindakan ini tidak dapat dibatalkan.`}
         type="danger"
       />
-
-      <Notification
-        show={notification.show}
-        message={notification.message}
-        type={notification.type}
-        onClose={() => setNotification({ show: false, message: '', type: 'success' })}
-      />
+{notification && (
+  <Notification
+    id={notification.id}
+    message={notification.message}
+    type={notification.type}
+    onClose={() => setNotification(null)}
+    autoClose={true}
+    duration={4000}
+  />
+)}
     </div>
   );
 }

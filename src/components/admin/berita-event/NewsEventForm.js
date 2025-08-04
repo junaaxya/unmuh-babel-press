@@ -21,6 +21,30 @@ import FormInput from '@/components/ui/FormInput/FormInput';
 import TextArea from '@/components/ui/TextArea/Textarea';
 import ImageUploader from '@/components/admin/berita-event/ImageUploader';
 import Editor from '@/components/admin/berita-event/Editor';
+import { uploadImage } from '../../../app/services/api'; 
+
+
+// Definisikan state awal di luar komponen agar bisa digunakan kembali
+const createInitialState = (type) => ({
+    title: '',
+    excerpt: '',
+    image: '',
+    date: '',
+    time: '',
+    location: '',
+    category: type === 'berita' ? 'Berita' : 'Event',
+    status: 'Upcoming',
+    author: '',
+    organizer: '',
+    slug: '',
+    content: '',
+    registrationEnabled: false,
+    registrationTitle: 'Tertarik mengikuti event ini?',
+    registrationDescription: 'Daftarkan diri Anda sekarang juga!',
+    registrationButtonText: 'Daftar Sekarang',
+    registrationLink: '',
+    registrationDeadline: '',
+});
 
 export default function NewsEventForm({
     type,
@@ -28,50 +52,36 @@ export default function NewsEventForm({
     onSubmit,
     onCancel,
 }) {
-    const [formData, setFormData] = useState({
-        title: '',
-        excerpt: '',
-        image: '',
-        date: '',
-        time: '', // for events
-        location: '', // for events
-        category: type === 'berita' ? 'Berita' : 'Event',
-        status: 'Upcoming', // for events
-        author: '', // for news
-        organizer: '', // for events
-        slug: '',
-        content: '',
-        // Registration fields for events
-        registrationEnabled: false,
-        registrationTitle: 'Tertarik mengikuti event ini?',
-        registrationDescription: 'Daftarkan diri Anda sekarang juga!',
-        registrationButtonText: 'Daftar Sekarang',
-        registrationLink: '',
-        registrationDeadline: '',
-    });
-
+    const [formData, setFormData] = useState(createInitialState(type));
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Categories
-    const newsCategories = ['Berita', 'Pengumuman', 'Artikel', 'Press Release'];
-    const eventCategories = [
-        'Event',
-        'Seminar',
-        'Workshop',
-        'Konferensi',
-        'Pelatihan',
+     const newsCategories = [
+        { value: 'Berita', label: 'Berita' },
+        { value: 'Pengumuman', label: 'Pengumuman' },
+        { value: 'Artikel', label: 'Artikel' },
+        { value: 'Press_Release', label: 'Press Release' }
     ];
+    const eventCategories = ['Event', 'Seminar', 'Workshop', 'Konferensi', 'Pelatihan'];
     const eventStatuses = ['Upcoming', 'Ongoing', 'Completed', 'Cancelled'];
 
     useEffect(() => {
         if (initialData) {
-            setFormData({ ...initialData });
+            // Gabungkan data awal dengan state default untuk memastikan semua properti ada
+            setFormData(prevState => ({
+                ...prevState,
+                ...initialData,
+                // Pastikan tanggal diformat dengan benar untuk input type="date"
+                date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : '',
+            }));
+        } else {
+            // Reset ke state awal jika ini adalah form untuk item baru
+            setFormData(createInitialState(type));
         }
-    }, [initialData]);
+    }, [initialData, type]);
 
-    // Generate slug from title
     const generateSlug = (title) => {
+        if (!title) return '';
         return title
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '')
@@ -86,92 +96,40 @@ export default function NewsEventForm({
             [field]: value,
             ...(field === 'title' && { slug: generateSlug(value) }),
         }));
-
-        // Clear error when user starts typing
         if (errors[field]) {
-            setErrors((prev) => ({
-                ...prev,
-                [field]: '',
-            }));
+            setErrors((prev) => ({ ...prev, [field]: '' }));
         }
     };
 
     const validateForm = () => {
         const newErrors = {};
+        const { title, excerpt, image, date, content, author, organizer, time, location, registrationEnabled, registrationLink, registrationTitle, registrationButtonText } = formData;
 
-        // Required fields validation
-        if (!formData.title.trim()) {
-            newErrors.title = 'Judul wajib diisi';
-        }
+        // Validasi yang lebih aman dengan memeriksa keberadaan nilai
+        if (!title || !title.trim()) newErrors.title = 'Judul wajib diisi';
+        if (title && title.length > 200) newErrors.title = 'Judul maksimal 200 karakter';
 
-        if (!formData.excerpt.trim()) {
-            newErrors.excerpt = 'Ringkasan wajib diisi';
-        }
+        if (!excerpt || !excerpt.trim()) newErrors.excerpt = 'Ringkasan wajib diisi';
+        if (excerpt && excerpt.length > 500) newErrors.excerpt = 'Ringkasan maksimal 500 karakter';
+        
+        if (!image) newErrors.image = 'Gambar wajib diupload';
+        if (!date) newErrors.date = 'Tanggal wajib diisi';
+        if (!content || !content.trim()) newErrors.content = 'Konten wajib diisi';
 
-        if (!formData.image) {
-            newErrors.image = 'Gambar wajib diupload';
-        }
-
-        if (!formData.date) {
-            newErrors.date = 'Tanggal wajib diisi';
-        }
-
-        if (!formData.content.trim()) {
-            newErrors.content = 'Konten wajib diisi';
-        }
-
-        // Type-specific validation
         if (type === 'berita') {
-            if (!formData.author.trim()) {
-                newErrors.author = 'Penulis wajib diisi';
+            if (!author || !author.trim()) newErrors.author = 'Penulis wajib diisi';
+        } else { // Validasi untuk event
+            if (!organizer || !organizer.trim()) newErrors.organizer = 'Penyelenggara wajib diisi';
+            if (!time || !time.trim()) newErrors.time = 'Waktu wajib diisi';
+            if (!location || !location.trim()) newErrors.location = 'Lokasi wajib diisi';
+
+            if (registrationEnabled) {
+                if (!registrationLink || !registrationLink.trim()) newErrors.registrationLink = 'Link registrasi wajib diisi';
+                if (registrationLink && !isValidUrl(registrationLink)) newErrors.registrationLink = 'Format URL tidak valid';
+                if (!registrationTitle || !registrationTitle.trim()) newErrors.registrationTitle = 'Judul registrasi wajib diisi';
+                if (registrationTitle && registrationTitle.length > 100) newErrors.registrationTitle = 'Judul registrasi maksimal 100 karakter';
+                if (!registrationButtonText || !registrationButtonText.trim()) newErrors.registrationButtonText = 'Teks tombol wajib diisi';
             }
-        } else {
-            if (!formData.organizer.trim()) {
-                newErrors.organizer = 'Penyelenggara wajib diisi';
-            }
-            if (!formData.time.trim()) {
-                newErrors.time = 'Waktu wajib diisi';
-            }
-            if (!formData.location.trim()) {
-                newErrors.location = 'Lokasi wajib diisi';
-            }
-
-            // Registration validation for events
-            if (formData.registrationEnabled) {
-                if (!formData.registrationLink.trim()) {
-                    newErrors.registrationLink = 'Link registrasi wajib diisi jika registrasi diaktifkan';
-                }
-                
-                // Validate URL format
-                if (formData.registrationLink && !isValidUrl(formData.registrationLink)) {
-                    newErrors.registrationLink = 'Format URL tidak valid';
-                }
-
-                if (!formData.registrationTitle.trim()) {
-                    newErrors.registrationTitle = 'Judul registrasi wajib diisi';
-                }
-
-                if (!formData.registrationButtonText.trim()) {
-                    newErrors.registrationButtonText = 'Teks tombol wajib diisi';
-                }
-            }
-        }
-
-        // Length validation
-        if (formData.title.length > 200) {
-            newErrors.title = 'Judul maksimal 200 karakter';
-        }
-
-        if (formData.excerpt.length > 500) {
-            newErrors.excerpt = 'Ringkasan maksimal 500 karakter';
-        }
-
-        if (formData.registrationTitle.length > 100) {
-            newErrors.registrationTitle = 'Judul registrasi maksimal 100 karakter';
-        }
-
-        if (formData.registrationDescription.length > 200) {
-            newErrors.registrationDescription = 'Deskripsi registrasi maksimal 200 karakter';
         }
 
         setErrors(newErrors);
@@ -189,18 +147,56 @@ export default function NewsEventForm({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsSubmitting(true);
+         // Cek apakah ini mode edit atau mode buat baru
+     // *** PERBAIKAN: Pastikan slug unik saat membuat item baru ***
+        const isEditing = !!initialData;
+        let finalSlug = formData.slug || generateSlug(formData.title);
 
+        if (!isEditing) {
+            finalSlug = `${finalSlug}-${Date.now()}`;
+        }
+
+        // *** SOLUSI: Buat payload yang bersih sebelum dikirim ***
+        const commonPayload = {
+            title: formData.title,
+            slug: finalSlug || generateSlug(formData.title),
+            excerpt: formData.excerpt,
+            content: formData.content,
+            image: formData.image,
+            date: formData.date,
+            category: formData.category,
+        };
+
+        let payload;
+        if (type === 'berita') {
+            payload = {
+                ...commonPayload,
+                author: formData.author,
+            };
+        } else { // type === 'event'
+            payload = {
+                ...commonPayload,
+                time: formData.time,
+                location: formData.location,
+                status: formData.status,
+                organizer: formData.organizer,
+                registrationEnabled: formData.registrationEnabled,
+                registrationTitle: formData.registrationEnabled ? formData.registrationTitle : '',
+            registrationDescription: formData.registrationEnabled ? formData.registrationDescription : '',
+            registrationButtonText: formData.registrationEnabled ? formData.registrationButtonText : '',
+            
+            // Untuk link dan tanggal, backend Anda sekarang bisa menangani `null`.
+            registrationLink: formData.registrationEnabled && formData.registrationLink ? formData.registrationLink : null,
+            registrationDeadline: formData.registrationEnabled && formData.registrationDeadline ? new Date(formData.registrationDeadline).toISOString() : null,
+        };
+        }
+        
         try {
-            // Simulate API call delay
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            onSubmit(formData);
+            // Kirim payload yang sudah bersih, bukan seluruh formData
+            await onSubmit(payload);
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
@@ -212,8 +208,26 @@ export default function NewsEventForm({
         handleInputChange('image', imageUrl);
     };
 
-    const handleContentChange = (content) => {
+
+    const handleContentChange = (content, textLength) => {
         handleInputChange('content', content);
+    };
+    // *** FUNGSI BARU UNTUK UPLOAD GAMBAR DARI EDITOR ***
+    const handleEditorImageUpload = async (file) => {
+        // Tentukan folder berdasarkan tipe (berita atau event)
+        // Masukan: Tambahkan subfolder 'content' untuk memisahkan gambar utama dan gambar konten
+        const folder = type === 'berita' ? 'unmuh-babel/news/content' : 'unmuh-babel/events/content';
+        
+        try {
+            // Panggil fungsi API yang sudah ada
+            const response = await uploadImage(file, folder);
+            // Kembalikan URL agar bisa digunakan oleh editor
+            return response.url;
+        } catch (error) {
+            console.error("Gagal mengunggah gambar dari editor:", error);
+            // Lemparkan kembali error agar komponen Editor bisa menampilkannya
+            throw error;
+        }
     };
 
     return (
@@ -221,22 +235,20 @@ export default function NewsEventForm({
             {/* Title */}
             <FormInput
                 label="Judul"
-                value={formData.title}
+                value={formData.title || ''}
                 onChange={(value) => handleInputChange('title', value)}
-                placeholder={`Masukkan judul ${
-                    type === 'berita' ? 'berita' : 'event'
-                }...`}
+                placeholder={`Masukkan judul ${type === 'berita' ? 'berita' : 'event'}...`}
                 error={errors.title}
                 required
                 icon={faFileText}
                 maxLength={200}
             />
 
-            {/* Slug - Auto generated, readonly */}
+            {/* Slug */}
             <FormInput
                 label="Slug"
-                value={formData.slug}
-                onChange={() => {}} // Read only
+                value={formData.slug || ''}
+                onChange={() => {}}
                 placeholder="slug-otomatis-dari-judul"
                 readOnly
                 icon={faTag}
@@ -246,11 +258,9 @@ export default function NewsEventForm({
             {/* Excerpt */}
             <TextArea
                 label="Ringkasan"
-                value={formData.excerpt}
+                value={formData.excerpt || ''}
                 onChange={(value) => handleInputChange('excerpt', value)}
-                placeholder={`Ringkasan singkat ${
-                    type === 'berita' ? 'berita' : 'event'
-                } ini...`}
+                placeholder={`Ringkasan singkat ${type === 'berita' ? 'berita' : 'event'} ini...`}
                 error={errors.excerpt}
                 required
                 rows={3}
@@ -264,28 +274,28 @@ export default function NewsEventForm({
                     Gambar <span className="text-red-500">*</span>
                 </label>
                 <ImageUploader
-                    currentImage={formData.image}
+                    currentImage={formData.image || ''}
                     onUpload={handleImageUpload}
+                    folder={type === 'berita' ? 'unmuh-babel/news' : 'unmuh-babel/events'}
                     error={errors.image}
                 />
             </div>
 
             {/* Date and Time Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormInput
                     label="Tanggal"
                     type="date"
-                    value={formData.date}
+                    value={formData.date || ''}
                     onChange={(value) => handleInputChange('date', value)}
                     error={errors.date}
                     required
                     icon={faCalendarAlt}
                 />
-
                 {type === 'event' && (
                     <FormInput
                         label="Waktu"
-                        value={formData.time}
+                        value={formData.time || ''}
                         onChange={(value) => handleInputChange('time', value)}
                         placeholder="08:00 - 10:30 WIB"
                         error={errors.time}
@@ -309,14 +319,18 @@ export default function NewsEventForm({
                         }
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     >
-                        {(type === 'berita'
-                            ? newsCategories
-                            : eventCategories
-                        ).map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
+                        {type === 'berita'
+                            ? newsCategories.map((category) => (
+                                <option key={category.value} value={category.value}>
+                                    {category.label}
+                                </option>
+                            ))
+                            : eventCategories.map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))
+                        }
                     </select>
                 </div>
 
@@ -496,12 +510,11 @@ export default function NewsEventForm({
                     Konten <span className="text-red-500">*</span>
                 </label>
                 <div className="border border-gray-300 rounded-lg overflow-hidden">
-                    <Editor
-                        content={formData.content}
+                   <Editor
+                        content={formData.content || ''}
                         onChange={handleContentChange}
-                        placeholder={`Tulis konten lengkap ${
-                            type === 'berita' ? 'berita' : 'event'
-                        } di sini...`}
+                        placeholder={`Tulis konten lengkap ${type === 'berita' ? 'berita' : 'event'} di sini...`}
+                        onImageUpload={handleEditorImageUpload}
                     />
                 </div>
                 {errors.content && (

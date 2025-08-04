@@ -1,11 +1,10 @@
 // src/app/berita-event/page.js
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import NewsCard from '@/components/News/NewsCard';
 import SearchFilter from '@/components/News/SearchFilter';
-import  newsData  from '@/data/news';
-import  eventData  from '@/data/event';
+import { getNews, getEvents } from '@/app/services/api';
 import {
     faNewspaper,
     faCalendarCheck,
@@ -14,56 +13,82 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function BeritaEventPage() {
+    // State untuk UI
     const [searchTerm, setSearchTerm] = useState('');
     const [activeFilter, setActiveFilter] = useState('all');
     const [isLoading, setIsLoading] = useState(true);
-    const [itemsPerPage] = useState(6);
+
+    // State untuk data dari API
+    const [allData, setAllData] = useState([]);
+
+    // State untuk pagination
+    const [itemsPerPage] = useState(9); // Tampilkan 9 item per halaman
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Combine and sort data
-    const allData = useMemo(() => {
-        const newsWithType = newsData.map((item) => ({
-            ...item,
-            type: 'news',
-        }));
-        const eventsWithType = eventData.map((item) => ({
-            ...item,
-            type: 'event',
-        }));
+    // Fungsi untuk mengambil semua data dari API
+    const fetchAllData = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            // Ambil berita dan event secara paralel untuk efisiensi
+            // Kita ambil cukup banyak (misal: 100) agar filtering di client terasa lengkap
+            const [newsResponse, eventsResponse] = await Promise.all([
+                getNews({ limit: 100 }),
+                getEvents({ limit: 100 }),
+            ]);
 
-        return [...newsWithType, ...eventsWithType].sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-        );
+            // Tambahkan properti 'type' ke setiap item untuk membedakannya
+            const newsWithType = newsResponse.data.items.map((item) => ({
+                ...item,
+                type: 'news',
+            }));
+            const eventsWithType = eventsResponse.data.items.map((item) => ({
+                ...item,
+                type: 'event',
+            }));
+
+            // Gabungkan dan urutkan berdasarkan tanggal terbaru
+            const combinedData = [...newsWithType, ...eventsWithType].sort(
+                (a, b) => new Date(b.date) - new Date(a.date)
+            );
+
+            setAllData(combinedData);
+        } catch (error) {
+            console.error('Gagal memuat data:', error);
+            // Di sini Anda bisa menambahkan notifikasi error jika perlu
+        } finally {
+            setIsLoading(false);
+        }
     }, []);
 
-    // Filter and search data
+    // Panggil fetchAllData sekali saat komponen dimuat
+    useEffect(() => {
+        fetchAllData();
+    }, [fetchAllData]);
+
+    // Gunakan useMemo untuk memfilter data secara efisien di sisi klien
     const filteredData = useMemo(() => {
         let filtered = allData;
 
-        // Apply filter
+        // Terapkan filter berdasarkan kategori
         if (activeFilter !== 'all') {
-            if (activeFilter === 'news') {
-                filtered = filtered.filter((item) => item.type === 'news');
-            } else if (activeFilter === 'event') {
-                filtered = filtered.filter((item) => item.type === 'event');
+            if (activeFilter === 'news' || activeFilter === 'event') {
+                filtered = filtered.filter(
+                    (item) => item.type === activeFilter
+                );
             } else if (activeFilter === 'upcoming') {
                 filtered = filtered.filter(
                     (item) =>
-                        item.type === 'event' &&
-                        (item.status === 'Upcoming' ||
-                            new Date(item.date) > new Date())
+                        item.type === 'event' && item.status === 'Upcoming'
                 );
             } else if (activeFilter === 'completed') {
                 filtered = filtered.filter(
                     (item) =>
-                        item.type === 'event' &&
-                        item.status === 'Completed' &&
-                        new Date(item.date) < new Date()
+                        item.type === 'event' && item.status === 'Completed'
                 );
             }
         }
 
-        // Apply search
+        // Terapkan filter pencarian
         if (searchTerm) {
             filtered = filtered.filter(
                 (item) =>
@@ -87,23 +112,33 @@ export default function BeritaEventPage() {
         return filtered;
     }, [allData, activeFilter, searchTerm]);
 
-    // Pagination
+    // Kalkulasi untuk pagination
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const paginatedData = filteredData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+    const paginatedData = useMemo(
+        () =>
+            filteredData.slice(
+                (currentPage - 1) * itemsPerPage,
+                currentPage * itemsPerPage
+            ),
+        [filteredData, currentPage, itemsPerPage]
     );
 
-    // Reset pagination when filter changes
+    // Reset halaman ke 1 setiap kali filter atau pencarian berubah
     useEffect(() => {
         setCurrentPage(1);
     }, [activeFilter, searchTerm]);
 
-    // Simulate loading
-    useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), 1000);
-        return () => clearTimeout(timer);
-    }, []);
+    // Kalkulasi statistik untuk header
+    const stats = useMemo(() => {
+        const newsCount = allData.filter((item) => item.type === 'news').length;
+        const eventCount = allData.filter(
+            (item) => item.type === 'event'
+        ).length;
+        const upcomingCount = allData.filter(
+            (item) => item.type === 'event' && item.status === 'Upcoming'
+        ).length;
+        return { newsCount, eventCount, upcomingCount };
+    }, [allData]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -112,22 +147,6 @@ export default function BeritaEventPage() {
     const handleFilter = (filter) => {
         setActiveFilter(filter);
     };
-
-    const getFilterStats = () => {
-        const newsCount = allData.filter((item) => item.type === 'news').length;
-        const eventCount = allData.filter(
-            (item) => item.type === 'event'
-        ).length;
-        const upcomingCount = allData.filter(
-            (item) =>
-                item.type === 'event' &&
-                (item.status === 'Upcoming' || new Date(item.date) > new Date())
-        ).length;
-
-        return { newsCount, eventCount, upcomingCount };
-    };
-
-    const stats = getFilterStats();
 
     if (isLoading) {
         return (
