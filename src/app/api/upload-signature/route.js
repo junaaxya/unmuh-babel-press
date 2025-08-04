@@ -18,7 +18,7 @@ async function streamToBuffer(stream) {
 }
 
 export async function POST(req) {
-  const authError = await authorize(request);
+  const authError = await authorize(req);
   if (authError) return authError;
   try {
     const contentType = req.headers.get("content-type") || "";

@@ -2,27 +2,47 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { authorize } from "@/lib/authorize";
 
-export async function GET(request, { params }) {
-  const id = parseInt(params.id);
-
-  const news = await prisma.news.findUnique({
-    where: { id },
-  });
-
-  if (!news) {
-    return Response.json({ status: "error", message: "Berita tidak ditemukan" }, { status: 404 });
-  }
-
-  return Response.json({ status: "success", data: news });
+async function getParams(context) {
+  const { params: maybeParams } = await context;
+  return await maybeParams; // ini yang mencegah error Next.js
 }
 
-export async function PUT(request, { params }) {
+export async function GET(request, context) {
+  const params = await getParams(context);
+  const id = parseInt(params.id, 10);
+  if (Number.isNaN(id)) {
+    return NextResponse.json(
+      { status: "error", message: "ID tidak valid" },
+      { status: 400 }
+    );
+  }
+
+  const news = await prisma.news.findUnique({ where: { id } });
+  if (!news) {
+    return NextResponse.json(
+      { status: "error", message: "Berita tidak ditemukan" },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({ status: "success", data: news });
+}
+
+export async function PUT(request, context) {
+  const params = await getParams(context);
   const authError = await authorize(request);
   if (authError) return authError;
-  try {
-    const id = parseInt(params.id);
-    const body = await request.json();
 
+  const id = parseInt(params.id, 10);
+  if (Number.isNaN(id)) {
+    return NextResponse.json(
+      { status: "error", message: "ID tidak valid" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const body = await request.json();
     if (body.title) {
       body.slug =
         body.title
@@ -41,24 +61,32 @@ export async function PUT(request, { params }) {
       },
     });
 
-    return NextResponse.json({
-      status: "success",
-      data: updatedNews,
-    });
+    return NextResponse.json({ status: "success", data: updatedNews });
   } catch (error) {
     console.error("PUT /api/news/[id] error:", error);
-    return NextResponse.json({ status: "error", message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { status: "error", message: error.message },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
+  const params = await getParams(context);
   const authError = await authorize(request);
   if (authError) return authError;
-  const id = parseInt(params.id);
+
+  const id = parseInt(params.id, 10);
+  if (Number.isNaN(id)) {
+    return NextResponse.json(
+      { status: "error", message: "ID tidak valid" },
+      { status: 400 }
+    );
+  }
 
   await prisma.news.delete({ where: { id } });
 
-  return Response.json({
+  return NextResponse.json({
     status: "success",
     message: "Berita berhasil dihapus",
   });

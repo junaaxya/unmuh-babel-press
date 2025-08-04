@@ -713,75 +713,63 @@ export default function Editor({
     placeholder = 'Mulai menulis konten Anda...',
     className = '',
     disabled = false,
-    onImageUpload,
+    onImageUpload, // <-- Prop ini sekarang menjadi kunci utama
     onPreview,
     height = '400px',
     maxLength,
 }) {
     const [isUploading, setIsUploading] = useState(false);
     const [status, setStatus] = useState(null);
-    const [wordCount, setWordCount] = useState(0);
+   const [wordCount, setWordCount] = useState(0);
     const fileInputRef = useRef(null);
 
     const editor = useEditor(
         {
             extensions: [
-                // Harus di atas StarterKit: digunakan oleh Color dan Highlight
                 TextStyle,
                 Color,
                 Highlight.configure({ multicolor: true }),
-
-                // StarterKit (pastikan setelah TextStyle)
                 StarterKit.configure({
                     heading: { levels: [1, 2, 3] },
                     codeBlock: false,
                 }),
-
-                // Extensions tambahan
                 Underline,
                 Image.configure({
                     HTMLAttributes: {
                         class: 'max-w-full h-auto rounded-lg shadow-sm my-4',
                     },
-                    allowBase64: true, // ⚠️ Hati-hati di produksi
                 }),
                 Link.configure({
                     openOnClick: false,
                     autolink: true,
                     HTMLAttributes: {
-                        class: 'text-blue-600 hover:text-blue-800 underline cursor-pointer',
+                        class: 'text-blue-600 hover:text-blue-800 underline',
                     },
                 }),
                 Placeholder.configure({ placeholder }),
                 TextAlign.configure({ types: ['heading', 'paragraph'] }),
             ],
-
             content: content || '',
             editable: !disabled,
             immediatelyRender: false,
 
             onUpdate: ({ editor }) => {
                 const html = editor.getHTML();
-                const text = editor.getText();
-                setWordCount(text.length);
-                onChange?.(html, text.length);
+            // *** PERBAIKAN: Pastikan 'text' didefinisikan sebelum digunakan ***
+            const text = editor.getText(); 
+            setWordCount(text.length);
+            onChange?.(html, text.length);
             },
-
             editorProps: {
                 attributes: {
-                    class: `prose prose-sm sm:prose-base max-w-none focus:outline-none p-4 ${
-                        disabled ? 'opacity-50' : ''
-                    }`,
+                    class: `prose prose-sm sm:prose-base max-w-none focus:outline-none p-4`,
                     style: `min-height: ${height}; max-height: 600px; overflow-y: auto;`,
                 },
-
-                // Drag & drop image handler
                 handleDrop: (view, event, slice, moved) => {
                     const files = Array.from(event.dataTransfer?.files || []);
                     const imageFiles = files.filter((file) =>
                         file.type.startsWith('image/')
                     );
-
                     if (imageFiles.length > 0) {
                         event.preventDefault();
                         imageFiles.forEach((file) =>
@@ -789,7 +777,6 @@ export default function Editor({
                         );
                         return true;
                     }
-
                     return false;
                 },
             },
@@ -800,42 +787,30 @@ export default function Editor({
     useEffect(() => {
         if (editor && content !== undefined && editor.getHTML() !== content) {
             editor.commands.setContent(content, false);
+            setWordCount(editor.getText().length);
         }
     }, [editor, content]);
 
-    useEffect(() => {
-        if (editor) {
-            const text = editor.getText();
-            setWordCount(text.length);
-        }
-    }, [editor]);
-
     const handleImageUpload = useCallback(
         async (event) => {
-            const file = event.target.files?.[0];
-            if (!file) return;
-
-            // Validate file
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (file.size > maxSize) {
+            // Pastikan ada fungsi onImageUpload yang diberikan dari parent
+            if (!onImageUpload) {
+                console.error("Editor: prop 'onImageUpload' tidak disediakan.");
                 setStatus({
                     type: 'error',
-                    message: 'Ukuran file terlalu besar. Maksimal 5MB.',
+                    message: 'Fungsi upload tidak dikonfigurasi.',
                 });
                 return;
             }
 
-            const allowedTypes = [
-                'image/jpeg',
-                'image/png',
-                'image/gif',
-                'image/webp',
-            ];
-            if (!allowedTypes.includes(file.type)) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            // Validasi sederhana (bisa diperkuat jika perlu)
+            if (!file.type.startsWith('image/')) {
                 setStatus({
                     type: 'error',
-                    message:
-                        'Format file tidak didukung. Gunakan JPEG, PNG, GIF, atau WebP.',
+                    message: 'File yang dipilih bukan gambar.',
                 });
                 return;
             }
@@ -844,17 +819,10 @@ export default function Editor({
             setStatus({ type: 'info', message: 'Mengunggah gambar...' });
 
             try {
-                let imageUrl;
+                // Panggil fungsi upload dari parent dan tunggu URL-nya
+                const imageUrl = await onImageUpload(file);
 
-                if (onImageUpload) {
-                    imageUrl = await onImageUpload(file);
-                } else {
-                    // Default upload simulation
-                    await new Promise((resolve) => setTimeout(resolve, 1500));
-                    imageUrl = `https://picsum.photos/800/400?random=${Date.now()}`;
-                }
-
-                if (imageUrl) {
+                if (imageUrl && typeof imageUrl === 'string') {
                     editor
                         ?.chain()
                         .focus()
@@ -864,14 +832,16 @@ export default function Editor({
                         type: 'success',
                         message: 'Gambar berhasil diunggah!',
                     });
+                } else {
+                    throw new Error(
+                        'URL gambar tidak valid diterima dari uploader.'
+                    );
                 }
             } catch (error) {
-                console.error('Error uploading image:', error);
+                console.error('Error uploading image in editor:', error);
                 setStatus({
                     type: 'error',
-                    message:
-                        error.message ||
-                        'Terjadi kesalahan saat mengunggah gambar.',
+                    message: error.message || 'Gagal mengunggah gambar.',
                 });
             } finally {
                 setIsUploading(false);
@@ -883,9 +853,7 @@ export default function Editor({
         [editor, onImageUpload]
     );
 
-    const clearStatus = useCallback(() => {
-        setStatus(null);
-    }, []);
+    const clearStatus = useCallback(() => setStatus(null), []);
 
     if (!editor) {
         return (
@@ -963,7 +931,6 @@ export default function Editor({
             />
 
             {/* Custom Styles */}
-          
         </div>
     );
 }

@@ -1,6 +1,5 @@
 // src/app/(main)/event/[slug]/page.js
 import { notFound } from 'next/navigation';
-import eventData from '@/data/event';
 import ClientImage from '@/components/admin/berita-event/ClientImage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -15,21 +14,45 @@ import {
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import ShareButtons from '@/components/ShareButtons/ShareButtons';
+import { getEventBySlug, getEvents } from '@/app/services/api';
 
-export async function generateStaticParams() {
-  return eventData.map((event) => ({
-    slug: event.slug,
-  }));
+
+async function fetchEventData(slug) {
+    try {
+        const response = await getEventBySlug(slug);
+        return response.data; // API Anda membungkus event dalam properti 'data'
+    } catch (error) {
+        // Jika API mengembalikan error 404 (tidak ditemukan), tampilkan halaman 404 Next.js
+        if (error.message && error.message.toLowerCase().includes('tidak ditemukan')) {
+            notFound();
+        }
+        // Untuk error lainnya, lempar error agar Next.js menampilkan halaman error default
+        console.error("Gagal mengambil data event:", error);
+        throw new Error("Gagal memuat data event.");
+    }
+}
+
+// Fungsi untuk mengambil event terkait dari API
+async function fetchRelatedEvents(currentEvent) {
+    try {
+        const params = {
+            category: currentEvent.category,
+            limit: 3, // Ambil maksimal 3 event terkait
+        };
+        const response = await getEvents(params);
+        // Pastikan event yang sedang dibuka tidak muncul di daftar terkait
+        return response.data.items.filter(item => item.id !== currentEvent.id);
+    } catch (error) {
+        console.error("Gagal mengambil event terkait:", error);
+        return []; // Jika gagal, kembalikan array kosong
+    }
 }
 
 export default async function EventDetailPage({ params }) {
-  const { slug } = params;
-
-  const event = eventData.find(item => item.slug === slug);
-
-  if (!event) {
-    notFound();
-  }
+const { slug } = await params;
+    const event = await fetchEventData(slug);
+    const relatedEvents = await fetchRelatedEvents(event);
 
   const formatDate = (dateString) => {
     const options = { 
@@ -238,76 +261,60 @@ export default async function EventDetailPage({ params }) {
             </div>
           )}
 
-          {/* Share Section */}
-          <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 font-medium">
-                <FontAwesomeIcon icon={faShare} className="mr-2" />
-                Bagikan Event
-              </span>
-              <div className="flex space-x-3">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Facebook
-                </button>
-                <button className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors">
-                  Twitter
-                </button>
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                  WhatsApp
-                </button>
-              </div>
-            </div>
-          </div>
+          {/* Share Section - Ganti bagian ini */}
+        <ShareButtons title={Event.title} type="event" />
         </div>
 
         {/* Related Events */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Terkait</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {eventData
-              .filter(item => item.id !== event.id && item.category === event.category)
-              .slice(0, 2)
-              .map(relatedEvent => (
-                <Link
-                  key={relatedEvent.id}
-                  href={`/event/${relatedEvent.slug}`}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                >
-                  <div className="aspect-video bg-gray-200">
-                    <ClientImage
-                      src={relatedEvent.image}
-                      alt={relatedEvent.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded">
-                        {relatedEvent.category}
-                      </span>
-                      {getStatusBadge(relatedEvent.status)}
+        {relatedEvents.length > 0 && (
+                    <div className="mt-12">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Terkait</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {relatedEvents.map(relatedEvent => (
+                                <Link
+                                    key={relatedEvent.id}
+                                    href={`/event/${relatedEvent.slug}`}
+                                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                                >
+                                    <div className="aspect-video bg-gray-200">
+                                        <ClientImage
+                                            src={relatedEvent.image}
+                                            alt={relatedEvent.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="p-4">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded">
+                                                {relatedEvent.category}
+                                            </span>
+                                            {getStatusBadge(relatedEvent.status)}
+                                        </div>
+                                        <h3 className="font-semibold text-gray-900 mb-2">
+                                            {relatedEvent.title}
+                                        </h3>
+                                        {/* --- START OF FIX --- */}
+                                        {/* Menambahkan elemen p untuk menampilkan excerpt */}
+                                        <p className="text-gray-600 text-sm mb-3">
+                                            {relatedEvent.excerpt}
+                                        </p>
+                                        {/* --- END OF FIX --- */}
+                                        <div className="space-y-1 text-xs text-gray-500">
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
+                                                {formatDate(relatedEvent.date)}
+                                            </div>
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
+                                                {relatedEvent.location}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">
-                      {relatedEvent.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-3">
-                      {relatedEvent.excerpt}
-                    </p>
-                    <div className="space-y-1 text-xs text-gray-500">
-                      <div className="flex items-center">
-                        <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
-                        {formatDate(relatedEvent.date)}
-                      </div>
-                      <div className="flex items-center">
-                        <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
-                        {relatedEvent.location}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-          </div>
-        </div>
+                )}
       </div>
     </div>
   );
