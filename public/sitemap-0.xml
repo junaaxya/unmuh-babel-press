@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://unmuhbabelpress.com/api-docs</loc><lastmod>2025-08-04T14:48:32.735Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/berita-event</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/dashboard/beranda</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/layanan</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/dashboard/event</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/kontak</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/dashboard/catalog</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/profil</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>1</priority></url>
-<url><loc>https://unmuhbabelpress.com/catalog</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/dashboard/berita</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/dashboard</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://unmuhbabelpress.com/admin/login</loc><lastmod>2025-08-04T14:48:32.737Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+
+<url><loc>https://unmuhbabelpress.com/api-docs</loc><lastmod>2025-08-04T03:33:49.472Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/dashboard/beranda</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/dashboard/berita</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>1</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/dashboard/event</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/dashboard</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/berita/bps-bangka-tengah-kunjungi-lppmpp-unmuh-babel-bahas-kerja-sama-strategis</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/berita/rapat-pleno-buku-pedoman-penelitian-pengabdian</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/berita/unmuh-babel-sabet-pendanaan-penelitian-dan-pengabdian-dari-kemdikbudristek</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/login</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/event/sosialisasi-kkn-kebangsaan-2024</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/event/sosialisasi-kkn-unmuh-babel-2024</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/berita-event</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/catalog</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/layanan</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/kontak</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/profil</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://unmuhbabelpress.com/admin/dashboard/catalog</loc><lastmod>2025-08-04T03:33:49.473Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+
 </urlset>

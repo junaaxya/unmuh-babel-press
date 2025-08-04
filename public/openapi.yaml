@@ -96,6 +96,68 @@ paths:
         "200":
           description: Berita berhasil dihapus
 
+  /api/news/{id}/publish:
+    put:
+      summary: Publish a news item
+      description: |
+        Mengubah status berita menjadi `published` dan menetapkan `published_at` dengan tanggal saat ini jika belum ada.
+      tags:
+        - News
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID dari berita yang akan dipublish
+      responses:
+        "200":
+          description: Berita berhasil dipublish
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/News"
+        "404":
+          description: Berita tidak ditemukan
+        "500":
+          description: Terjadi kesalahan pada server
+
+  /api/news/{id}/unpublish:
+    put:
+      summary: Unpublish a news item
+      description: |
+        Mengubah status berita menjadi `draft` dan menghapus nilai `published_at`.
+      tags:
+        - News
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID dari berita yang akan di-unpublish
+      responses:
+        "200":
+          description: Berita berhasil diubah menjadi draft
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/News"
+        "404":
+          description: Berita tidak ditemukan
+        "500":
+          description: Terjadi kesalahan pada server
+
   /news/slug/{slug}:
     get:
       summary: Ambil berita berdasarkan slug
@@ -248,8 +310,202 @@ paths:
                   status: { type: string }
                   message: { type: string }
 
+  /books:
+    get:
+      summary: Ambil daftar buku
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: kategori
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, all]
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+      responses:
+        "200":
+          description: Daftar buku berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookListResponse"
+
+    post:
+      summary: Tambah buku baru
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/BookInput"
+      responses:
+        "201":
+          description: Buku berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetailResponse"
+
+  /books/{id}:
+    get:
+      summary: Ambil detail buku berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Detail buku berhasil ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetailResponse"
+
+    put:
+      summary: Perbarui buku berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/BookInput"
+      responses:
+        "200":
+          description: Buku berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetailResponse"
+
+    delete:
+      summary: Hapus buku berdasarkan ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Buku berhasil dihapus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  message: { type: string }
+
+  /books/{id}/publish:
+    put:
+      summary: Mempublish buku
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Buku berhasil dipublish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookStatusResponse"
+
+  /books/{id}/unpublish:
+    put:
+      summary: Mengubah status buku menjadi draft
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Buku berhasil di-unpublish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookStatusResponse"
+
+  /books/stats:
+    get:
+      summary: Statistik buku
+      responses:
+        "200":
+          description: Statistik berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookStatsResponse"
+
+  /books/categories:
+    get:
+      summary: Daftar kategori buku
+      responses:
+        "200":
+          description: Daftar kategori berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:
+                    type: array
+                    items:
+                      type: string
+
 components:
   schemas:
+    News:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "5f2b5d3f-4c11-4f92-a4f1-2cfb58aa8240"
+        title:
+          type: string
+          example: "Update Fitur Baru Aplikasi"
+        slug:
+          type: string
+          example: "update-fitur-baru-aplikasi"
+        content:
+          type: string
+          example: "<p>Konten berita dengan HTML support</p>"
+        status:
+          type: string
+          enum: [draft, published]
+          example: "published"
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-08-02T10:00:00Z"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-08-01T14:23:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-08-02T14:23:00Z"
+
     NewsInput:
       type: object
       required: [title, excerpt, content, image, date, category, author]
@@ -261,6 +517,12 @@ components:
         date: { type: string, format: date }
         category: { type: string }
         author: { type: string }
+        status:
+          type: string
+          enum: [draft, published]
+        published_at:
+          type: string
+          format: date-time
 
     NewsItem:
       type: object
@@ -381,3 +643,93 @@ components:
       properties:
         status: { type: string }
         data: { $ref: "#/components/schemas/EventDetail" }
+
+    BookInput:
+      type: object
+      properties:
+        title: { type: string }
+        penulis: { type: string }
+        penerbit: { type: string }
+        isbn: { type: string }
+        kode_buku: { type: string }
+        editor: { type: string }
+        ukuran: { type: string }
+        halaman: { type: string }
+        kategori: { type: string }
+        sinopsis: { type: string }
+        status:
+          type: string
+          enum: [draft, published]
+        cover:
+          type: string
+          format: binary
+
+    BookItem:
+      type: object
+      properties:
+        id: { type: integer }
+        kode_buku: { type: string }
+        title: { type: string }
+        isbn: { type: string }
+        penerbit: { type: string }
+        penulis: { type: string }
+        editor: { type: string }
+        ukuran: { type: string }
+        halaman: { type: string }
+        image: { type: string }
+        kategori: { type: string }
+        sinopsis: { type: string }
+        status: { type: string }
+        published_at: { type: string, format: date-time }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    BookDetailResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        message: { type: string }
+        data:
+          $ref: "#/components/schemas/BookItem"
+
+    BookListResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        data:
+          type: array
+          items: { $ref: "#/components/schemas/BookItem" }
+        meta:
+          type: object
+          properties:
+            total: { type: integer }
+            page: { type: integer }
+            limit: { type: integer }
+            total_pages: { type: integer }
+
+    BookStatusResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        message: { type: string }
+        data:
+          type: object
+          properties:
+            id: { type: integer }
+            status: { type: string }
+            published_at:
+              type: string
+              format: date-time
+              nullable: true
+
+    BookStatsResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        data:
+          type: object
+          properties:
+            total_books: { type: integer }
+            published_books: { type: integer }
+            draft_books: { type: integer }
+            recent_published: { type: integer }

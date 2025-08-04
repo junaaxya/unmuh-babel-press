@@ -1,92 +1,3 @@
-/**
- * @swagger
- * /api/news:
- *   get:
- *     summary: Ambil daftar berita
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: Halaman saat ini
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Jumlah item per halaman
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Kata kunci untuk mencari judul, excerpt, atau penulis
- *       - in: query
- *         name: category
- *         schema:
- *           type: string
- *         description: Filter berdasarkan kategori
- *       - in: query
- *         name: date_filter
- *         schema:
- *           type: string
- *           enum: [today, week, month, all]
- *         description: Filter berdasarkan tanggal berita
- *     responses:
- *       200:
- *         description: Daftar berita berhasil diambil
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     items:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/News'
- *                     pagination:
- *                       type: object
- *                       properties:
- *                         current_page:
- *                           type: integer
- *                         total_pages:
- *                           type: integer
- *                         total_items:
- *                           type: integer
- *                         items_per_page:
- *                           type: integer
- *
- *   post:
- *     summary: Buat berita baru
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/NewsInput'
- *     responses:
- *       200:
- *         description: Berita berhasil dibuat
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/News'
- *       400:
- *         description: Validasi gagal
- *       500:
- *         description: Terjadi kesalahan pada server
- */
-
 import { prisma } from "@/lib/db";
 import { newsSchema } from "@/lib/validation";
 import { authorize } from "@/lib/authorize";
@@ -178,7 +89,7 @@ export async function POST(request) {
       );
     }
 
-    const { title } = parsed.data;
+    const { title, status, published_at } = parsed.data;
 
     const baseSlug = title
       .toLowerCase()
@@ -191,6 +102,8 @@ export async function POST(request) {
       data: {
         ...parsed.data,
         slug,
+        status: status || "draft",
+        published_at: status === "published" && !published_at ? new Date() : published_at || null,
       },
     });
 
