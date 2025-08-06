@@ -11,7 +11,7 @@ import Notification from '@/components/ui/Notification/Notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faNewspaper, faSpinner } from '@fortawesome/free-solid-svg-icons';
 // Import fungsi API yang sesungguhnya
-import { getNews, createNews, updateNews, deleteNews } from '../../../services/api';
+import { getNews, createNews, updateNews, deleteNews,setNewsPublished, setNewsUnpublished } from '../../../services/api';
 
 export default function BeritaPage() {
   // State untuk data dan UI
@@ -21,6 +21,7 @@ export default function BeritaPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [deletingItem, setDeletingItem] = useState(null);
+  const [publishingId, setPublishingId] = useState(null);
   
   // State untuk filter dan pagination, sesuai dengan respons API
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,7 +58,13 @@ export default function BeritaPage() {
       Object.keys(params).forEach(key => (params[key] === '' || params[key] === null) && delete params[key]);
 
       const response = await getNews(params);
-      setItems(response.data.items);
+      // Kita buat properti `publishStatus` dari `status` yang ada.
+      const transformedItems = response.data.items.map(item => ({
+        ...item,
+        publishStatus: item.status, // Salin nilai dari 'status' ke 'publishStatus'
+      }));
+
+      setItems(transformedItems); 
       setPagination(response.data.pagination);
     } catch (error) {
       console.error("Failed to fetch news:", error);
@@ -73,12 +80,12 @@ export default function BeritaPage() {
   }, [fetchBerita]);
 
   // Fungsi untuk membuat berita baru
-  const handleCreate = async (newItemData) => {
+    const handleCreate = async (newItemData) => {
     try {
       await createNews(newItemData);
-      showNotification('Berita berhasil ditambahkan!', 'success');
+      showNotification(`Berita berhasil disimpan sebagai ${newItemData.status}.`, 'success');
       handleCloseFormModal();
-      fetchBerita(); // Muat ulang data untuk menampilkan item baru
+      fetchBerita();
     } catch (error) {
       console.error("Failed to create news:", error);
       showNotification(error.message || 'Gagal menambahkan berita.', 'error');
@@ -117,6 +124,35 @@ export default function BeritaPage() {
       showNotification(error.message || 'Gagal menghapus berita.', 'error');
     }
   };
+
+
+ // Fungsi ini sekarang memanggil endpoint yang sesuai
+  const handleStatusChange = async (itemToToggle) => {
+    setPublishingId(itemToToggle.id);
+    const isCurrentlyPublished = itemToToggle.status === 'published';
+
+    try {
+      if (isCurrentlyPublished) {
+        // Jika sedang published, panggil unpublish
+        await setNewsUnpublished(itemToToggle.id);
+        showNotification('Berita berhasil dijadikan draf.', 'success');
+      } else {
+        // Jika sedang draft, panggil publish
+        await setNewsPublished(itemToToggle.id);
+        showNotification('Berita berhasil diterbitkan.', 'success');
+      }
+      
+      // Panggil ulang fetchBerita untuk mendapatkan data terbaru dari server
+      // Ini lebih aman daripada mengubah state secara manual
+      await fetchBerita();
+
+    } catch (error) {
+      console.error("Gagal mengubah status:", error);
+      showNotification(error.message || 'Gagal mengubah status.', 'error');
+    } finally {
+      setPublishingId(null);
+    }
+  };
   
   // Handler untuk UI
   const handlePageChange = (page) => {
@@ -142,6 +178,12 @@ export default function BeritaPage() {
     setIsDeleteModalOpen(false);
     setDeletingItem(null);
   };
+
+   // Menambahkan state 'isPublishing' sementara ke item untuk UI
+  const itemsWithPublishState = items.map(item => ({
+    ...item,
+    isPublishing: item.id === publishingId,
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -189,6 +231,7 @@ export default function BeritaPage() {
           activeTab="berita"
           onEdit={handleOpenFormModal}
           onDelete={handleOpenDeleteModal}
+          onStatusChange={handleStatusChange}
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
           onPageChange={handlePageChange}
@@ -202,7 +245,7 @@ export default function BeritaPage() {
         isOpen={isFormModalOpen}
         onClose={handleCloseFormModal}
         title={`${editingItem ? 'Edit' : 'Tambah'} Berita`}
-        size="2xl"
+        size="3xl"
       >
         <NewsEventForm
           type="berita"
