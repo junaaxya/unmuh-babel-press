@@ -266,6 +266,38 @@ paths:
         "200":
           description: Event berhasil dihapus
 
+  /events/{id}/publish:
+    put:
+      summary: Mempublish event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Event berhasil dipublish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventStatusResponse"
+
+  /events/{id}/unpublish:
+    put:
+      summary: Mengubah status Event menjadi draft
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Event berhasil di-unpublish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventStatusResponse"
+
   /events/slug/{slug}:
     get:
       summary: Ambil event berdasarkan slug
@@ -589,6 +621,11 @@ components:
         registration_button_text: { type: string }
         registration_link: { type: string }
         registration_deadline: { type: string, format: date-time }
+        publisStatus: { type: string, enum: [draft, published] }
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
 
     EventItem:
       type: object
@@ -619,6 +656,26 @@ components:
             registration_button_text: { type: string }
             registration_link: { type: string }
             registration_deadline: { type: string, format: date-time }
+            publisStatus: { type: string }
+            published_at:
+              type: string
+              format: date-time
+              nullable: true
+
+    EventStatusResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+        message: { type: string }
+        data:
+          type: object
+          properties:
+            id: { type: integer }
+            publisStatus: { type: string }
+            published_at:
+              type: string
+              format: date-time
+              nullable: true
 
     EventListResponse:
       type: object

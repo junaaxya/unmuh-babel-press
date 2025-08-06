@@ -13,14 +13,11 @@ const buildSlug = (title) => {
   );
 };
 
-const badRequest = (message, extra = {}) =>
-  Response.json({ status: "error", message, ...extra }, { status: 400 });
+const badRequest = (message, extra = {}) => Response.json({ status: "error", message, ...extra }, { status: 400 });
 
-const notFound = (message) =>
-  Response.json({ status: "error", message }, { status: 404 });
+const notFound = (message) => Response.json({ status: "error", message }, { status: 404 });
 
-const internalError = (message = "Terjadi kesalahan internal") =>
-  Response.json({ status: "error", message }, { status: 500 });
+const internalError = (message = "Terjadi kesalahan internal") => Response.json({ status: "error", message }, { status: 500 });
 
 const parseId = (params) => {
   const id = parseInt(params?.id ?? "", 10);
@@ -74,9 +71,7 @@ export async function PUT(request, context) {
         title,
         slug,
         date: new Date(parsed.data.date),
-        registrationDeadline: parsed.data.registrationDeadline
-          ? new Date(parsed.data.registrationDeadline)
-          : null,
+        registrationDeadline: parsed.data.registrationDeadline ? new Date(parsed.data.registrationDeadline) : null,
       },
     });
 
