@@ -126,6 +126,18 @@ export const getNews = async (params) => {
     return apiRequest(`/api/news?${query}`);
 };
 
+// Fungsi untuk mempublikasikan berita
+export const setNewsPublished = async (id) => {
+    // Memanggil endpoint PUT khusus untuk publish
+    return apiRequest(`/api/news/${id}/publish`, 'PUT');
+};
+
+// Fungsi untuk menjadikan berita sebagai draf
+export const setNewsUnpublished = async (id) => {
+    // Memanggil endpoint PUT khusus untuk unpublish
+    return apiRequest(`/api/news/${id}/unpublish`, 'PUT');
+};
+
 export const createNews = async (data) => {
     return apiRequest('/api/news', 'POST', data);
 };
@@ -160,5 +172,10 @@ export const deleteEvent = async (id) => {
     return apiRequest(`/api/events/${id}`, 'DELETE');
 };
 
+export const setEventPublished = async (id) => {
+    return apiRequest(`/api/events/${id}/publish`, 'PUT');
+};
 
-
+export const setEventUnpublished = async (id) => {
+    return apiRequest(`/api/events/${id}/unpublish`, 'PUT');
+};

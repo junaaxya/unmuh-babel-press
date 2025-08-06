@@ -1,16 +1,16 @@
-import { prisma } from "@/lib/db";
-import { eventSchema } from "@/lib/validation";
-import { authorize } from "@/lib/authorize";
+import { prisma } from '@/lib/db';
+import { eventSchema } from '@/lib/validation';
+import { authorize } from '@/lib/authorize';
 
 function getDateRange(filter) {
     const now = new Date();
     switch (filter) {
-        case "today":
+        case 'today':
             return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        case "week":
+        case 'week':
             now.setDate(now.getDate() - 7);
             return now;
-        case "month":
+        case 'month':
             now.setMonth(now.getMonth() - 1);
             return now;
         default:
@@ -24,11 +24,16 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category");
-    const status = searchParams.get("status");
+    const status = searchParams.get("status"); // Ini untuk 'Upcoming', 'Ongoing', dll.
     const dateFilter = searchParams.get("date_filter") || "all";
+
+    // --- TAMBAHKAN BARIS INI ---
+    // Ambil parameter 'publishStatus' dari URL.
+    const publishStatus = searchParams.get("publishStatus");
 
     const skip = (page - 1) * limit;
 
+    // --- PERBAIKI LOGIKA 'where' ---
     const where = {
         AND: [
             {
@@ -37,6 +42,12 @@ export async function GET(request) {
             category ? { category } : {},
             status ? { status } : {},
             dateFilter !== "all" ? { date: { gte: getDateRange(dateFilter) } } : {},
+            
+            // --- TAMBAHKAN KONDISI INI ---
+            // Jika parameter 'publishStatus' ada, tambahkan sebagai filter.
+            // Ini akan memastikan hanya item 'published' yang diambil saat diminta
+            // oleh halaman publik /berita-event.
+            publishStatus ? { publishStatus } : {},
         ],
     };
 
@@ -74,50 +85,54 @@ export async function POST(request) {
     try {
         let body = await request.json();
 
-        // --- START OF BACKEND FIX ---
-        // Logika ini membuat validasi lebih cerdas dan fleksibel.
-        // Jika registrasi tidak diaktifkan (false), kita pastikan field terkait
-        // diatur ke null atau nilai default yang sesuai SEBELUM divalidasi.
         if (!body.registrationEnabled) {
             body.registrationTitle = '';
             body.registrationDescription = '';
             body.registrationButtonText = '';
-            body.registrationLink = null; // Kirim null agar sesuai dengan skema DB
-            body.registrationDeadline = null; // Kirim null agar sesuai dengan skema DB
+            body.registrationLink = null;
+            body.registrationDeadline = null;
         }
-        // --- END OF BACKEND FIX ---
 
         const parsed = eventSchema.safeParse(body);
 
         if (!parsed.success) {
-            // Error dari Zod akan ditangkap di sini
-            return Response.json({ status: "error", errors: parsed.error.flatten() }, { status: 400 });
+            return Response.json(
+                { status: 'error', errors: parsed.error.flatten() },
+                { status: 400 }
+            );
         }
 
-        const { title, ...rest } = parsed.data;
-        
-        // Buat slug yang unik
+        const { title, publishStatus, ...rest } = parsed.data;
+
         const slug =
             title
                 .toLowerCase()
-                .replace(/ /g, "-")
-                .replace(/[^\w-]+/g, "") + `-${Date.now()}`;
+                .replace(/ /g, '-')
+                .replace(/[^\w-]+/g, '') + `-${Date.now()}`;
 
         const event = await prisma.event.create({
             data: {
                 ...rest,
                 title,
                 slug,
-                // Pastikan konversi tanggal dilakukan dengan benar
+                publishStatus: publishStatus || 'draft',
+                published_at: publishStatus === 'published' ? new Date() : null,
                 date: new Date(parsed.data.date),
-                // Konversi deadline hanya jika ada nilainya
-                registrationDeadline: parsed.data.registrationDeadline ? new Date(parsed.data.registrationDeadline) : null,
+                registrationDeadline: parsed.data.registrationDeadline
+                    ? new Date(parsed.data.registrationDeadline)
+                    : null,
             },
         });
 
-        return Response.json({ status: "success", data: event }, { status: 201 }); // Gunakan status 201 Created
+        return Response.json(
+            { status: 'success', data: event },
+            { status: 201 }
+        );
     } catch (err) {
-        console.error("EVENT POST ERROR:", err); // Log error untuk debugging
-        return Response.json({ status: "error", message: "Terjadi kesalahan pada server." }, { status: 500 });
+        console.error('EVENT POST ERROR:', err);
+        return Response.json(
+            { status: 'error', message: 'Terjadi kesalahan pada server.' },
+            { status: 500 }
+        );
     }
 }

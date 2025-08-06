@@ -86,7 +86,8 @@ model Event {
   registrationButtonText   String?  @db.VarChar(50)
   registrationLink         String?  @db.VarChar(500)
   registrationDeadline     DateTime?
-
+  published_at DateTime?  @db.Timestamp(6)
+  publishStatus            Status        @default(draft) @map("publish_status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }

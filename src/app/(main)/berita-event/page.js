@@ -26,27 +26,27 @@ export default function BeritaEventPage() {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Fungsi untuk mengambil semua data dari API
+     // Fungsi untuk mengambil data yang HANYA sudah 'published'
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
-            // Ambil berita dan event secara paralel untuk efisiensi
-            // Kita ambil cukup banyak (misal: 100) agar filtering di client terasa lengkap
+            // Ambil berita dan event yang statusnya 'published'
             const [newsResponse, eventsResponse] = await Promise.all([
-                getNews({ limit: 100 }),
-                getEvents({ limit: 100 }),
+                getNews({ limit: 100, status: 'published' }),
+                // Untuk event, kita asumsikan backend mendukung filter 'publishStatus'
+                // sesuai dengan skema Prisma Anda.
+                getEvents({ limit: 100, publishStatus: 'published' }), 
             ]);
 
-            // Tambahkan properti 'type' ke setiap item untuk membedakannya
-            const newsWithType = newsResponse.data.items.map((item) => ({
+            const newsWithType = (newsResponse?.data?.items || []).map((item) => ({
                 ...item,
                 type: 'news',
             }));
-            const eventsWithType = eventsResponse.data.items.map((item) => ({
+            const eventsWithType = (eventsResponse?.data?.items || []).map((item) => ({
                 ...item,
                 type: 'event',
             }));
 
-            // Gabungkan dan urutkan berdasarkan tanggal terbaru
             const combinedData = [...newsWithType, ...eventsWithType].sort(
                 (a, b) => new Date(b.date) - new Date(a.date)
             );
@@ -54,7 +54,6 @@ export default function BeritaEventPage() {
             setAllData(combinedData);
         } catch (error) {
             console.error('Gagal memuat data:', error);
-            // Di sini Anda bisa menambahkan notifikasi error jika perlu
         } finally {
             setIsLoading(false);
         }

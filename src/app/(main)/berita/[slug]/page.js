@@ -19,21 +19,24 @@ async function getNewsData(slug) {
         const newsResponse = await getNewsBySlug(slug);
         const news = newsResponse.data;
 
-        if (!news) return { news: null, relatedNews: [] };
+        // Jika berita tidak ada ATAU statusnya bukan 'published', anggap tidak ditemukan.
+        if (!news || news.status !== 'published') {
+            return { news: null, relatedNews: [] };
+        }
 
-        // Ambil berita terkait (3 item, untuk disaring menjadi 2)
+        // Ambil berita terkait yang juga sudah 'published'
         const relatedNewsResponse = await getNews({
             category: news.category,
             limit: 3,
+            status: 'published', // Filter berita terkait
         });
         
         const relatedNews = relatedNewsResponse.data.items
-            .filter((item) => item.slug !== slug) // Pastikan berita saat ini tidak masuk daftar
+            .filter((item) => item.slug !== slug)
             .slice(0, 2);
 
         return { news, relatedNews };
     } catch (error) {
-        // Jika slug tidak ditemukan, API akan error (misal: 404), dan kita tangkap di sini
         console.error(`Gagal mengambil data untuk slug: ${slug}`, error);
         return { news: null, relatedNews: [] };
     }
@@ -42,8 +45,11 @@ async function getNewsData(slug) {
 // Fungsi ini membuat halaman statis untuk setiap berita saat build
 export async function generateStaticParams() {
     try {
-        // Ambil semua berita (misal, hingga 1000) untuk mendapatkan slug-nya
-        const response = await getNews({ limit: 1000 });
+        // Ambil semua berita yang statusnya 'published'
+        const response = await getNews({ limit: 1000, status: 'published' });
+        if (!response.data || !response.data.items) {
+            return [];
+        }
         return response.data.items.map((news) => ({
             slug: news.slug,
         }));
