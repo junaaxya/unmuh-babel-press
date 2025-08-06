@@ -21,37 +21,61 @@ import { getEventBySlug, getEvents } from '@/app/services/api';
 async function fetchEventData(slug) {
     try {
         const response = await getEventBySlug(slug);
-        return response.data; // API Anda membungkus event dalam properti 'data'
-    } catch (error) {
-        // Jika API mengembalikan error 404 (tidak ditemukan), tampilkan halaman 404 Next.js
-        if (error.message && error.message.toLowerCase().includes('tidak ditemukan')) {
-            notFound();
+        const event = response.data;
+
+        // Jika event tidak ada ATAU statusnya bukan 'published', kembalikan null
+        if (!event || event.publishStatus !== 'published') {
+            return null;
         }
-        // Untuk error lainnya, lempar error agar Next.js menampilkan halaman error default
+        return event;
+    } catch (error) {
+        // Jika slug tidak ditemukan, API akan error, kita tangkap di sini
+        if (error.message && error.message.toLowerCase().includes('tidak ditemukan')) {
+            return null;
+        }
         console.error("Gagal mengambil data event:", error);
         throw new Error("Gagal memuat data event.");
     }
 }
 
-// Fungsi untuk mengambil event terkait dari API
+// Mengambil event terkait yang juga sudah 'published' ---
 async function fetchRelatedEvents(currentEvent) {
     try {
         const params = {
             category: currentEvent.category,
-            limit: 3, // Ambil maksimal 3 event terkait
+            limit: 3,
+            publishStatus: 'published', // Filter hanya event yang sudah terbit
         };
         const response = await getEvents(params);
-        // Pastikan event yang sedang dibuka tidak muncul di daftar terkait
         return response.data.items.filter(item => item.id !== currentEvent.id);
     } catch (error) {
         console.error("Gagal mengambil event terkait:", error);
-        return []; // Jika gagal, kembalikan array kosong
+        return [];
+    }
+}
+
+//Membuat halaman statis hanya untuk event yang 'published' ---
+export async function generateStaticParams() {
+    try {
+        const response = await getEvents({ limit: 1000, publishStatus: 'published' });
+        if (!response.data || !response.data.items) {
+            return [];
+        }
+        return response.data.items.map((event) => ({
+            slug: event.slug,
+        }));
+    } catch (error) {
+        console.error("Gagal membuat parameter statis untuk event:", error);
+        return [];
     }
 }
 
 export default async function EventDetailPage({ params }) {
 const { slug } = await params;
     const event = await fetchEventData(slug);
+    if (!event) {
+        notFound();
+    }
     const relatedEvents = await fetchRelatedEvents(event);
 
   const formatDate = (dateString) => {

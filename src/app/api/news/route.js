@@ -9,6 +9,9 @@ export async function GET(request) {
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || null;
   const dateFilter = searchParams.get("date_filter") || "all";
+  
+  // --- PERUBAHAN 1: Baca parameter 'status' ---
+  const status = searchParams.get("status") || null;
 
   const skip = (page - 1) * limit;
 
@@ -25,6 +28,8 @@ export async function GET(request) {
             },
           }
         : {},
+      // --- PERUBAHAN 2: Terapkan filter 'status' jika ada ---
+      status ? { status } : {},
     ],
   };
 
@@ -76,7 +81,6 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    // Validasi body
     const parsed = newsSchema.safeParse(body);
     if (!parsed.success) {
       return Response.json(

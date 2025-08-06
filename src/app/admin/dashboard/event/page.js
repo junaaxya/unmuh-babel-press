@@ -19,6 +19,8 @@ import {
     createEvent,
     updateEvent,
     deleteEvent,
+     setEventPublished,
+    setEventUnpublished,
 } from '../../../services/api';
 
 export default function EventPage() {
@@ -43,7 +45,7 @@ export default function EventPage() {
     });
 
   const [notification, setNotification] = useState(null);
-
+const [publishingId, setPublishingId] = useState(null);
         // State baru untuk menampung error form dari backend
     const [formErrors, setFormErrors] = useState(null);
 
@@ -163,6 +165,27 @@ export default function EventPage() {
         }
     };
 
+     // handler untuk mengubah status publish ---
+    const handleStatusChange = async (itemToToggle) => {
+        setPublishingId(itemToToggle.id);
+        const isCurrentlyPublished = itemToToggle.publishStatus === 'published';
+
+        try {
+            if (isCurrentlyPublished) {
+                await setEventUnpublished(itemToToggle.id);
+                showNotification('Event berhasil dijadikan draf.', 'success');
+            } else {
+                await setEventPublished(itemToToggle.id);
+                showNotification('Event berhasil diterbitkan.', 'success');
+            }
+            await fetchEvents(); // Muat ulang data untuk memastikan konsistensi
+        } catch (error) {
+            showNotification(error.message || 'Gagal mengubah status.', 'error');
+        } finally {
+            setPublishingId(null);
+        }
+    };
+
     // Handler untuk UI
     const handlePageChange = (page) => {
         setPagination((p) => ({ ...p, current_page: page }));
@@ -195,6 +218,12 @@ export default function EventPage() {
         setDateFilter('all');
         // fetchEvents akan terpanggil otomatis oleh useEffect
     };
+
+   // state sementara untuk UI loading ---
+    const itemsWithPublishState = items.map(item => ({
+        ...item,
+        isPublishing: item.id === publishingId,
+    }));
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
@@ -259,12 +288,11 @@ export default function EventPage() {
                 </div>
             ) : (
                 <NewsEventTable
-                    // *** PERBAIKAN DI SINI ***
-                    // Ganti getPaginatedItems() dengan state 'items' yang berisi data dari API
-                    items={items}
+                    items={itemsWithPublishState}
                     activeTab="event"
                     onEdit={handleOpenFormModal}
                     onDelete={handleOpenDeleteModal}
+                    onStatusChange={handleStatusChange}
                     currentPage={pagination.current_page}
                     totalPages={pagination.total_pages}
                     onPageChange={handlePageChange}

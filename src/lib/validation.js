@@ -24,6 +24,7 @@ export const eventSchema = z.object({
   time: z.string().min(1, { message: "Waktu tidak boleh kosong" }),
   location: z.string().min(1, { message: "Lokasi tidak boleh kosong" }),
   category: z.string(),
+  publishStatus: z.string().optional(),
   status: z.enum(["Upcoming", "Ongoing", "Completed", "Cancelled"]),
   organizer: z.string().min(1, { message: "Penyelenggara tidak boleh kosong" }),
   registrationEnabled: z.boolean(),
@@ -31,7 +32,19 @@ export const eventSchema = z.object({
   registrationDescription: z.string().optional(),
   registrationButtonText: z.string().optional(),
   registrationLink: z.string().url({ message: "URL registrasi tidak valid" }).nullable().optional(),
-  registrationDeadline: z.string().datetime({ offset: true, message: "Format batas waktu tidak valid" }).nullable().optional(),
+  registrationDeadline: z.preprocess(
+        (arg) => {
+            // Jika input kosong atau tidak ada, anggap sebagai null.
+            if (arg === '' || arg === null || arg === undefined) {
+                return null;
+            }
+            return arg;
+        },
+        // Coba ubah string menjadi objek Date. Jika gagal, akan muncul error.
+        z.coerce.date({
+            errorMap: () => ({ message: 'Format batas waktu tidak valid.' })
+        }).nullable()
+    ),
 }).superRefine((data, ctx) => {
   if (data.registrationEnabled) {
     if (!data.registrationTitle || data.registrationTitle.trim() === '') {
