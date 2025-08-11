@@ -17,7 +17,7 @@ export default async function BookDetailPage({ params }) {
         const response = await getBookById(params.id);
         const book = response.data;
 
-        if (!book) {
+        if (!book || book.status !== 'published') {
             return (
                 <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-center p-4">
                     <FontAwesomeIcon
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }) {
         const response = await getBookById(params.id);
         const book = response.data;
 
-        if (!book) {
+        if (!book || book.status !== 'published') {
             return { title: 'Buku Tidak Ditemukan' };
         }
         return {
