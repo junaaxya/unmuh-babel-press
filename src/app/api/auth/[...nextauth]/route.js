@@ -6,6 +6,13 @@ import { comparePassword } from '@/lib/hash';
 
 const prisma = new PrismaClient();
 
+// ensure NEXTAUTH_URL is always set to avoid configuration errors
+if (!process.env.NEXTAUTH_URL) {
+  process.env.NEXTAUTH_URL = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
+}
+
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },

@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt');
+// use bcryptjs to avoid native bindings in restricted environments
+const bcrypt = require('bcryptjs');
 
 const SALT_ROUNDS = 10;
 
