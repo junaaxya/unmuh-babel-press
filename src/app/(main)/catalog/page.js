@@ -1,48 +1,58 @@
-
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { BookCard } from '@/components/Book';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons';
-import dummyBooks from '@/data/dummyBooks';
-import { dummyNewBook } from '@/data/dummyNewBook';
+import { faSearch, faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { getBooks, getBookCategories } from '@/app/services/api';
 import Seo from '@/components/common/Seo';
-
+import { useDebounce } from 'use-debounce';
 
 export default function CatalogPage() {
+    // State untuk data dari API dan status UI
+    const [allBooks, setAllBooks] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // State untuk filter dan pencarian
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
-    const allBooksRaw = useMemo(() => [...dummyBooks, ...dummyNewBook], []);
-    const normalizedBooks = useMemo(
-        () =>
-            allBooksRaw.map((book) => ({
-                id: book.id || Math.random().toString(36).substring(2, 9),
-                title: book.title || 'Judul Tidak Tersedia',
-                Penulis: book.Penulis || 'Penulis Tidak Diketahui',
-                kategori: book.kategori || 'Umum',
-                image: book.image || '/cover1.jpg',
-                tahun_terbit: book.tahun_terbit || '-',
-                harga: book.harga || 'N/A',
-            })),
-        [allBooksRaw]
-    );
+    // Mengambil semua data buku (tanpa paginasi untuk filter di client) dan kategori
+    useEffect(() => {
+        const fetchInitialData = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                // Ambil semua buku yang published dan semua kategori
+                const [booksResponse, catsResponse] = await Promise.all([
+                    getBooks({ status: 'published', limit: 1000 }), // Ambil semua buku
+                    getBookCategories(),
+                ]);
+                setAllBooks(booksResponse.data || []);
+                setCategories(catsResponse || []);
+            } catch (err) {
+                setError(err.message || 'Gagal memuat data.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchInitialData();
+    }, []);
 
-    const categories = useMemo(
-        () => [...new Set(normalizedBooks.map((b) => b.kategori))],
-        [normalizedBooks]
-    );
-
+    // Logika filter dan pengelompokan dari kode asli Anda, sekarang menggunakan data dari state
     const filteredBooks = useMemo(() => {
-        const search = searchTerm.toLowerCase();
-        return normalizedBooks.filter(
+        const search = debouncedSearchTerm.toLowerCase();
+        return allBooks.filter(
             (book) =>
                 (book.title.toLowerCase().includes(search) ||
-                    book.Penulis.toLowerCase().includes(search)) &&
+                    (book.penulis &&
+                        book.penulis.toLowerCase().includes(search))) &&
                 (activeCategory === 'all' || book.kategori === activeCategory)
         );
-    }, [searchTerm, activeCategory, normalizedBooks]);
+    }, [debouncedSearchTerm, activeCategory, allBooks]);
 
     const booksByCategory = useMemo(() => {
         const group = {};
@@ -51,6 +61,11 @@ export default function CatalogPage() {
         });
         return group;
     }, [categories, filteredBooks]);
+
+    const resetFilters = () => {
+        setSearchTerm('');
+        setActiveCategory('all');
+    };
 
     return (
         <>
@@ -96,7 +111,7 @@ export default function CatalogPage() {
                                 <FontAwesomeIcon
                                     icon={faFilter}
                                     className="w-4 text-gray-700"
-fixedWidth
+                                    fixedWidth
                                 />
                                 <select
                                     className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -115,13 +130,28 @@ fixedWidth
                             </div>
                         </div>
                         <div className="mt-4 text-gray-500 text-sm">
-                            Menampilkan {filteredBooks.length} dari{' '}
-                            {normalizedBooks.length} buku
+                            Menampilkan {filteredBooks.length} dari {allBooks.length} buku
                         </div>
                     </div>
 
                     {/* Book Display */}
-                    {filteredBooks.length === 0 ? (
+                    {isLoading ? (
+                        <div className="text-center py-16">
+                            <FontAwesomeIcon
+                                icon={faSpinner}
+                                className="text-4xl text-blue-500 animate-spin"
+                            />
+                            <p className="mt-4 text-gray-600">Memuat buku...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="text-center py-16 text-red-500">
+                            <FontAwesomeIcon
+                                icon={faExclamationCircle}
+                                className="text-4xl mb-4"
+                            />
+                            <p>{error}</p>
+                        </div>
+                    ) : filteredBooks.length === 0 ? (
                         <div className="text-center py-16">
                             <div className="text-5xl text-gray-300 mb-4">
                                 📚
@@ -134,19 +164,21 @@ fixedWidth
                                 kategori
                             </p>
                             <button
-                                onClick={() => {
-                                    setSearchTerm('');
-                                    setActiveCategory('all');
-                                }}
+                                onClick={resetFilters}
                                 className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                             >
                                 Reset Filter
                             </button>
                         </div>
-                    ) : activeCategory === 'all' ? (
+                    ) : // --- MENGEMBALIKAN TAMPILAN ASLI ANDA ---
+                    activeCategory === 'all' ? (
                         categories.map((category) => {
-                            const books = booksByCategory[category];
-                            if (!books.length) return null;
+                            const booksInCategory = booksByCategory[category];
+                            if (
+                                !booksInCategory ||
+                                booksInCategory.length === 0
+                            )
+                                return null;
                             return (
                                 <div key={category} className="mb-12">
                                     <div className="flex items-center mb-6">
@@ -155,12 +187,19 @@ fixedWidth
                                             {category}
                                         </h2>
                                         <span className="ml-2 text-sm text-gray-500">
-                                            ({books.length} buku)
+                                            ({booksInCategory.length} buku)
                                         </span>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                        {books.map((book) => (
-                                            <BookCard key={book.id} {...book} />
+                                        {booksInCategory.map((book) => (
+                                            <BookCard
+                                                key={book.id}
+                                                id={book.id}
+                                                title={book.title}
+                                                kategori={book.kategori}
+                                                image={book.image}
+                                                published_at={book.published_at}
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -169,7 +208,14 @@ fixedWidth
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {filteredBooks.map((book) => (
-                                <BookCard key={book.id} {...book} />
+                                <BookCard
+                                    key={book.id}
+                                    id={book.id}
+                                    title={book.title}
+                                    kategori={book.kategori}
+                                    image={book.image}
+                                    published_at={book.published_at}
+                                />
                             ))}
                         </div>
                     )}
@@ -178,4 +224,3 @@ fixedWidth
         </>
     );
 }
-

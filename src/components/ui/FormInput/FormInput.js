@@ -19,11 +19,11 @@ export default function FormInput({
   maxLength,
   ...props
 }) {
-  const handleChange = (e) => {
-    if (onChange) {
-      onChange(e.target.value);
-    }
-  };
+ const handleChange = (e) => {
+  if (onChange) {
+    onChange(e); // <-- KIRIM SELURUH EVENT (e)
+  }
+};
 
   return (
     <div className="space-y-1">

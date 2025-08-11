@@ -1,5 +1,5 @@
 // src/components/admin/BookForm/BookForm.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import FormInput from '@/components/ui/FormInput/FormInput';
 import Image from 'next/image';
 
@@ -14,138 +14,213 @@ import {
     faImage,
     faSave,
     faTimes,
-    faBarcode
+    faBarcode,
+    faCalendarAlt,
+    faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+    uploadCoverImage,
+    getBookCategories,
+} from '../../../../app/services/api';
 
-const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
+const BookForm = ({
+    book,
+    onSubmit,
+    onCancel,
+    isLoading = false,
+    apiErrors = {},
+    showNotification,
+}) => {
+    const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+        try {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        } catch (e) {
+            return '';
+        }
+    };
     const [formData, setFormData] = useState({
-        id: '',
-        Kode_Buku: '',
+        kode_buku: '',
         title: '',
         isbn: '',
-        publisher: '',
+        penerbit: '',
         editor: '',
-        size: '',
-        author: '',
-        pages: '',
-        synopsis: '',
-        category: '',
-        cover: null,
+        ukuran: '',
+        penulis: '',
+        halaman: '',
+        sinopsis: '',
+        kategori: '',
+        image: '',
+        status: 'draft',
+        published_at: '',
     });
+    const [imageFile, setImageFile] = useState(null);
 
-    const [previewImage, setPreviewImage] = useState(null);
+    const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0); // Untuk masa depan jika ingin progress bar
+    const [previewImage, setPreviewImage] = useState(null);
 
-    const categories = [
-        { value: '', label: 'Pilih Kategori' },
-        { value: 'Pendidikan', label: 'Pendidikan' },
-        { value: 'Agama', label: 'Agama' },
-        { value: 'Teknologi', label: 'Teknologi' },
-        { value: 'Sejarah', label: 'Sejarah' },
-        { value: 'Sastra', label: 'Sastra' },
-        { value: 'Sains', label: 'Sains' },
-        { value: 'Ekonomi', label: 'Ekonomi' },
-        { value: 'Politik', label: 'Politik' },
-        { value: 'Budaya', label: 'Budaya' },
-        { value: 'Lainnya', label: 'Lainnya' },
-    ];
+    // Fetch categories on component mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const fetchedCategories = await getBookCategories();
+                setCategories(
+                    fetchedCategories.map((cat) => ({ value: cat, label: cat }))
+                );
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+                // Mungkin bisa ditambahkan notifikasi toast di sini
+            }
+        };
+        fetchCategories();
+    }, []);
 
+    // Populate form if editing an existing book
     useEffect(() => {
         if (book) {
             setFormData({
-                id: book.id || '',
-                Kode_Buku: book.Kode_Buku || '',
+                kode_buku: book.kode_buku || '',
                 title: book.title || '',
-                isbn: book.ISBN || '',
-                publisher: book.Penerbit || '',
-                editor: book.Editor || '',
-                size: book.Ukuran || '',
-                author: book.Penulis || '',
-                pages: book.Halaman || '',
-                synopsis: book.sinopsis || '',
-                category: book.Kategori || '',
-                cover: null,
+                isbn: book.isbn || '',
+                penerbit: book.penerbit || '',
+                editor: book.editor || '',
+                ukuran: book.ukuran || '',
+                penulis: book.penulis || '',
+                halaman: book.halaman || '',
+                sinopsis: book.sinopsis || '',
+                kategori: book.kategori || '',
+                image: book.image || '',
+                status: book.status || 'draft',
+                published_at: formatDateForInput(book.published_at),
             });
-            setPreviewImage(book.cover || null);
+            if (book.image) {
+                setPreviewImage(book.image);
+            }
         }
     }, [book]);
 
-    const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
+    // Gabungkan error dari client-side dan server-side
+    const combinedErrors = { ...errors, ...apiErrors };
 
-        if (name === 'cover' && files && files[0]) {
-            const file = files[0];
-            setFormData((prev) => ({ ...prev, cover: file }));
-
-            // Create preview
-            const reader = new FileReader();
-            reader.onload = (e) => setPreviewImage(e.target.result);
-            reader.readAsDataURL(file);
-        } else {
+    const handleInputChange = useCallback(
+        (e) => {
+            const { name, value } = e.target;
             setFormData((prev) => ({ ...prev, [name]: value }));
+            // Clear error when user starts typing
+            if (errors[name] || apiErrors[name]) {
+                setErrors((prev) => ({ ...prev, [name]: undefined }));
+            }
+        },
+        [errors, apiErrors]
+    );
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setImageFile(file);
+
+        // Validasi file di client-side
+        if (file.size > 5 * 1024 * 1024) {
+            // 5MB
+            setErrors((prev) => ({
+                ...prev,
+                image: 'Ukuran file maksimal 5MB.',
+            }));
+            return;
         }
 
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: '' }));
+        setIsUploading(true);
+        showNotification('info', 'Mengunggah cover buku...');
+        setErrors((prev) => ({ ...prev, image: undefined }));
+
+        // Buat preview lokal sementara
+        const localPreview = URL.createObjectURL(file);
+        setPreviewImage(localPreview);
+
+        try {
+            // Panggil API untuk upload ke Cloudinary via backend
+            const response = await uploadCoverImage(file, 'books');
+            setFormData((prev) => ({ ...prev, image: response.url }));
+            setPreviewImage(response.url); // Update preview dengan URL final
+            showNotification('success', 'Cover buku berhasil diunggah!');
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            setErrors((prev) => ({
+                ...prev,
+                image: error.message || 'Gagal mengunggah gambar.',
+            }));
+            setPreviewImage(book?.image || null); // Kembalikan ke gambar awal jika gagal
+        } finally {
+            setIsUploading(false);
         }
     };
 
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.Kode_Buku.trim()) newErrors.Kode_Buku = 'Kode buku wajib diisi';
+        if (!formData.kode_buku.trim())
+            newErrors.kode_buku = 'Kode buku wajib diisi';
         if (!formData.title.trim()) newErrors.title = 'Judul buku wajib diisi';
-        if (!formData.isbn.trim()) newErrors.isbn = 'ISBN wajib diisi';
-        if (!formData.publisher.trim())
-            newErrors.publisher = 'Penerbit wajib diisi';
-        if (!formData.author.trim()) newErrors.author = 'Penulis wajib diisi';
-        if (!formData.pages.trim())
-            newErrors.pages = 'Jumlah halaman wajib diisi';
-        if (!formData.category) newErrors.category = 'Kategori wajib dipilih';
-        if (!formData.synopsis.trim())
-            newErrors.synopsis = 'Sinopsis wajib diisi';
-
-        // Validate pages is a number
-        if (formData.pages && isNaN(formData.pages)) {
-            newErrors.pages = 'Jumlah halaman harus berupa angka';
+        if (!formData.penerbit.trim())
+            newErrors.penerbit = 'Penerbit wajib diisi';
+        if (!formData.penulis.trim()) newErrors.penulis = 'Penulis wajib diisi';
+        if (!String(formData.halaman || '').trim()) {
+            newErrors.halaman = 'Jumlah halaman wajib diisi';
         }
+        if (!formData.kategori) newErrors.kategori = 'Kategori wajib dipilih';
+        if (!formData.sinopsis.trim())
+            newErrors.sinopsis = 'Sinopsis wajib diisi';
 
-        // Validate ISBN format (basic)
-        if (
-            formData.isbn &&
-            !/^[\d-]{10,17}$/.test(formData.isbn.replace(/\s/g, ''))
-        ) {
-            newErrors.isbn = 'Format ISBN tidak valid';
-        }
+       
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
-    const handleSubmit = (e) => {
+  const handleSubmit = (e, status) => {
         e.preventDefault();
-
         if (!validateForm()) {
             return;
         }
 
-        onSubmit(formData);
+        const submissionData = new FormData();
+        for (const key in formData) {
+            if (key === 'published_at' && formData[key]) {
+                submissionData.append(key, new Date(formData[key]).toISOString());
+            } else if (formData[key] !== null && formData[key] !== undefined) {
+                // Jangan kirim status dari state, karena kita pakai dari parameter
+                if (key !== 'status') {
+                    submissionData.append(key, formData[key]);
+                }
+            }
+        }
+        
+        // Gunakan 'status' dari parameter tombol yang diklik
+        submissionData.append('status', status);
+
+        onSubmit(submissionData);
     };
 
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left Column */}
                 <div className="space-y-4">
                     <FormInput
                         label="Kode Buku"
-                        name="kode buku"
-                        value={formData.Kode_Buku}
+                        name="kode_buku"
+                        value={formData.kode_buku}
                         onChange={handleInputChange}
                         placeholder="Masukkan Kode buku"
                         required
-                        error={errors.Kode_Buku}
+                        error={errors.kode_buku}
                         icon={faBarcode}
                     />
                     <FormInput
@@ -165,18 +240,16 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                         value={formData.isbn}
                         onChange={handleInputChange}
                         placeholder="978-xxx-xxx-xxx-x"
-                        required
-                        error={errors.isbn}
                     />
 
                     <FormInput
                         label="Penerbit"
-                        name="publisher"
-                        value={formData.publisher}
+                        name="penerbit"
+                        value={formData.penerbit}
                         onChange={handleInputChange}
                         placeholder="Nama penerbit"
                         required
-                        error={errors.publisher}
+                        error={errors.penerbit}
                         icon={faBuilding}
                     />
 
@@ -191,8 +264,8 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
 
                     <FormInput
                         label="Ukuran Buku"
-                        name="size"
-                        value={formData.size}
+                        name="ukuran"
+                        value={formData.ukuran}
                         onChange={handleInputChange}
                         placeholder="Contoh: 14 x 20 cm"
                         icon={faRuler}
@@ -203,8 +276,8 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                 <div className="space-y-4">
                     <FormInput
                         label="Penulis"
-                        name="author"
-                        value={formData.author}
+                        name="penulis"
+                        value={formData.penulis}
                         onChange={handleInputChange}
                         placeholder="Nama penulis"
                         required
@@ -214,25 +287,35 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
 
                     <FormInput
                         label="Jumlah Halaman"
-                        name="pages"
+                        name="halaman"
                         type="number"
-                        value={formData.pages}
+                        value={formData.halaman}
                         onChange={handleInputChange}
                         placeholder="Jumlah halaman"
                         required
-                        error={errors.pages}
+                        error={errors.halaman}
                         min="1"
                     />
 
                     <FormInput
                         label="Kategori"
-                        name="category"
+                        name="kategori"
                         type="select"
-                        value={formData.category}
+                        value={formData.kategori}
                         onChange={handleInputChange}
                         required
-                        error={errors.category}
+                        error={errors.kategori}
                         options={categories}
+                    />
+
+                    <FormInput
+                        label="Tanggal Terbit"
+                        name="published_at"
+                        type="date"
+                        value={formData.published_at}
+                        onChange={handleInputChange}
+                        error={combinedErrors.published_at}
+                        icon={faCalendarAlt}
                     />
 
                     {/* Cover Image Upload */}
@@ -240,7 +323,7 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                         label="Cover Buku"
                         name="cover"
                         type="file"
-                        onChange={handleInputChange}
+                        onChange={handleImageChange}
                         accept="image/*"
                         icon={faImage}
                     />
@@ -255,7 +338,8 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                                 <Image
                                     src={previewImage}
                                     alt="Preview"
-                                    width={200} height={300}
+                                    width={200}
+                                    height={300}
                                     className="w-full h-full object-cover"
                                 />
                             </div>
@@ -267,13 +351,13 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
             {/* Synopsis - Full Width */}
             <FormInput
                 label="Sinopsis"
-                name="synopsis"
+                name="sinopsis"
                 type="textarea"
-                value={formData.synopsis}
+                value={formData.sinopsis}
                 onChange={handleInputChange}
                 placeholder="Tulis sinopsis buku..."
                 required
-                error={errors.synopsis}
+                error={errors.sinopsis}
                 rows={4}
                 icon={faFileText}
             />
@@ -287,6 +371,19 @@ const BookForm = ({ book, onSubmit, onCancel, isLoading = false }) => {
                 >
                     <FontAwesomeIcon icon={faTimes} className="mr-2" />
                     Batal
+                </button>
+                <button
+                    type="button"
+                    // Panggil handleSubmit dengan status 'draft'
+                    onClick={(e) => handleSubmit(e, 'draft')}
+                    disabled={isLoading || (book && book.status === 'draft')}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                    <FontAwesomeIcon
+                        icon={isLoading ? faCircleNotch : faSave}
+                        className={`mr-2 ${isLoading ? 'animate-spin' : ''}`}
+                    />
+                    Simpan Draf
                 </button>
                 <button
                     type="submit"

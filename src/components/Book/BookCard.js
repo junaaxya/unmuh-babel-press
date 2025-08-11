@@ -3,10 +3,20 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-export default function BookCard({ id, title, kategori, image, lazy = false }) {
+import React, { useState, useMemo } from 'react';
+export default function BookCard({ id, title, kategori, image, published_at, lazy = false }) {
     const router = useRouter();
     const [isNavigating, setIsNavigating] = useState(false);
+
+    const isNew = useMemo(() => {
+    if (!published_at) return false;
+    
+    const publishedDate = new Date(published_at);
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
+
+    return publishedDate > thirtyDaysAgo;
+}, [published_at]);
 
     // Fungsi untuk mengarahkan ke halaman detail buku
     const handleViewDetail = async () => {
@@ -29,9 +39,11 @@ export default function BookCard({ id, title, kategori, image, lazy = false }) {
             transition={{ duration: 0.5 }}
         >
             {/* Badge "Baru" */}
-            <div className="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-                Baru
-            </div>
+        {isNew && (
+    <div className="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+        Baru
+    </div>
+)}
 
             {/* Gambar Buku */}
             <div className="flex justify-center items-center bg-gray-100 ">

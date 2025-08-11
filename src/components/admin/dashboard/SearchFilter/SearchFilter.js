@@ -2,20 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategoryChange, onClearFilters, totalBooks, filteredBooks }) => {
-  const categories = [
-    { value: "", label: "Semua Kategori" },
-    { value: "Pendidikan", label: "Pendidikan" },
-    { value: "Agama", label: "Agama" },
-    { value: "Teknologi", label: "Teknologi" },
-    { value: "Sejarah", label: "Sejarah" },
-    { value: "Sastra", label: "Sastra" },
-    { value: "Sains", label: "Sains" },
-    { value: "Ekonomi", label: "Ekonomi" },
-    { value: "Politik", label: "Politik" },
-    { value: "Budaya", label: "Budaya" },
-    { value: "Lainnya", label: "Lainnya" },
-  ];
+const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategoryChange, onClearFilters, totalBooks, filteredBooks, categories = [] }) => {
 
   const hasActiveFilters = searchTerm || selectedCategory;
 
@@ -49,11 +36,12 @@ const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategory
               onChange={(e) => onCategoryChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
             >
-              {categories.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.label}
-                </option>
-              ))}
+              <option value="">Semua Kategori</option>
+    {categories.map((category) => (
+        <option key={category} value={category}>
+            {category}
+        </option>
+    ))}
             </select>
           </div>
         </div>
