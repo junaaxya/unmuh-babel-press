@@ -4,7 +4,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import NewsCard from '@/components/News/NewsCard';
 import SearchFilter from '@/components/News/SearchFilter';
-import { getNews, getEvents } from '@/app/services/api';
+import { getNews } from '@/app/services/api.news';
+import { getEvents } from '@/app/services/api.events';
 import {
     faNewspaper,
     faCalendarCheck,

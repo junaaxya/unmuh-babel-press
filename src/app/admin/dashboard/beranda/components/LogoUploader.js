@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Button from '@/components/ui/button/Button';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
-import { uploadLogo, deleteLogo } from '@/app/services/api';
+import { uploadLogo, deleteLogo } from '@/app/services/api.home';
 import Image from 'next/image';
 
 export default function LogoUploader({

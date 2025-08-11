@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image'
 import ShareButtons from '@/components/ShareButtons/ShareButtons';
-import { getNews,getNewsBySlug } from '@/app/services/api';
+import { getNews, getNewsBySlug } from '@/app/services/api.news';
 
 // Fungsi ini mengambil data utama dan data terkait dari API
 async function getNewsData(slug) {

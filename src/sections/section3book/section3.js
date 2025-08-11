@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import BookCarousel from '@/components/carousel/BookCarousel';
 import SectionHeading from '@/components/common/SectionHeading';
 import { motion } from 'framer-motion';
-import { getBooks } from '@/app/services/api'; 
+import { getBooks } from '@/app/services/api.books';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 

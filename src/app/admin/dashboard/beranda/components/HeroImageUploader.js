@@ -1,7 +1,7 @@
 import { useState, useRef,useEffect } from 'react';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import Button from '@/components/ui/button/Button';
-import { uploadHeroImage, deleteHeroImage } from '@/app/services/api';
+import { uploadHeroImage, deleteHeroImage } from '@/app/services/api.home';
 import Image from 'next/image';
 
 export default function HeroImageUploader({

@@ -1,7 +1,7 @@
 // src/app/(main)/buku/[id]/page.js
 
 import React from 'react';
-import { getBookById } from '@/app/services/api';
+import { getBookById } from '@/app/services/api.books';
 import BookDetailView from './BookDetailView'; // Impor komponen klien
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

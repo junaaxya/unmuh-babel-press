@@ -26,9 +26,9 @@ import {
     updateBook,
     deleteBook,
     getBookCategories,
-     publishBook,   
+    publishBook,
     unpublishBook,
-} from '../../../services/api';
+} from '../../../services/api.books';
 
 const AdminCatalogPage = () => {
     // State untuk data dan UI

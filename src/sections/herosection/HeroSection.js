@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import Button from '@/components/ui/button/Button';
 import { faBookOpen, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { getHomeContent } from '@/app/services/api';
+import { getHomeContent } from '@/app/services/api.home';
 
 export default function HeroSection() {
     const [heroImage, setHeroImage] = useState('/unmuhpress.png');

@@ -6,7 +6,8 @@ import SectionHeading from '@/components/common/SectionHeading';
 import { NewsList, NewsLoading, NewsEmpty } from '@/components/News';
 
 // 1. Import fungsi API, bukan data statis
-import { getNews, getEvents } from '@/app/services/api';
+import { getNews } from '@/app/services/api.news';
+import { getEvents } from '@/app/services/api.events';
 
 export default function Section4NewsEvent() {
     // 2. Gunakan useState untuk mengelola data dan loading state

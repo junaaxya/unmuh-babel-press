@@ -11,7 +11,7 @@ import Notification from '@/components/ui/Notification/Notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faNewspaper, faSpinner } from '@fortawesome/free-solid-svg-icons';
 // Import fungsi API yang sesungguhnya
-import { getNews, createNews, updateNews, deleteNews,setNewsPublished, setNewsUnpublished } from '../../../services/api';
+import { getNews, createNews, updateNews, deleteNews, setNewsPublished, setNewsUnpublished } from '../../../services/api.news';
 
 export default function BeritaPage() {
   // State untuk data dan UI

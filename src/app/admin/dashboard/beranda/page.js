@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import LogoUploader from './components/LogoUploader';
 import HeroImageUploader from './components/HeroImageUploader';
 import HeroTextEditor from './components/HeroTextEditor';
-import { getHomeContent } from '../../../services/api';
+import { getHomeContent } from '../../../services/api.home';
 import Notification from '@/components/ui/Notification/Notification';
 
 export default function BerandaPage() {

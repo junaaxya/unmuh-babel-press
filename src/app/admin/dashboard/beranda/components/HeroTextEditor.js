@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'; // PERBAIKAN 1: Menambahkan useCallback dan useRef
 import Button from '@/components/ui/button/Button';
-import { updateHeroText } from '@/app/services/api';
+import { updateHeroText } from '@/app/services/api.home';
 
 export default function HeroTextEditor({
     headline,

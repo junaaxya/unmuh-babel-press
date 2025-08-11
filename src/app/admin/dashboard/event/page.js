@@ -19,9 +19,9 @@ import {
     createEvent,
     updateEvent,
     deleteEvent,
-     setEventPublished,
+    setEventPublished,
     setEventUnpublished,
-} from '../../../services/api';
+} from '../../../services/api.events';
 
 export default function EventPage() {
     // State untuk data dan UI

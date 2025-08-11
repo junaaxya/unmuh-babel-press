@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import ShareButtons from '@/components/ShareButtons/ShareButtons';
-import { getEventBySlug, getEvents } from '@/app/services/api';
+import { getEventBySlug, getEvents } from '@/app/services/api.events';
 
 
 async function fetchEventData(slug) {

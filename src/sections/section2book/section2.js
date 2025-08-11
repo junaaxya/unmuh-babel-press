@@ -9,7 +9,7 @@ import { faArrowRight, faSpinner, faExclamationCircle } from '@fortawesome/free-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BookCarousel } from '@/components/carousel';
 import SectionHeading from '@/components/common/SectionHeading';
-import { getBooks } from '@/app/services/api';
+import { getBooks } from '@/app/services/api.books';
 
 export default function Section2Books() {
     // state untuk buku, loading, dan error

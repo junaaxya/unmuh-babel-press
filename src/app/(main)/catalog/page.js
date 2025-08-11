@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { BookCard } from '@/components/Book';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faFilter, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { getBooks, getBookCategories } from '@/app/services/api';
+import { getBooks, getBookCategories } from '@/app/services/api.books';
 import Seo from '@/components/common/Seo';
 import { useDebounce } from 'use-debounce';
 

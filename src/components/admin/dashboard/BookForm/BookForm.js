@@ -21,7 +21,7 @@ import {
 import {
     uploadCoverImage,
     getBookCategories,
-} from '../../../../app/services/api';
+} from '../../../../../app/services/api.books';
 
 const BookForm = ({
     book,
