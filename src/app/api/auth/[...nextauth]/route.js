@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'database' },
+  session: { strategy: 'jwt' },
+  secret: process.env.NEXTAUTH_SECRET || 'dev-secret',
   providers: [
     CredentialsProvider({
       name: 'Credentials',
