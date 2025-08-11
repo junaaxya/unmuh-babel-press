@@ -21,7 +21,7 @@ const menuItems = [
   { title: 'Berita', icon: faNewspaper, path: '/admin/news' },
   { title: 'Penulis', icon: faUserEdit, path: '/admin/authors' },
   { title: 'Kategori', icon: faTags, path: '/admin/categories' },
-  { title: 'Pengaturan', icon: faCog, path: '/admin/settings' },
+  { title: 'Pengaturan', icon: faCog, path: '/admin/dashboard/settings' },
 ];
 
 const Sidebar = ({ isOpen, isMobile, toggleSidebar }) => {

@@ -10,7 +10,7 @@ const titleMap = {
   '/admin/news': 'Berita',
   '/admin/authors': 'Penulis',
   '/admin/categories': 'Kategori',
-  '/admin/settings': 'Pengaturan',
+  '/admin/dashboard/settings': 'Pengaturan',
 };
 
 const AdminHeader = ({ isMobile, toggleSidebar }) => {
