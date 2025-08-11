@@ -127,6 +127,19 @@ model Book {
 
 }
 
+model Setting {
+  id           Int      @id @default(1)
+  siteName     String?  @db.VarChar(255) @map("site_name")
+  contactEmail String?  @db.VarChar(255) @map("contact_email")
+  contactPhone String?  @db.VarChar(50)  @map("contact_phone")
+  address      String?  @db.Text
+  facebook     String?  @db.VarChar(255)
+  instagram    String?  @db.VarChar(255)
+  twitter      String?  @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+}
+
 enum Status {
   draft
   published

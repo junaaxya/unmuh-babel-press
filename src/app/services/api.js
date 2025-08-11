@@ -96,6 +96,15 @@ export const updateHeroText = async (payload) => {
     return await apiRequest('/api/beranda/hero-text', 'PUT', payload);
 };
 
+// Settings API
+export const getSettings = async () => {
+    return apiRequest('/api/settings');
+};
+
+export const updateSettings = async (data) => {
+    return apiRequest('/api/settings', 'PUT', data);
+};
+
 // ====================================================================
 // ||                TAMBAHAN UNTUK BERITA & EVENT                   ||
 // ====================================================================
