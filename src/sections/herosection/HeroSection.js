@@ -67,7 +67,7 @@ export default function HeroSection() {
                                 Lihat Katalog
                             </Button>
                         </Link>
-                        <Link href="/" className="flex flex-col text-center">
+                        <Link href="/kontak" className="flex flex-col text-center">
                             <Button icon={faEnvelope} variant="outline">
                                 Hubungi Kami
                             </Button>

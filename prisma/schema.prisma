@@ -116,7 +116,7 @@ model Book {
   penulis      String?    @db.Text
   editor       String?    @db.VarChar(255)
   ukuran       String?    @db.VarChar(50)
-  halaman      String?    @db.VarChar(10)
+  halaman      Int?    
   image        String?    @db.VarChar(500) // URL Cloudinary
   kategori     String?    @db.VarChar(100)
   sinopsis     String?    @db.Text

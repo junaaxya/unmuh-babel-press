@@ -179,3 +179,98 @@ export const setEventPublished = async (id) => {
 export const setEventUnpublished = async (id) => {
     return apiRequest(`/api/events/${id}/unpublish`, 'PUT');
 };
+
+// ====================================================================
+// ||                    API UNTUK KATALOG BUKU                      ||
+// ====================================================================
+
+/**
+ * Mengambil daftar buku dengan filter dan paginasi.
+ * @param {object} params - Query params (search, kategori, status, page, limit).
+ * @returns {Promise<object>} - Response dari API { data: [], meta: {} }.
+ */
+export const getBooks = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/api/books?${query}`);
+};
+
+/**
+ * Mengambil detail satu buku berdasarkan ID.
+ * @param {string|number} id - ID buku.
+ * @returns {Promise<object>} - Data buku.
+ */
+export const getBookById = (id) => {
+    return apiRequest(`/api/books/${id}`);
+};
+
+/**
+ * Membuat buku baru. Menggunakan FormData karena ada file upload.
+ * @param {FormData} formData - Data buku dalam bentuk FormData.
+ * @returns {Promise<object>} - Data buku yang baru dibuat.
+ */
+export const createBook = (formData) => {
+    return apiRequest('/api/books', 'POST', formData, true);
+};
+
+/**
+ * Memperbarui buku yang sudah ada. Menggunakan FormData.
+ * @param {string|number} id - ID buku yang akan diupdate.
+ * @param {FormData} formData - Data buku yang baru.
+ * @returns {Promise<object>} - Data buku yang sudah diupdate.
+ */
+export const updateBook = (id, formData) => {
+    // Untuk PUT dengan FormData, beberapa backend memerlukan method POST dengan _method=PUT
+    // Namun, kita coba dengan PUT langsung sesuai standar REST. Jika gagal, ini perlu disesuaikan.
+    return apiRequest(`/api/books/${id}`, 'PUT', formData, true);
+};
+
+/**
+ * Menghapus buku berdasarkan ID.
+ * @param {string|number} id - ID buku.
+ * @returns {Promise<object>} - Pesan sukses.
+ */
+export const deleteBook = (id) => {
+    return apiRequest(`/api/books/${id}`, 'DELETE');
+};
+
+/**
+ * Mengubah status buku menjadi 'published'.
+ * @param {string|number} id - ID buku.
+ * @returns {Promise<object>} - Data buku dengan status baru.
+ */
+export const publishBook = (id) => {
+    return apiRequest(`/api/books/${id}/publish`, 'PUT');
+};
+
+/**
+ * Mengubah status buku menjadi 'draft'.
+ * @param {string|number} id - ID buku.
+ * @returns {Promise<object>} - Data buku dengan status baru.
+ */
+export const unpublishBook = (id) => {
+    return apiRequest(`/api/books/${id}/unpublish`, 'PUT');
+};
+
+/**
+ * Mengambil daftar semua kategori buku yang tersedia.
+ * @returns {Promise<Array<string>>} - Array berisi nama-nama kategori.
+ */
+export const getBookCategories = async () => {
+    const response = await apiRequest('/api/books/categories');
+    return response.data || []; // Pastikan mengembalikan array
+};
+
+/**
+
+ * Fungsi ini sama seperti di modul berita/event.
+ * Mengirim file ke backend untuk mendapatkan signature dan URL Cloudinary.
+ * @param {File} file - File gambar yang akan diupload.
+ * @param {string} folder - Nama folder di Cloudinary (e.g., 'books').
+ * @returns {Promise<object>} - Response dari backend berisi { url: '...' }.
+ */
+export const uploadCoverImage = (file, folder = 'books') => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', folder);
+    return apiRequest('/api/upload-signature', 'POST', formData, true);
+};

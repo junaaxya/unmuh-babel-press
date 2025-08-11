@@ -68,14 +68,21 @@ export const eventSchema = z.object({
 // Skema untuk Buku (Book)
 export const bookSchema = z.object({
   kode_buku: z.string().max(50).optional(),
-  title: z.string().max(255, "Judul terlalu panjang"),
+  title: z.string().min(1, "Judul tidak boleh kosong").max(255, "Judul terlalu panjang"),
   isbn: z.string().max(50).optional(),
   penerbit: z.string().max(255).optional(),
-  penulis: z.string(),
+  penulis: z.string().min(1, "Penulis tidak boleh kosong"),
   editor: z.string().max(255).optional(),
   ukuran: z.string().max(50).optional(),
-  halaman: z.string().max(10).optional(),
-  image: z.string().url().optional(),
+  
+  // --- PERBAIKAN DI SINI ---
+  // Mengubah dari z.string() menjadi z.coerce.number() agar Zod
+  // otomatis mengubah string dari form menjadi angka.
+  halaman: z.coerce.number({
+        errorMap: () => ({ message: "Jumlah halaman harus berupa angka." })
+  }).positive("Jumlah halaman harus positif.").optional(),
+
+  image: z.string().url("Format URL gambar tidak valid").optional(),
   kategori: z.string().max(100).optional(),
   sinopsis: z.string().optional(),
   status: z.enum(["draft", "published"]).default("draft"),
