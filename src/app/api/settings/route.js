@@ -16,7 +16,7 @@ export async function GET() {
   return NextResponse.json(settings || {});
 }
 
-export async function PUT(request) {
+export async function POST(request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
