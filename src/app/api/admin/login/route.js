@@ -23,24 +23,24 @@ export async function POST(req) {
       return NextResponse.json({ error: "Format email tidak valid" }, { status: 400 });
     }
 
-    // Cari admin berdasarkan email
-    const admin = await prisma.admin.findUnique({
+    // Cari user berdasarkan email
+    const user = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (!admin) {
+    if (!user) {
       return NextResponse.json({ error: "Email tidak ditemukan" }, { status: 404 });
     }
 
     // Cek password cocok atau tidak
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Password salah" }, { status: 401 });
     }
 
     // Generate token JWT menggunakan jose
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const token = await new SignJWT({ id: admin.id, email: admin.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("1d").sign(secret);
+    const token = await new SignJWT({ id: user.id, email: user.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("1d").sign(secret);
 
     const serialized = serialize("token", token, {
       httpOnly: true,
@@ -53,7 +53,7 @@ export async function POST(req) {
     // Return token
     const response = NextResponse.json({
       message: "Login berhasil",
-      admin: { id: admin.id, email: admin.email },
+      user: { id: user.id, email: user.email },
     });
 
     response.headers.set("Set-Cookie", serialized);
