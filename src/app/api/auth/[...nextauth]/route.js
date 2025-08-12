@@ -1,10 +1,8 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@/lib/prismaAdapter';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { comparePassword } from '@/lib/hash';
-
-const prisma = new PrismaClient();
 
 // ensure NEXTAUTH_URL is always set to avoid configuration errors
 if (!process.env.NEXTAUTH_URL) {
@@ -13,10 +11,14 @@ if (!process.env.NEXTAUTH_URL) {
     : 'http://localhost:3000';
 }
 
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET is not set');
+}
+
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
-  secret: process.env.NEXTAUTH_SECRET || 'dev-secret',
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -26,7 +28,8 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        const email = credentials.email.trim().toLowerCase();
+        const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
         const valid = await comparePassword(credentials.password, user.password);
         if (!valid) return null;
@@ -36,11 +39,17 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role;
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
+      token.role = token.role || 'VIEWER';
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) session.user.role = token.role;
+      session.user = session.user || {};
+      session.user.id = token.id;
+      session.user.role = token.role || 'VIEWER';
       return session;
     },
   },

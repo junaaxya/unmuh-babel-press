@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBook,
   faNewspaper,
   faCalendarAlt,
-  faUsers,
   faEye,
   faArrowUp,
   faArrowDown,
-  faPlus,
   faEdit,
   faChartLine,
   faClock,
@@ -119,6 +118,9 @@ const RecentActivityItem = ({ type, title, time, status }) => {
 };
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
+  const role = session?.user?.role || 'VIEWER';
+  const canEdit = role === 'ADMIN' || role === 'EDITOR';
   const [stats, setStats] = useState({
     books: 0,
     news: 0,
@@ -180,7 +182,14 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl text-white p-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Selamat Datang di Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              Selamat Datang di Dashboard
+              {role === 'VIEWER' && (
+                <span className="ml-2 text-sm font-normal bg-white/20 text-white px-2 py-1 rounded">
+                  Read-only
+                </span>
+              )}
+            </h1>
             <p className="text-blue-100 text-lg">
               Kelola seluruh konten website Unmuh Press dari satu tempat
             </p>
@@ -229,41 +238,43 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Quick Actions */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900">Aksi Cepat</h2>
+        {canEdit && (
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">Aksi Cepat</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <QuickActionCard
+                title="Tambah Buku Baru"
+                description="Upload dan kelola katalog buku terbaru"
+                icon={faBook}
+                href="/admin/dashboard/catalog"
+                color="blue"
+              />
+              <QuickActionCard
+                title="Buat Berita"
+                description="Publikasikan berita dan artikel terbaru"
+                icon={faNewspaper}
+                href="/admin/dashboard/berita/add"
+                color="green"
+              />
+              <QuickActionCard
+                title="Jadwalkan Event"
+                description="Buat dan kelola event mendatang"
+                icon={faCalendarAlt}
+                href="/admin/dashboard/event/add"
+                color="yellow"
+              />
+              <QuickActionCard
+                title="Edit Beranda"
+                description="Perbarui konten halaman utama"
+                icon={faEdit}
+                href="/admin/dashboard/beranda"
+                color="purple"
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <QuickActionCard
-              title="Tambah Buku Baru"
-              description="Upload dan kelola katalog buku terbaru"
-              icon={faBook}
-              href="/admin/dashboard/catalog"
-              color="blue"
-            />
-            <QuickActionCard
-              title="Buat Berita"
-              description="Publikasikan berita dan artikel terbaru"
-              icon={faNewspaper}
-              href="/admin/dashboard/berita/add"
-              color="green"
-            />
-            <QuickActionCard
-              title="Jadwalkan Event"
-              description="Buat dan kelola event mendatang"
-              icon={faCalendarAlt}
-              href="/admin/dashboard/event/add"
-              color="yellow"
-            />
-            <QuickActionCard
-              title="Edit Beranda"
-              description="Perbarui konten halaman utama"
-              icon={faEdit}
-              href="/admin/dashboard/beranda"
-              color="purple"
-            />
-          </div>
-        </div>
+        )}
 
         {/* Recent Activity */}
         <div>
@@ -293,17 +304,28 @@ export default function DashboardPage() {
             { title: 'Layanan', path: '/admin/dashboard/layanan', desc: 'Layanan yang ditawarkan' },
             { title: 'Kontak', path: '/admin/dashboard/kontak', desc: 'Informasi kontak dan alamat' },
             { title: 'Menu Navigasi', path: '/admin/dashboard/navbar', desc: 'Kelola menu dan submenu' },
-            { title: 'Pengaturan', path: '/admin/dashboard/settings', desc: 'Konfigurasi website' },
-          ].map((item, index) => (
-            <Link key={index} href={item.path}>
-              <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all duration-200 cursor-pointer group">
-                <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">{item.desc}</p>
-              </div>
-            </Link>
-          ))}
+            { title: 'Pengaturan', path: '/admin/dashboard/settings', desc: 'Konfigurasi website', minRole: 'EDITOR' },
+          ]
+            .filter((item) => canEdit || !item.minRole)
+            .map((item, index) => {
+              const content = (
+                <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all duration-200 cursor-pointer group">
+                  <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">{item.desc}</p>
+                </div>
+              );
+              return canEdit ? (
+                <Link key={index} href={item.path}>
+                  {content}
+                </Link>
+              ) : (
+                <div key={index} className="opacity-60 cursor-not-allowed">
+                  {content}
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>

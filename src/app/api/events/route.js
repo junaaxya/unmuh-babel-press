@@ -79,6 +79,7 @@ export async function GET(request) {
 
 // ============ POST =========
 export async function POST(request) {
+    // Only ADMIN or EDITOR may create events; VIEWER will receive 403
     const authError = await authorize(request);
     if (authError) return authError;
 

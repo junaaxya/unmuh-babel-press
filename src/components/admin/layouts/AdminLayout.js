@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartLine,
@@ -19,8 +20,8 @@ import {
   faChevronDown,
   faChevronRight,
   faTimes,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import AuthGuard from '../auth/AuthGuard';
 
 const MENU_ITEMS = [
   {
@@ -69,11 +70,25 @@ const MENU_ITEMS = [
     icon: faCog,
     path: '/admin/dashboard/settings',
     single: true,
+    minRole: 'EDITOR',
+  },
+  {
+    title: 'Users',
+    icon: faUsers,
+    path: '/admin/dashboard/users',
+    single: true,
+    minRole: 'ADMIN',
   },
 ];
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const role = session?.user?.role || 'VIEWER';
+  const roleRank = { VIEWER: 0, EDITOR: 1, ADMIN: 2 };
+  const visibleMenu = MENU_ITEMS.filter(
+    (item) => !item.minRole || roleRank[role] >= roleRank[item.minRole]
+  );
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default open for desktop
   const [expandedMenus, setExpandedMenus] = useState({});
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -134,15 +149,7 @@ export default function AdminLayout({ children }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      localStorage.removeItem('adminToken');
-      const res = await fetch('/api/admin/logout', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!res.ok) throw new Error('Logout failed');
-
-      window.location.href = '/admin/login';
+      await signOut({ callbackUrl: '/admin/login' });
     } catch (err) {
       console.error(err);
       alert('Gagal logout. Silakan coba lagi.');
@@ -153,12 +160,13 @@ export default function AdminLayout({ children }) {
 
   // Auto-expand menus based on current path
   useEffect(() => {
-    MENU_ITEMS.forEach((item, index) => {
+    visibleMenu.forEach((item, index) => {
       if (item.submenu && item.submenu.some((sub) => pathname.startsWith(sub.path))) {
         setExpandedMenus((prev) => ({ ...prev, [index]: true }));
       }
     });
-  }, [pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, role]);
 
   const getCurrentPageTitle = () => {
     for (const item of MENU_ITEMS) {
@@ -186,8 +194,7 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <AuthGuard>
-      <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50">
         {/* Backdrop Overlay for Mobile */}
         {sidebarOpen && isMobile && (
           <div
@@ -240,7 +247,7 @@ export default function AdminLayout({ children }) {
 
           {/* Navigation Menu */}
           <nav className="mt-4 px-3 space-y-1 flex-1 overflow-x-hidden">
-            {MENU_ITEMS.map((item, index) => (
+            {visibleMenu.map((item, index) => (
               <div key={index}>
                 {item.single ? (
                   <Link
@@ -431,6 +438,5 @@ export default function AdminLayout({ children }) {
           </main>
         </div>
       </div>
-    </AuthGuard>
   );
 }

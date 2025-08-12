@@ -74,6 +74,7 @@ export async function GET(request) {
 
 // POST /api/books
 export async function POST(req) {
+  // Only ADMIN or EDITOR may add books; VIEWER will be rejected
   const authError = await authorize(req);
   if (authError) return authError;
 

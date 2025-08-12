@@ -19,7 +19,7 @@ export default function TextArea({
 }) {
   const handleChange = (e) => {
     if (onChange) {
-      onChange(e.target.value);
+      onChange(e); // <-- KIRIM SELURUH EVENT (e)
     }
   };
 

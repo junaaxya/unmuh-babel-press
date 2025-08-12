@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import { useDebounce } from 'use-debounce';
 import BookCard from '@/components/admin/dashboard/BookCard/BookCard';
 import BookForm from '@/components/admin/dashboard/BookForm/BookForm'; 
@@ -53,7 +54,7 @@ const AdminCatalogPage = () => {
     
 
     // State untuk notifikasi global
-   const [notification, setNotification] = useState({
+    const [notification, setNotification] = useState({
         id: null,
         type: '',
         message: '',
@@ -77,6 +78,11 @@ const AdminCatalogPage = () => {
         total_pages: 1,
     });
     const [debouncedSearch] = useDebounce(filters.search, 500);
+
+    // Ambil role dari session untuk menentukan izin
+    const { data: session } = useSession();
+    const role = session?.user?.role || 'VIEWER';
+    const canEdit = role === 'ADMIN' || role === 'EDITOR';
 
     // Fungsi untuk mengambil data buku dari API
     const fetchBooks = useCallback(async () => {
@@ -135,18 +141,21 @@ const AdminCatalogPage = () => {
 
     // --- Handlers untuk membuka modal ---
     const handleOpenAddModal = () => {
+        if (!canEdit) return;
         setSelectedBook(null);
         setApiErrors({});
         setIsFormModalOpen(true);
     };
 
     const handleOpenEditModal = (book) => {
+        if (!canEdit) return;
         setSelectedBook(book);
         setApiErrors({});
         setIsFormModalOpen(true);
     };
 
     const handleOpenDeleteModal = (book) => {
+        if (!canEdit) return;
         setSelectedBook(book);
         setIsDeleteModalOpen(true);
     };
@@ -166,6 +175,7 @@ const AdminCatalogPage = () => {
 
     // --- Handler untuk submit form (Create & Update) ---
    const handleFormSubmit = async (formData) => {
+        if (!canEdit) return; // Viewer tidak boleh menambah/mengedit buku
         setIsSubmitting(true);
         setApiErrors({});
         const isEditing = !!selectedBook;
@@ -193,7 +203,7 @@ const AdminCatalogPage = () => {
 
     // --- Handler untuk menghapus buku ---
      const handleDeleteBook = async () => {
-        if (!selectedBook) return;
+        if (!canEdit || !selectedBook) return; // Viewer tidak boleh menghapus
         setIsSubmitting(true);
         try {
             await deleteBook(selectedBook.id);
@@ -209,7 +219,7 @@ const AdminCatalogPage = () => {
     };
 
     const handleToggleStatus = async (book) => {
-        // ... (fungsi handleToggleStatus tidak berubah)
+        if (!canEdit) return; // Viewer tidak boleh mengubah status buku
         const isPublishing = book.status !== 'published';
         const actionText = isPublishing ? 'dipublikasikan' : 'diubah menjadi draf';
 
@@ -289,14 +299,16 @@ const AdminCatalogPage = () => {
                         </button>
                     </div>
 
-                    {/* Tombol Tambah Buku (sudah diperbaiki) */}
-                    <button
-                        onClick={handleOpenAddModal}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                    >
-                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                        Tambah Buku
-                    </button>
+                    {/* Tombol Tambah Buku */}
+                    {canEdit && (
+                        <button
+                            onClick={handleOpenAddModal}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                        >
+                            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                            Tambah Buku
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -335,7 +347,7 @@ const AdminCatalogPage = () => {
                             ? 'Coba ubah kriteria pencarian atau filter Anda.'
                             : 'Belum ada buku yang ditambahkan ke katalog.'}
                     </p>
-                    {!filters.search && !filters.kategori && (
+                    {!filters.search && !filters.kategori && canEdit && (
                         <button
                             onClick={handleOpenAddModal}
                             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -362,6 +374,7 @@ const AdminCatalogPage = () => {
                             onEdit={() => handleOpenEditModal(book)}
                             onDelete={() => handleOpenDeleteModal(book)}
                             onToggleStatus={handleToggleStatus}
+                            readOnly={!canEdit}
                         />
                     ))}
                 </div>
