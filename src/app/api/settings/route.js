@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   noStore();
   const session = await getServerSession(authOptions);
-  if (!session || !['ADMIN', 'EDITOR'].includes(session.user.role)) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
@@ -18,8 +18,11 @@ export async function GET() {
 
 export async function PUT(request) {
   const session = await getServerSession(authOptions);
-  if (!session || !['ADMIN', 'EDITOR'].includes(session.user.role)) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!['ADMIN', 'EDITOR'].includes(session.user.role)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
   const data = await request.json();
   const updated = await prisma.siteSetting.update({

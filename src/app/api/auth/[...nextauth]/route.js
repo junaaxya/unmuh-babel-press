@@ -43,13 +43,13 @@ export const authOptions = {
         token.role = user.role;
         token.id = user.id;
       }
+      token.role = token.role || 'VIEWER';
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.role = token.role;
-        session.user.id = token.id;
-      }
+      session.user = session.user || {};
+      session.user.id = token.id;
+      session.user.role = token.role || 'VIEWER';
       return session;
     },
   },

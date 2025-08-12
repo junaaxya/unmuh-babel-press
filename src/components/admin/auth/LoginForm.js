@@ -30,25 +30,18 @@ const LoginForm = () => {
     setIsLoading(true);
     setError("");
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      callbackUrl: '/admin/dashboard',
-      email: formData.email.trim().toLowerCase(),
-      password: formData.password,
-    });
+      const res = await signIn("credentials", {
+        redirect: false,
+        callbackUrl: '/admin/dashboard',
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+      });
 
-    if (res?.error) {
-      setError("Login gagal");
-    } else {
-      const sessionRes = await fetch("/api/auth/session");
-      const session = await sessionRes.json();
-      const role = session?.user?.role;
-      if (role === "VIEWER") {
-        router.push("/");
+      if (res?.error) {
+        setError("Login gagal");
       } else {
         router.push("/admin/dashboard");
       }
-    }
 
     setIsLoading(false);
   };

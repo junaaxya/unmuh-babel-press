@@ -21,14 +21,6 @@ export async function middleware(req) {
     return NextResponse.redirect(new URL('/admin/dashboard', req.url));
   }
 
-  if (pathname.startsWith('/admin/dashboard/users') && token.role !== 'ADMIN') {
-    return NextResponse.redirect(new URL('/admin/dashboard', req.url));
-  }
-
-  if (pathname.startsWith('/admin/dashboard') && !['ADMIN', 'EDITOR'].includes(token.role)) {
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-
   return NextResponse.next();
 }
 

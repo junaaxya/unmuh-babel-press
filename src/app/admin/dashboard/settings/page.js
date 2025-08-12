@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { getSettings, updateSettings } from '@/app/services/api';
 
 const stringFields = [
@@ -37,6 +38,9 @@ const labels = {
 };
 
 export default function SettingsPage() {
+  const { data: session } = useSession();
+  const role = session?.user?.role || 'VIEWER';
+  const canEdit = role === 'ADMIN' || role === 'EDITOR';
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -47,13 +51,13 @@ export default function SettingsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setSettings({
-      ...settings,
-      [name]: type === 'number' ? Number(value) : type === 'checkbox' ? checked : value,
-    });
-  };
+    const handleChange = (e) => {
+      const { name, value, type, checked } = e.target;
+      setSettings({
+        ...settings,
+        [name]: type === 'number' ? Number(value) : type === 'checkbox' ? checked : value,
+      });
+    };
 
   const handleSave = async () => {
     setSaving(true);
@@ -63,50 +67,55 @@ export default function SettingsPage() {
 
   if (loading || !settings) return <div>Loading...</div>;
 
-  return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl">Site Settings</h1>
-      {stringFields.map((f) => (
-        <div key={f}>
-          <label className="block text-sm">{labels[f]}</label>
-          <input
-            name={f}
-            value={settings[f] || ''}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-      ))}
-      {numberFields.map((f) => (
-        <div key={f}>
-          <label className="block text-sm">{labels[f]}</label>
-          <input
-            type="number"
-            name={f}
-            value={settings[f] ?? ''}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-      ))}
-      {booleanFields.map((f) => (
-        <div key={f} className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name={f}
-            checked={settings[f] || false}
-            onChange={handleChange}
-          />
-          <label className="text-sm" htmlFor={f}>{labels[f]}</label>
-        </div>
-      ))}
-      <button
-        onClick={handleSave}
-        className="px-4 py-2 bg-blue-600 text-white"
-        disabled={saving}
-      >
-        {saving ? 'Saving...' : 'Save'}
-      </button>
-    </div>
-  );
-}
+    return (
+      <div className="p-4 space-y-4">
+        <h1 className="text-2xl">
+          Site Settings { !canEdit && <span className="ml-2 text-sm text-gray-500">(Read-only)</span> }
+        </h1>
+        {stringFields.map((f) => (
+          <div key={f}>
+            <label className="block text-sm">{labels[f]}</label>
+            <input
+              name={f}
+              value={settings[f] || ''}
+              onChange={handleChange}
+              className="border p-2 w-full"
+              readOnly={!canEdit}
+            />
+          </div>
+        ))}
+        {numberFields.map((f) => (
+          <div key={f}>
+            <label className="block text-sm">{labels[f]}</label>
+            <input
+              type="number"
+              name={f}
+              value={settings[f] ?? ''}
+              onChange={handleChange}
+              className="border p-2 w-full"
+              readOnly={!canEdit}
+            />
+          </div>
+        ))}
+        {booleanFields.map((f) => (
+          <div key={f} className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              name={f}
+              checked={settings[f] || false}
+              onChange={handleChange}
+              disabled={!canEdit}
+            />
+            <label className="text-sm" htmlFor={f}>{labels[f]}</label>
+          </div>
+        ))}
+        <button
+          onClick={handleSave}
+          className="px-4 py-2 bg-blue-600 text-white"
+          disabled={!canEdit || saving}
+        >
+          {saving ? 'Saving...' : 'Save'}
+        </button>
+      </div>
+    );
+  }

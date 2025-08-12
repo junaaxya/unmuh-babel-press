@@ -6,14 +6,8 @@ import { hashPassword } from '@/lib/hash';
 
 const prisma = new PrismaClient();
 
-async function requireRole(roles) {
-  const session = await getServerSession(authOptions);
-  if (!session || !roles.includes(session.user.role)) return null;
-  return session;
-}
-
 export async function GET(request) {
-  const session = await requireRole(['ADMIN', 'EDITOR']);
+  const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
@@ -34,8 +28,11 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const session = await requireRole(['ADMIN']);
+  const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
   const { email, password, role } = await request.json();
   const hashed = await hashPassword(password);
   const user = await prisma.user.create({
@@ -45,16 +42,22 @@ export async function POST(request) {
 }
 
 export async function PUT(request) {
-  const session = await requireRole(['ADMIN']);
+  const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
   const { id, role } = await request.json();
   await prisma.user.update({ where: { id }, data: { role } });
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(request) {
-  const session = await requireRole(['ADMIN']);
+  const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
   const { id } = await request.json();
   await prisma.user.delete({ where: { id } });
   return NextResponse.json({ ok: true });
