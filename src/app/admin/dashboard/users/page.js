@@ -1,16 +1,28 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function UsersPage() {
+  const { data: session } = useSession();
   const [users, setUsers] = useState([]);
+  const [meta, setMeta] = useState({ page: 1, limit: 10, total: 0 });
   const [form, setForm] = useState({ email: '', password: '', role: 'VIEWER' });
+  const [search, setSearch] = useState('');
 
-  const load = async () => {
-    const res = await fetch('/api/admin/users');
-    if (res.ok) setUsers(await res.json());
+  const load = async (page = meta.page) => {
+    const params = new URLSearchParams({ page, limit: meta.limit, search });
+    const res = await fetch(`/api/admin/users?${params.toString()}`);
+    if (res.ok) {
+      const data = await res.json();
+      setUsers(data.data);
+      setMeta(data.meta);
+    }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCreate = async () => {
     await fetch('/api/admin/users', {
@@ -19,7 +31,7 @@ export default function UsersPage() {
       body: JSON.stringify(form),
     });
     setForm({ email: '', password: '', role: 'VIEWER' });
-    load();
+    load(1);
   };
 
   const changeRole = async (id, role) => {
@@ -28,12 +40,43 @@ export default function UsersPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, role }),
     });
-    load();
+    if (session?.user.id === id && role !== 'ADMIN') {
+      await signOut({ callbackUrl: '/admin/login' });
+      return;
+    }
+    load(meta.page);
+  };
+
+  const handleDelete = async (id) => {
+    await fetch('/api/admin/users', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (session?.user.id === id) {
+      await signOut({ callbackUrl: '/admin/login' });
+      return;
+    }
+    load(meta.page);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    load(1);
   };
 
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl">Users</h1>
+      <form onSubmit={handleSearch} className="mb-4 space-x-2">
+        <input
+          placeholder="search email"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border p-2"
+        />
+        <button type="submit" className="px-4 py-2 bg-gray-600 text-white">Search</button>
+      </form>
       <div>
         <input
           placeholder="email"
@@ -57,7 +100,7 @@ export default function UsersPage() {
           <option value="EDITOR">EDITOR</option>
           <option value="VIEWER">VIEWER</option>
         </select>
-        <button onClick={handleCreate} className="px-4 py-2 bg-blue-600 text-white">
+        <button type="button" onClick={handleCreate} className="px-4 py-2 bg-blue-600 text-white">
           Add
         </button>
       </div>
@@ -67,6 +110,7 @@ export default function UsersPage() {
             <th>Email</th>
             <th>Role</th>
             <th>Created</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -81,10 +125,33 @@ export default function UsersPage() {
                 </select>
               </td>
               <td>{new Date(u.createdAt).toLocaleString()}</td>
+              <td>
+                {session?.user.id !== u.id && (
+                  <button onClick={() => handleDelete(u.id)} className="text-red-600">
+                    Delete
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className="flex space-x-2">
+        <button
+          disabled={meta.page <= 1}
+          onClick={() => load(meta.page - 1)}
+          className="px-2 py-1 border"
+        >
+          Prev
+        </button>
+        <button
+          disabled={meta.page * meta.limit >= meta.total}
+          onClick={() => load(meta.page + 1)}
+          className="px-2 py-1 border"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

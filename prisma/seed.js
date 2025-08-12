@@ -4,7 +4,7 @@ const { hashPassword } = require('../src/lib/hash');
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = 'admin@example.com';
+  const email = 'admin@example.com'.trim().toLowerCase();
   const password = await hashPassword('password123');
   await prisma.user.upsert({
     where: { email },

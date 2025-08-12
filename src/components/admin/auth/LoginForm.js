@@ -32,15 +32,22 @@ const LoginForm = () => {
 
     const res = await signIn("credentials", {
       redirect: false,
-      callbackUrl: "/admin/dashboard",
-      email: formData.email,
+      callbackUrl: '/admin/dashboard',
+      email: formData.email.trim().toLowerCase(),
       password: formData.password,
     });
 
     if (res?.error) {
       setError("Login gagal");
-    } else if (res?.url) {
-      router.push(res.url);
+    } else {
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const role = session?.user?.role;
+      if (role === "VIEWER") {
+        router.push("/");
+      } else {
+        router.push("/admin/dashboard");
+      }
     }
 
     setIsLoading(false);
