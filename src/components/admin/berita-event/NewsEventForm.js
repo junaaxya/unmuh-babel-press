@@ -75,19 +75,34 @@ export default function NewsEventForm({
 
     useEffect(() => {
         if (initialData) {
-            setFormData((prevState) => ({
+            const merged = {
                 ...createInitialState(type),
                 ...initialData,
+            };
+
+            setFormData({
+                ...merged,
+                // Pastikan nilai null tidak diteruskan ke input yang terkontrol
+                registrationEnabled: merged.registrationEnabled ?? false,
+                registrationTitle:
+                    merged.registrationTitle ?? 'Tertarik mengikuti event ini?',
+                registrationDescription:
+                    merged.registrationDescription ??
+                    'Daftarkan diri Anda sekarang juga!',
+                registrationButtonText:
+                    merged.registrationButtonText ?? 'Daftar Sekarang',
+                registrationLink: merged.registrationLink ?? '',
+                registrationDeadline: merged.registrationDeadline ?? '',
                 // Pastikan status publikasi di-set dengan benar dari data awal
                 status:
                     type === 'berita'
-                        ? initialData.status || 'draft'
-                        : initialData.status || 'Upcoming',
-                publishStatus: initialData.publishStatus || 'draft',
-                date: initialData.date
-                    ? new Date(initialData.date).toISOString().split('T')[0]
+                        ? merged.status || 'draft'
+                        : merged.status || 'Upcoming',
+                publishStatus: merged.publishStatus || 'draft',
+                date: merged.date
+                    ? new Date(merged.date).toISOString().split('T')[0]
                     : '',
-            }));
+            });
         } else {
             setFormData(createInitialState(type));
         }
