@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartLine,
@@ -20,7 +21,6 @@ import {
   faChevronRight,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-import AuthGuard from '../auth/AuthGuard';
 
 const MENU_ITEMS = [
   {
@@ -134,15 +134,7 @@ export default function AdminLayout({ children }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      localStorage.removeItem('adminToken');
-      const res = await fetch('/api/admin/logout', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!res.ok) throw new Error('Logout failed');
-
-      window.location.href = '/admin/login';
+      await signOut({ callbackUrl: '/admin/login' });
     } catch (err) {
       console.error(err);
       alert('Gagal logout. Silakan coba lagi.');
@@ -186,8 +178,7 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <AuthGuard>
-      <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50">
         {/* Backdrop Overlay for Mobile */}
         {sidebarOpen && isMobile && (
           <div
@@ -431,6 +422,5 @@ export default function AdminLayout({ children }) {
           </main>
         </div>
       </div>
-    </AuthGuard>
   );
 }

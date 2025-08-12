@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 export default function Layout({ children }) {
   const pathname = usePathname();
   
-  // Routes yang tidak perlu AdminLayout (sidebar, AuthGuard)
+  // Routes yang tidak perlu AdminLayout (sidebar)
   const publicAdminRoutes = ['/admin/login', '/admin/register', '/admin/forgot-password'];
   
   // Jika route adalah public admin route, render tanpa AdminLayout
