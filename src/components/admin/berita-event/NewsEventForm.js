@@ -94,7 +94,7 @@ export default function NewsEventForm({
     }, [initialData, type]);
 
     const generateSlug = (title) => {
-        if (!title) return '';
+        if (typeof title !== 'string') return '';
         return title
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '')
@@ -293,7 +293,7 @@ export default function NewsEventForm({
             <FormInput
                 label="Judul"
                 value={formData.title || ''}
-                onChange={(value) => handleInputChange('title', value)}
+                onChange={(e) => handleInputChange('title', e.target.value)}
                 placeholder={`Masukkan judul ${
                     type === 'berita' ? 'berita' : 'event'
                 }...`}
@@ -318,7 +318,7 @@ export default function NewsEventForm({
             <TextArea
                 label="Ringkasan"
                 value={formData.excerpt || ''}
-                onChange={(value) => handleInputChange('excerpt', value)}
+                onChange={(e) => handleInputChange('excerpt', e.target.value)}
                 placeholder={`Ringkasan singkat ${
                     type === 'berita' ? 'berita' : 'event'
                 } ini...`}
@@ -352,7 +352,7 @@ export default function NewsEventForm({
                     label="Tanggal"
                     type="date"
                     value={formData.date || ''}
-                    onChange={(value) => handleInputChange('date', value)}
+                    onChange={(e) => handleInputChange('date', e.target.value)}
                     error={errors.date}
                     required
                     icon={faCalendarAlt}
@@ -361,7 +361,7 @@ export default function NewsEventForm({
                     <FormInput
                         label="Waktu"
                         value={formData.time || ''}
-                        onChange={(value) => handleInputChange('time', value)}
+                        onChange={(e) => handleInputChange('time', e.target.value)}
                         placeholder="08:00 - 10:30 WIB"
                         error={errors.time}
                         required
@@ -430,7 +430,7 @@ export default function NewsEventForm({
                     <FormInput
                         label="Penulis"
                         value={formData.author}
-                        onChange={(value) => handleInputChange('author', value)}
+                        onChange={(e) => handleInputChange('author', e.target.value)}
                         placeholder="Nama penulis berita"
                         error={errors.author}
                         required
@@ -445,8 +445,8 @@ export default function NewsEventForm({
                     <FormInput
                         label="Penyelenggara"
                         value={formData.organizer}
-                        onChange={(value) =>
-                            handleInputChange('organizer', value)
+                        onChange={(e) =>
+                            handleInputChange('organizer', e.target.value)
                         }
                         placeholder="Nama penyelenggara event"
                         error={errors.organizer}
@@ -457,8 +457,8 @@ export default function NewsEventForm({
                     <FormInput
                         label="Lokasi"
                         value={formData.location}
-                        onChange={(value) =>
-                            handleInputChange('location', value)
+                        onChange={(e) =>
+                            handleInputChange('location', e.target.value)
                         }
                         placeholder="Lokasi pelaksanaan event"
                         error={errors.location}
@@ -510,10 +510,10 @@ export default function NewsEventForm({
                                     <FormInput
                                         label="Judul Registrasi"
                                         value={formData.registrationTitle}
-                                        onChange={(value) =>
+                                        onChange={(e) =>
                                             handleInputChange(
                                                 'registrationTitle',
-                                                value
+                                                e.target.value
                                             )
                                         }
                                         placeholder="Tertarik mengikuti event ini?"
@@ -525,10 +525,10 @@ export default function NewsEventForm({
                                     <FormInput
                                         label="Teks Tombol"
                                         value={formData.registrationButtonText}
-                                        onChange={(value) =>
+                                        onChange={(e) =>
                                             handleInputChange(
                                                 'registrationButtonText',
-                                                value
+                                                e.target.value
                                             )
                                         }
                                         placeholder="Daftar Sekarang"
@@ -541,10 +541,10 @@ export default function NewsEventForm({
                                 <TextArea
                                     label="Deskripsi Registrasi"
                                     value={formData.registrationDescription}
-                                    onChange={(value) =>
+                                    onChange={(e) =>
                                         handleInputChange(
                                             'registrationDescription',
-                                            value
+                                            e.target.value
                                         )
                                     }
                                     placeholder="Daftarkan diri Anda sekarang juga!"
@@ -556,10 +556,10 @@ export default function NewsEventForm({
                                 <FormInput
                                     label="Link Registrasi"
                                     value={formData.registrationLink}
-                                    onChange={(value) =>
+                                    onChange={(e) =>
                                         handleInputChange(
                                             'registrationLink',
-                                            value
+                                            e.target.value
                                         )
                                     }
                                     placeholder="https://example.com/register"
@@ -573,10 +573,10 @@ export default function NewsEventForm({
                                     label="Batas Waktu Registrasi"
                                     type="datetime-local"
                                     value={formData.registrationDeadline}
-                                    onChange={(value) =>
+                                    onChange={(e) =>
                                         handleInputChange(
                                             'registrationDeadline',
-                                            value
+                                            e.target.value
                                         )
                                     }
                                     error={errors.registrationDeadline}
