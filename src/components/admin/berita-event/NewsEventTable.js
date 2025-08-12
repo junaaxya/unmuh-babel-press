@@ -28,6 +28,7 @@ export default function NewsEventTable({
     onPageChange,
     totalItems,
     itemsPerPage,
+    readOnly = false,
 }) {
     const formatDate = (dateString) => {
         const options = {
@@ -194,9 +195,11 @@ export default function NewsEventTable({
                         Belum Ada {activeTab === 'berita' ? 'Berita' : 'Event'}
                     </h3>
                     <p className="text-gray-500">
-                        Mulai dengan menambahkan{' '}
-                        {activeTab === 'berita' ? 'berita' : 'event'} pertama
-                        Anda.
+                        {readOnly
+                            ? `Belum ada ${activeTab === 'berita' ? 'berita' : 'event'} tersedia.`
+                            : `Mulai dengan menambahkan ${
+                                  activeTab === 'berita' ? 'berita' : 'event'
+                              } pertama Anda.`}
                     </p>
                 </div>
             </div>
@@ -314,24 +317,29 @@ export default function NewsEventTable({
                                                 )
                                             }
                                             className="text-gray-400 hover:text-blue-600 transition-colors"
+        
                                             title="Lihat"
                                         >
                                             <FontAwesomeIcon icon={faEye} />
                                         </button>
-                                        <button
-                                            onClick={() => onEdit(item)}
-                                            className="text-gray-400 hover:text-blue-600 transition-colors"
-                                            title="Edit"
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
-                                        <button
-                                            onClick={() => onDelete(item)}
-                                            className="text-gray-400 hover:text-red-600 transition-colors"
-                                            title="Hapus"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
+                                        {!readOnly && (
+                                            <>
+                                                <button
+                                                    onClick={() => onEdit(item)}
+                                                    className="text-gray-400 hover:text-blue-600 transition-colors"
+                                                    title="Edit"
+                                                >
+                                                    <FontAwesomeIcon icon={faEdit} />
+                                                </button>
+                                                <button
+                                                    onClick={() => onDelete(item)}
+                                                    className="text-gray-400 hover:text-red-600 transition-colors"
+                                                    title="Hapus"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
@@ -407,24 +415,28 @@ export default function NewsEventTable({
                                             >
                                                 <FontAwesomeIcon icon={faEye} />
                                             </button>
-                                            <button
-                                                onClick={() => onEdit(item)}
-                                                className="text-gray-400 hover:text-blue-600 transition-colors p-1"
-                                                title="Edit"
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faEdit}
-                                                />
-                                            </button>
-                                            <button
-                                                onClick={() => onDelete(item)}
-                                                className="text-gray-400 hover:text-red-600 transition-colors p-1"
-                                                title="Hapus"
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faTrash}
-                                                />
-                                            </button>
+                                            {!readOnly && (
+                                                <>
+                                                    <button
+                                                        onClick={() => onEdit(item)}
+                                                        className="text-gray-400 hover:text-blue-600 transition-colors p-1"
+                                                        title="Edit"
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faEdit}
+                                                        />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => onDelete(item)}
+                                                        className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                                                        title="Hapus"
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faTrash}
+                                                        />
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

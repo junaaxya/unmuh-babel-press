@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import NewsEventTable from '@/components/admin/berita-event/NewsEventTable';
 import NewsEventForm from '@/components/admin/berita-event/NewsEventForm';
 import SearchFilter from '@/components/admin/berita-event/SearchFilter';
@@ -35,6 +36,11 @@ export default function BeritaPage() {
   });
 
   const [notification, setNotification] = useState(null);
+
+  // Ambil role dari sesi untuk menentukan izin
+  const { data: session } = useSession();
+  const role = session?.user?.role || 'VIEWER';
+  const canEdit = role === 'ADMIN' || role === 'EDITOR';
 
   // Fungsi untuk menampilkan notifikasi
   const showNotification = (message, type = 'success') => {
@@ -80,7 +86,8 @@ export default function BeritaPage() {
   }, [fetchBerita]);
 
   // Fungsi untuk membuat berita baru
-    const handleCreate = async (newItemData) => {
+  const handleCreate = async (newItemData) => {
+    if (!canEdit) return; // Viewer tidak boleh membuat berita
     try {
       await createNews(newItemData);
       showNotification(`Berita berhasil disimpan sebagai ${newItemData.status}.`, 'success');
@@ -94,7 +101,7 @@ export default function BeritaPage() {
 
   // Fungsi untuk memperbarui berita
   const handleUpdate = async (updatedItemData) => {
-    if (!editingItem) return;
+    if (!canEdit || !editingItem) return; // Viewer tidak boleh mengedit
     try {
       await updateNews(editingItem.id, updatedItemData);
       showNotification('Berita berhasil diperbarui!', 'success');
@@ -108,7 +115,7 @@ export default function BeritaPage() {
 
   // Fungsi untuk menghapus berita
   const handleDelete = async () => {
-    if (!deletingItem) return;
+    if (!canEdit || !deletingItem) return; // Viewer tidak boleh menghapus
     try {
       await deleteNews(deletingItem.id);
       showNotification('Berita berhasil dihapus!', 'success');
@@ -128,6 +135,7 @@ export default function BeritaPage() {
 
  // Fungsi ini sekarang memanggil endpoint yang sesuai
   const handleStatusChange = async (itemToToggle) => {
+    if (!canEdit) return; // Viewer tidak boleh mengubah status
     setPublishingId(itemToToggle.id);
     const isCurrentlyPublished = itemToToggle.status === 'published';
 
@@ -141,7 +149,7 @@ export default function BeritaPage() {
         await setNewsPublished(itemToToggle.id);
         showNotification('Berita berhasil diterbitkan.', 'success');
       }
-      
+
       // Panggil ulang fetchBerita untuk mendapatkan data terbaru dari server
       // Ini lebih aman daripada mengubah state secara manual
       await fetchBerita();
@@ -160,6 +168,7 @@ export default function BeritaPage() {
   };
 
   const handleOpenFormModal = (item = null) => {
+    if (!canEdit) return;
     setEditingItem(item);
     setIsFormModalOpen(true);
   };
@@ -170,6 +179,7 @@ export default function BeritaPage() {
   };
   
   const handleOpenDeleteModal = (item) => {
+    if (!canEdit) return;
     setDeletingItem(item);
     setIsDeleteModalOpen(true);
   };
@@ -200,13 +210,15 @@ export default function BeritaPage() {
 
       {/* Action Bar */}
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <button
-          onClick={() => handleOpenFormModal()}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          Tambah Berita
-        </button>
+        {canEdit && (
+          <button
+            onClick={() => handleOpenFormModal()}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Tambah Berita
+          </button>
+        )}
       </div>
       
       {/* Search and Filters */}
@@ -237,6 +249,7 @@ export default function BeritaPage() {
           onPageChange={handlePageChange}
           totalItems={pagination.total_items}
           itemsPerPage={pagination.items_per_page}
+          readOnly={!canEdit}
         />
       )}
 

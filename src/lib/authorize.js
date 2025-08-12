@@ -1,33 +1,25 @@
-import { NextResponse } from "next/server";
-import { verifyToken } from "@/lib/authjose";
-import { cookies } from "next/headers";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export async function authorize(request) {
-  let token = null;
-
-  // 1. Coba ambil dari Authorization header
-  const authHeader = request.headers.get("Authorization");
-  if (authHeader?.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
+/**
+ * Authorize request based on NextAuth session role.
+ * @param {Request} _request - kept for backward compatibility
+ * @param {string[]} allowedRoles - roles permitted to proceed
+ * @returns {NextResponse|null} null when authorized, or a NextResponse error
+ */
+export async function authorize(_request, allowedRoles = ['ADMIN', 'EDITOR']) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    // No active session
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // 2. Kalau header kosong, coba ambil dari cookie
-  if (!token) {
-    const cookieStore = await cookies(); // Next.js native cookie reader
-    token = cookieStore.get("token")?.value;
+  const role = session.user?.role;
+  if (!allowedRoles.includes(role)) {
+    // Session exists but role is not allowed (e.g., VIEWER)
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  // 3. Kalau tetap tidak ada token, tolak akses
-  if (!token) {
-    return NextResponse.json({ error: "Token tidak ditemukan" }, { status: 401 });
-  }
-
-  // 4. Verifikasi token
-  try {
-    await verifyToken(token);
-    return null; // sukses
-  } catch (error) {
-    console.error("Token verification failed:", error);
-    return NextResponse.json({ error: "Token tidak valid" }, { status: 401 });
-  }
+  return null; // Authorized
 }

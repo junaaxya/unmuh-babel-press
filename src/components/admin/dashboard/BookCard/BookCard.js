@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye, faBookOpen, faBuilding, faBarcode, faFileLines,faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
-const BookCard = ({ book, onEdit, onDelete, onView,onToggleStatus }) => {
+const BookCard = ({ book, onEdit, onDelete, onView, onToggleStatus, readOnly = false }) => {
     // Gambar default jika gambar dari API tidak ada atau gagal dimuat
     const defaultCover = "/cover1.jpg";
      const isPublished = book.status === 'published';
@@ -77,36 +77,42 @@ const BookCard = ({ book, onEdit, onDelete, onView,onToggleStatus }) => {
                         >
                             <FontAwesomeIcon icon={faEye} />
                         </button>
-                        <button
-                            onClick={() => onEdit(book)}
-                            title="Edit Buku"
-                            className="flex items-center justify-center w-9 h-9 text-sm bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
-                        >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                            onClick={() => onDelete(book)}
-                            title="Hapus Buku"
-                            className="flex items-center justify-center w-9 h-9 text-sm bg-red-100 text-red-800 rounded-full hover:bg-red-200 transition-colors"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                        
+                        {!readOnly && (
+                            <>
+                                <button
+                                    onClick={() => onEdit(book)}
+                                    title="Edit Buku"
+                                    className="flex items-center justify-center w-9 h-9 text-sm bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+                                >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </button>
+                                <button
+                                    onClick={() => onDelete(book)}
+                                    title="Hapus Buku"
+                                    className="flex items-center justify-center w-9 h-9 text-sm bg-red-100 text-red-800 rounded-full hover:bg-red-200 transition-colors"
+                                >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                            </>
+                        )}
+
                     </div>
-                    <div>
-                      <button
-                            onClick={() => onToggleStatus(book)}
-                            title={isPublished ? 'Ubah ke Draf' : 'Publikasikan'}
-                            className={`flex items-center text-xs font-bold px-3 py-1.5 rounded-full transition-colors ${
-                                isPublished 
-                                ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                                : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                            }`}
-                        >
-                            <FontAwesomeIcon icon={isPublished ? faToggleOn : faToggleOff} className="mr-2 h-4 w-4" />
-                            {isPublished ? 'Published' : 'Draft'}
-                        </button>
-                    </div>
+                    {!readOnly && (
+                        <div>
+                          <button
+                                onClick={() => onToggleStatus(book)}
+                                title={isPublished ? 'Ubah ke Draf' : 'Publikasikan'}
+                                className={`flex items-center text-xs font-bold px-3 py-1.5 rounded-full transition-colors ${
+                                    isPublished
+                                    ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                }`}
+                            >
+                                <FontAwesomeIcon icon={isPublished ? faToggleOn : faToggleOff} className="mr-2 h-4 w-4" />
+                                {isPublished ? 'Published' : 'Draft'}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
