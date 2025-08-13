@@ -8,7 +8,7 @@ export default function UsersPage() {
   const canEdit = role === 'ADMIN';
   const [users, setUsers] = useState([]);
   const [meta, setMeta] = useState({ page: 1, limit: 10, total: 0 });
-  const [form, setForm] = useState({ email: '', password: '', role: 'VIEWER' });
+  const [form, setForm] = useState({ email: '', role: 'VIEWER' });
   const [search, setSearch] = useState('');
 
   const load = async (page = meta.page) => {
@@ -26,14 +26,13 @@ export default function UsersPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-    const handleCreate = async () => {
-      await fetch('/api/admin/users', {
+    const handleInvite = async () => {
+      await fetch('/api/admin/invitations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-      setForm({ email: '', password: '', role: 'VIEWER' });
-      load(1);
+      setForm({ email: '', role: 'VIEWER' });
     };
 
     const changeRole = async (id, role) => {
@@ -89,13 +88,6 @@ export default function UsersPage() {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="border p-2 mr-2"
             />
-            <input
-              type="password"
-              placeholder="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="border p-2 mr-2"
-            />
             <select
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
@@ -105,8 +97,8 @@ export default function UsersPage() {
               <option value="EDITOR">EDITOR</option>
               <option value="VIEWER">VIEWER</option>
             </select>
-            <button type="button" onClick={handleCreate} className="px-4 py-2 bg-blue-600 text-white">
-              Add
+            <button type="button" onClick={handleInvite} className="px-4 py-2 bg-blue-600 text-white">
+              Invite
             </button>
           </div>
         )}
