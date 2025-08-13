@@ -27,6 +27,10 @@ export async function POST(request) {
   const filename = `favicon-${Date.now()}${ext}`;
   await fs.writeFile(path.join(uploadDir, filename), buffer);
   const url = `/uploads/${filename}`;
-  await prisma.siteSetting.update({ where: { id: 1 }, data: { faviconUrl: url } });
+  await prisma.siteSetting.upsert({
+    where: { id: 1 },
+    update: { faviconUrl: url },
+    create: { faviconUrl: url },
+  });
   return NextResponse.json({ url });
 }
