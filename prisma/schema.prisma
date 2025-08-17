@@ -193,8 +193,6 @@ model SiteSetting {
   id                Int      @id @default(1)
   siteName          String?
   contactEmail      String?
-  contactPhone      String?
-  address           String?
   facebook          String?
   instagram         String?
   twitter           String?
@@ -213,10 +211,17 @@ model SiteSetting {
   passwordMinLength Int      @default(8)
   sessionMaxAgeHours Int     @default(24)
   revalidateSeconds Int      @default(60)
-  imageDomains      String?
   ga4MeasurementId  String?
   metaPixelId       String?
-  webhookUrl        String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model Invitation {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  token     String   @unique
+  role      Role
+  expires   DateTime
+  createdAt DateTime @default(now())
 }
