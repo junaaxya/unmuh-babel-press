@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -29,34 +30,20 @@ const LoginForm = () => {
     setIsLoading(true);
     setError("");
 
-    try {
-      // Hapus localStorage yang tidak perlu
-      localStorage.removeItem("token");
-      localStorage.removeItem("admin");
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Penting untuk mengirim/menerima cookies
-        body: JSON.stringify(formData),
+      const res = await signIn("credentials", {
+        redirect: false,
+        callbackUrl: '/admin/dashboard',
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Login gagal");
+      if (res?.error) {
+        setError("Login gagal");
+      } else {
+        router.push("/admin/dashboard");
       }
 
-      // Token sudah otomatis tersimpan di cookies oleh browser
-      console.log("Login berhasil, token tersimpan di cookies");
-      router.push("/admin/dashboard");
-      router.refresh();
-    } catch (err) {
-      setError(err.message || "Terjadi kesalahan saat login");
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   // Tampilkan loading state jika belum ter-mount

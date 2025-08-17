@@ -76,6 +76,7 @@ function getDateRange(filter) {
 }
 
 export async function POST(request) {
+  // Only ADMIN or EDITOR may create news; VIEWER receives 403 via authorize()
   const authError = await authorize(request);
   if (authError) return authError;
   try {

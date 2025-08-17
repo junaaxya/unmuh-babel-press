@@ -1,46 +1,6 @@
-🔐 1. Login Admin
-Endpoint: /api/admin/login
-Method: POST
+## Admin Authentication
 
-Request Body:
-{
-"email": "admin@example.com",
-"password": "admin123"
-}
-
-Response:
-
-{
-"message": "Login berhasil",
-"admin": {
-"id": 1,
-"email": "admin@example.com"
-}
-}
-
-🧑‍💼 2. Register Admin
-Endpoint: /api/admin/register
-
-Method: POST
-
-Request Body:
-{
-"email": "admin@example.com",
-"password": "admin123"
-}
-Response:
-
-{
-"message": "Admin berhasil didaftarkan",
-"admin": {
-"id": 1,
-"email": "admin@example.com"
-}
-}
-
-🚪 3. Logout Admin
-Endpoint: /api/admin/logout
-Method: POST
+Authentication is handled by NextAuth using the Credentials provider. Submit a `POST` request to `/api/auth/callback/credentials` with `email` and `password` or use the `/admin/login` page. A successful login creates a session and redirects to `/admin/dashboard`. Use NextAuth's `signOut` to log out.
 
 api-books
 

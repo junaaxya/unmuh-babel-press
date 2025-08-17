@@ -1,43 +1,29 @@
-import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+export async function middleware(req) {
+  const { pathname } = req.nextUrl;
 
-export async function middleware(request) {
-  const { pathname } = request.nextUrl;
-
-  // Skip middleware untuk API routes dan halaman login
-  if (pathname.startsWith("/api") || pathname === "/admin/login") {
+  if (!pathname.startsWith('/admin')) {
     return NextResponse.next();
   }
 
-  // Proteksi route admin
-  if (pathname.startsWith("/admin")) {
-    const token = request.cookies.get("token")?.value;
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-    // Jika tidak ada token, redirect ke login
-    if (!token) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
-    }
+  if (!token) {
+    if (pathname === '/admin/login') return NextResponse.next();
+    const loginUrl = new URL('/admin/login', req.url);
+    loginUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
-    try {
-      // Verifikasi token
-      await jwtVerify(token, JWT_SECRET);
-      return NextResponse.next();
-    } catch (error) {
-      // Jika token tidak valid, hapus cookie dan redirect ke login
-      const response = NextResponse.redirect(new URL("/admin/login", request.url));
-      response.cookies.set("token", "", {
-        expires: new Date(0),
-        path: "/",
-      });
-      return response;
-    }
+  if (pathname === '/admin/login') {
+    return NextResponse.redirect(new URL('/admin/dashboard', req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ['/admin/:path*'],
 };

@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import NewsEventTable from '@/components/admin/berita-event/NewsEventTable';
 import NewsEventForm from '@/components/admin/berita-event/NewsEventForm';
 import SearchFilter from '@/components/admin/berita-event/SearchFilter';
@@ -44,10 +45,15 @@ export default function EventPage() {
         items_per_page: 10,
     });
 
-  const [notification, setNotification] = useState(null);
+    const [notification, setNotification] = useState(null);
 const [publishingId, setPublishingId] = useState(null);
         // State baru untuk menampung error form dari backend
     const [formErrors, setFormErrors] = useState(null);
+
+    // Ambil role dari session untuk menentukan izin
+    const { data: session } = useSession();
+    const role = session?.user?.role || 'VIEWER';
+    const canEdit = role === 'ADMIN' || role === 'EDITOR';
 
     // Fungsi untuk menampilkan notifikasi
    const showNotification = (message, type = 'success') => {
@@ -107,7 +113,8 @@ const [publishingId, setPublishingId] = useState(null);
     }, [searchTerm, categoryFilter, statusFilter, dateFilter, fetchEvents]);
 
     // Fungsi untuk membuat event baru
-  const handleCreate = async (newItemData) => {
+    const handleCreate = async (newItemData) => {
+        if (!canEdit) return; // Viewer tidak boleh membuat event
         setFormErrors(null); // Bersihkan error lama setiap kali submit
         try {
             await createEvent(newItemData);
@@ -126,7 +133,7 @@ const [publishingId, setPublishingId] = useState(null);
 
     // Fungsi untuk memperbarui event
     const handleUpdate = async (updatedItemData) => {
-        if (!editingItem) return;
+        if (!canEdit || !editingItem) return; // Viewer tidak boleh mengedit
         try {
             await updateEvent(editingItem.id, updatedItemData);
             showNotification('Event berhasil diperbarui!', 'success');
@@ -143,7 +150,7 @@ const [publishingId, setPublishingId] = useState(null);
 
     // Fungsi untuk menghapus event
     const handleDelete = async () => {
-        if (!deletingItem) return;
+        if (!canEdit || !deletingItem) return; // Viewer tidak boleh menghapus
         try {
             await deleteEvent(deletingItem.id);
             showNotification('Event berhasil dihapus!', 'success');
@@ -167,6 +174,7 @@ const [publishingId, setPublishingId] = useState(null);
 
      // handler untuk mengubah status publish ---
     const handleStatusChange = async (itemToToggle) => {
+        if (!canEdit) return; // Viewer tidak boleh mengubah status
         setPublishingId(itemToToggle.id);
         const isCurrentlyPublished = itemToToggle.publishStatus === 'published';
 
@@ -192,6 +200,7 @@ const [publishingId, setPublishingId] = useState(null);
     };
 
     const handleOpenFormModal = (item = null) => {
+        if (!canEdit) return;
         setEditingItem(item);
         setIsFormModalOpen(true);
     };
@@ -202,6 +211,7 @@ const [publishingId, setPublishingId] = useState(null);
     };
 
     const handleOpenDeleteModal = (item) => {
+        if (!canEdit) return;
         setDeletingItem(item);
         setIsDeleteModalOpen(true);
     };
@@ -240,16 +250,18 @@ const [publishingId, setPublishingId] = useState(null);
 
             {/* Action Bar */}
             <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <button
-                    onClick={() => {
-                        setEditingItem(null);
-                        setIsFormModalOpen(true);
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-                >
-                    <FontAwesomeIcon icon={faPlus} />
-                    Tambah Event
-                </button>
+                {canEdit && (
+                    <button
+                        onClick={() => {
+                            setEditingItem(null);
+                            setIsFormModalOpen(true);
+                        }}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                        Tambah Event
+                    </button>
+                )}
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>Total: {pagination.total_items} event</span>
                     {(searchTerm ||
@@ -298,6 +310,7 @@ const [publishingId, setPublishingId] = useState(null);
                     onPageChange={handlePageChange}
                     totalItems={pagination.total_items}
                     itemsPerPage={pagination.items_per_page}
+                    readOnly={!canEdit}
                 />
             )}
 

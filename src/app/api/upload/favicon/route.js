@@ -1,0 +1,32 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
+import { PrismaClient } from '@prisma/client';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+const prisma = new PrismaClient();
+
+export async function POST(request) {
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const form = await request.formData();
+  const file = form.get('file');
+  if (!file || !file.name) {
+    return NextResponse.json({ error: 'File required' }, { status: 400 });
+  }
+  const ext = path.extname(file.name).toLowerCase();
+  if (!['.ico', '.png'].includes(ext)) {
+    return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
+  }
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+  await fs.mkdir(uploadDir, { recursive: true });
+  const filename = `favicon-${Date.now()}${ext}`;
+  await fs.writeFile(path.join(uploadDir, filename), buffer);
+  const url = `/uploads/${filename}`;
+  await prisma.siteSetting.update({ where: { id: 1 }, data: { faviconUrl: url } });
+  return NextResponse.json({ url });
+}

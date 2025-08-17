@@ -274,3 +274,15 @@ export const uploadCoverImage = (file, folder = 'books') => {
     formData.append('folder', folder);
     return apiRequest('/api/upload-signature', 'POST', formData, true);
 };
+
+// ==============================
+// Settings API
+// ==============================
+
+export const getSettings = () => {
+    return apiRequest('/api/settings');
+};
+
+export const updateSettings = (payload) => {
+    return apiRequest('/api/settings', 'PUT', payload);
+};
