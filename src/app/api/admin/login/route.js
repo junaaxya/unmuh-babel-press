@@ -5,11 +5,17 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { serialize } from "cookie";
 
-if (!process.env.JWT_SECRET) {
-  throw new Error("JWT_SECRET tidak terdefinisi di environment variables");
-}
-
 export async function POST(req) {
+  // Pindahkan pengecekan ke dalam fungsi ini
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    console.error("JWT_SECRET tidak terdefinisi di environment variables");
+    return NextResponse.json(
+      { error: "Konfigurasi server tidak lengkap." },
+      { status: 500 }
+    );
+  }
+
   try {
     const { email, password } = await req.json();
 
@@ -39,8 +45,11 @@ export async function POST(req) {
     }
 
     // Generate token JWT menggunakan jose
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const token = await new SignJWT({ id: admin.id, email: admin.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("1d").sign(secret);
+    const secret = new TextEncoder().encode(jwtSecret); // Gunakan variabel yang sudah dicek
+    const token = await new SignJWT({ id: admin.id, email: admin.email })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("1d")
+      .sign(secret);
 
     const serialized = serialize("token", token, {
       httpOnly: true,
