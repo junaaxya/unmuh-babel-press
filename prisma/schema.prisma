@@ -1,7 +1,8 @@
 
-generator client {
-  provider = "prisma-client-js"
 
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,54 +11,20 @@ datasource db {
 }
 
 
-model admin {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique(map: "Admin_email_key")
-
-  password  String
-  createdAt DateTime @default(now())
-}
-
-
-model berita {
-  id           Int      @id @default(autoincrement())
-  judul        String
-  isi          String   @db.Text
-  thumbnailUrl String?
-  createdAt    DateTime @default(now())
-}
-
-model listbuku {
-
- id Int @id @default(autoincrement())
-Kode_Buku String @unique
-ISBN String @unique
-Penerbit String
-Penulis String
-Editor String
-Ukuran String
-Halaman Int
-image String? // URL gambar sampul
-kategori String
-sinopsis String @db.Text
-createdAt DateTime @default(now())
-}
-
 model News {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(200)
-  slug      String   @unique @db.VarChar(255)
-  excerpt   String   @db.Text
-  content   String   @db.LongText
-  image     String?  @db.VarChar(500)
-  date      DateTime @db.Date
-  category  NewsCategory @default(Berita)
-  status    Status       @default(draft)
-  author    String   @db.VarChar(100)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  published_at DateTime?  @db.Timestamp(6)
-
+  id           Int          @id @default(autoincrement())
+  title        String       @db.VarChar(200)
+  slug         String       @unique @db.VarChar(255)
+  excerpt      String       @db.Text
+  content      String       @db.LongText
+  image        String?      @db.VarChar(500)
+  date         DateTime     @db.Date
+  category     NewsCategory @default(Berita)
+  status       Status       @default(draft)
+  author       String       @db.VarChar(100)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  published_at DateTime?    @db.Timestamp(6)
 }
 
 enum NewsCategory {
@@ -68,28 +35,28 @@ enum NewsCategory {
 }
 
 model Event {
-  id                       Int      @id @default(autoincrement())
-  title                    String   @db.VarChar(200)
-  slug                     String   @unique @db.VarChar(255)
-  excerpt                  String   @db.Text
-  content                  String   @db.LongText
-  image                    String?  @db.VarChar(500)
-  date                     DateTime @db.Date
-  time                     String   @db.VarChar(50)
-  location                 String   @db.VarChar(200)
-  category                 EventCategory @default(Event)
-  status                   EventStatus   @default(Upcoming)
-  organizer                String   @db.VarChar(100)
-  registrationEnabled      Boolean  @default(false)
-  registrationTitle        String?  @db.VarChar(100)
-  registrationDescription  String?  @db.Text
-  registrationButtonText   String?  @db.VarChar(50)
-  registrationLink         String?  @db.VarChar(500)
-  registrationDeadline     DateTime?
-  published_at DateTime?  @db.Timestamp(6)
-  publishStatus            Status        @default(draft) @map("publish_status")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id                      Int           @id @default(autoincrement())
+  title                   String        @db.VarChar(200)
+  slug                    String        @unique @db.VarChar(255)
+  excerpt                 String        @db.Text
+  content                 String        @db.LongText
+  image                   String?       @db.VarChar(500)
+  date                    DateTime      @db.Date
+  time                    String        @db.VarChar(50)
+  location                String        @db.VarChar(200)
+  category                EventCategory @default(Event)
+  status                  EventStatus   @default(Upcoming)
+  organizer               String        @db.VarChar(100)
+  registrationEnabled     Boolean       @default(false)
+  registrationTitle       String?       @db.VarChar(100)
+  registrationDescription String?       @db.Text
+  registrationButtonText  String?       @db.VarChar(50)
+  registrationLink        String?       @db.VarChar(500)
+  registrationDeadline    DateTime?
+  published_at            DateTime?     @db.Timestamp(6)
+  publishStatus           Status        @default(draft) @map("publish_status")
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
 }
 
 enum EventCategory {
@@ -108,23 +75,22 @@ enum EventStatus {
 }
 
 model Book {
-  id           BigInt     @id @default(autoincrement())
-  kode_buku    String?    @db.VarChar(50)
-  title        String     @db.VarChar(255)
-  isbn         String?    @db.VarChar(50)
-  penerbit     String?    @db.VarChar(255)
-  penulis      String?    @db.Text
-  editor       String?    @db.VarChar(255)
-  ukuran       String?    @db.VarChar(50)
-  halaman      Int?    
-  image        String?    @db.VarChar(500) // URL Cloudinary
-  kategori     String?    @db.VarChar(100)
-  sinopsis     String?    @db.Text
-  status       Status     @default(draft)
-  published_at DateTime?  @db.Timestamp(6)
-  created_at   DateTime   @default(now()) @db.Timestamp(6)
-  updated_at   DateTime   @updatedAt
-
+  id           BigInt    @id @default(autoincrement())
+  kode_buku    String?   @db.VarChar(50)
+  title        String    @db.VarChar(255)
+  isbn         String?   @db.VarChar(50)
+  penerbit     String?   @db.VarChar(255)
+  penulis      String?   @db.Text
+  editor       String?   @db.VarChar(255)
+  ukuran       String?   @db.VarChar(50)
+  halaman      Int?
+  image        String?   @db.VarChar(500)
+  kategori     String?   @db.VarChar(100)
+  sinopsis     String?   @db.Text
+  status       Status    @default(draft)
+  published_at DateTime? @db.Timestamp(6)
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  updated_at   DateTime  @updatedAt
 }
 
 enum Status {
@@ -132,7 +98,7 @@ enum Status {
   published
 }
 
-// --- NextAuth models and site settings ---
+// --- MODEL-MODEL UNTUK NEXT-AUTH & PENGATURAN ---
 
 enum Role {
   ADMIN
@@ -141,18 +107,17 @@ enum Role {
 }
 
 model User {
-  id              String   @id @default(cuid())
-  name            String?
-  email           String?  @unique
-  emailVerified   DateTime?
-  password        String
-  image           String?
-  role            Role     @default(VIEWER)
-  twoFactorSecret String?
-  accounts        Account[]
-  sessions        Session[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  role          Role      @default(VIEWER)
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Account {
@@ -190,33 +155,19 @@ model VerificationToken {
 }
 
 model SiteSetting {
-  id                Int      @id @default(1)
-  siteName          String?
-  contactEmail      String?
-  contactPhone      String?
-  address           String?
-  facebook          String?
-  instagram         String?
-  twitter           String?
-  faviconUrl        String?
-  logoUrl           String?
-  defaultTitle      String?
+  id                 Int      @id @default(1)
+  siteName           String?
+  contactEmail       String?
+  contactPhone       String?
+  address            String?
+  facebook           String?
+  instagram          String?
+  twitter            String?
+  faviconUrl         String?
+  logoUrl            String?
+  defaultTitle       String?
   defaultDescription String?
-  ogImageUrl        String?
-  smtpHost          String?
-  smtpPort          Int?
-  smtpUser          String?
-  smtpPass          String?
-  fromName          String?
-  fromEmail         String?
-  require2FA        Boolean  @default(false)
-  passwordMinLength Int      @default(8)
-  sessionMaxAgeHours Int     @default(24)
-  revalidateSeconds Int      @default(60)
-  imageDomains      String?
-  ga4MeasurementId  String?
-  metaPixelId       String?
-  webhookUrl        String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  ogImageUrl         String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

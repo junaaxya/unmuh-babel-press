@@ -1,46 +1,4 @@
 -- CreateTable
-CREATE TABLE `admin` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `Admin_email_key`(`email`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `berita` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `judul` VARCHAR(191) NOT NULL,
-    `isi` TEXT NOT NULL,
-    `thumbnailUrl` VARCHAR(191) NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `listbuku` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `Kode_Buku` VARCHAR(191) NOT NULL,
-    `ISBN` VARCHAR(191) NOT NULL,
-    `Penerbit` VARCHAR(191) NOT NULL,
-    `Penulis` VARCHAR(191) NOT NULL,
-    `Editor` VARCHAR(191) NOT NULL,
-    `Ukuran` VARCHAR(191) NOT NULL,
-    `Halaman` INTEGER NOT NULL,
-    `image` VARCHAR(191) NULL,
-    `kategori` VARCHAR(191) NOT NULL,
-    `sinopsis` TEXT NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `listbuku_Kode_Buku_key`(`Kode_Buku`),
-    UNIQUE INDEX `listbuku_ISBN_key`(`ISBN`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `News` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(200) NOT NULL,
@@ -120,7 +78,6 @@ CREATE TABLE `User` (
     `password` VARCHAR(191) NOT NULL,
     `image` VARCHAR(191) NULL,
     `role` ENUM('ADMIN', 'EDITOR', 'VIEWER') NOT NULL DEFAULT 'VIEWER',
-    `twoFactorSecret` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -183,20 +140,6 @@ CREATE TABLE `SiteSetting` (
     `defaultTitle` VARCHAR(191) NULL,
     `defaultDescription` VARCHAR(191) NULL,
     `ogImageUrl` VARCHAR(191) NULL,
-    `smtpHost` VARCHAR(191) NULL,
-    `smtpPort` INTEGER NULL,
-    `smtpUser` VARCHAR(191) NULL,
-    `smtpPass` VARCHAR(191) NULL,
-    `fromName` VARCHAR(191) NULL,
-    `fromEmail` VARCHAR(191) NULL,
-    `require2FA` BOOLEAN NOT NULL DEFAULT false,
-    `passwordMinLength` INTEGER NOT NULL DEFAULT 8,
-    `sessionMaxAgeHours` INTEGER NOT NULL DEFAULT 24,
-    `revalidateSeconds` INTEGER NOT NULL DEFAULT 60,
-    `imageDomains` VARCHAR(191) NULL,
-    `ga4MeasurementId` VARCHAR(191) NULL,
-    `metaPixelId` VARCHAR(191) NULL,
-    `webhookUrl` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -208,4 +151,3 @@ ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`
 
 -- AddForeignKey
 ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-

@@ -1,39 +1,63 @@
-# Production-grade Dockerfile for Next.js 15 + Prisma (staging/prod)
-# Uses Debian bookworm slim for Prisma binary compatibility.
-FROM node:20-bookworm-slim AS builder
+# Dockerfile
 
+# [Stage 1: Builder]
+# Tahap ini fokus untuk meng-install dependencies dan membangun aplikasi Next.js
+# Menggunakan base image yang lebih lengkap untuk build
+FROM node:20-bookworm AS builder
 WORKDIR /app
 
-# Install dependencies
+# Install openssl untuk Prisma
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+# --- Menerima variabel dari docker-compose saat build ---
+ARG NEXTAUTH_SECRET
+ARG NEXTAUTH_URL
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+
+# Install dependencies dengan cache
 COPY package*.json ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
-# Copy source
-COPY . .
-
-# Build artifacts
-ENV NEXT_TELEMETRY_DISABLED=1
+# Generate Prisma Client
+COPY prisma ./prisma
 RUN npx prisma generate
+
+# Build aplikasi Next.js
+# Menyalin sisa kode setelah install dependencies adalah praktik terbaik
+COPY . .
 RUN npm run build
 
-# ------------ Runtime image ------------
+
+# ---------- [Stage 2: Runner] ----------
+# Tahap ini fokus untuk menjalankan aplikasi yang sudah di-build
+# Menggunakan base image yang lebih kecil dan aman
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
-
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 
-# Copy standalone build & required assets
+# Install openssl untuk Prisma Client di runtime
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+# Salin folder 'standalone' yang dibuat oleh `output: 'standalone'`
 COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+
+# Salin folder 'public' dan 'static' yang dibutuhkan oleh server standalone
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+
+# Salin entrypoint script untuk migrasi
+COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
+# Salin folder prisma agar migrasi bisa dijalankan
 COPY --from=builder /app/prisma ./prisma
+# Salin package.json agar npx bisa menemukan prisma
+COPY --from=builder /app/package.json ./package.json
 
-# Expose Next.js default port
-EXPOSE 3000
+RUN chmod +x ./entrypoint.sh
 
-# Health endpoint recommended at /api/health
-# HEALTHCHECK --interval=30s --timeout=3s --retries=5 CMD curl -fsS http://localhost:3000/api/health || exit 1
+# Atur entrypoint untuk menjalankan migrasi sebelum start
+ENTRYPOINT ["./entrypoint.sh"]
 
-# Start the Node server produced by Next.js standalone
+EXPOSE 4000
+# PERUBAHAN: Jalankan server standalone, bukan `next start`
 CMD ["node", "server.js"]

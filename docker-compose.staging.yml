@@ -1,28 +1,22 @@
 name: unmuhbabelpress-staging
 
 networks:
-    staging:
+    staging: {}
 
 volumes:
-    mysql_data_staging:
+    mysql_data_staging: {}
 
 services:
     mysql:
         image: mysql:8.4
         container_name: ubp-staging-mysql
+        command: ['--skip-log-bin']
         env_file:
             - .env.staging
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-            MYSQL_DATABASE: ${DB_NAME}
-            MYSQL_USER: ${DB_USER}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
         ports:
-            - '127.0.0.1:3307:3306' # local-only
+            - '3306:3306'
         volumes:
             - mysql_data_staging:/var/lib/mysql
-        networks: [staging]
-        restart: unless-stopped
         healthcheck:
             test:
                 [
@@ -30,47 +24,58 @@ services:
                     'mysqladmin',
                     'ping',
                     '-h',
-                    'localhost',
-                    '--user=root',
-                    '--password=${DB_ROOT_PASSWORD}',
+                    '127.0.0.1',
+                    '-u',
+                    'root',
+                    '-p${MYSQL_ROOT_PASSWORD}',
                 ]
-            interval: 10s
+            interval: 5s
             timeout: 3s
-            retries: 10
-
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: ubp-staging-app
-        env_file:
-            - .env.staging
-        environment:
-            NODE_ENV: production
-        depends_on:
-            mysql:
-                condition: service_healthy
-        # Bind to localhost only; Nginx will reverse-proxy
-        ports:
-            - '127.0.0.1:4000:3000'
+            retries: 30
         networks: [staging]
         restart: unless-stopped
 
-    # Optional: phpMyAdmin (bound to localhost for security)
     phpmyadmin:
-        image: phpmyadmin:5-apache
+        image: phpmyadmin:5
         container_name: ubp-staging-pma
         env_file:
             - .env.staging
         environment:
             PMA_HOST: mysql
             PMA_USER: ${PMA_USER:-root}
-            PMA_PASSWORD: ${PMA_PASSWORD:-${DB_ROOT_PASSWORD}}
+            PMA_PASSWORD: ${PMA_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
             PMA_ARBITRARY: 0
         ports:
-            - '127.0.0.1:8081:80'
+            # PERUBAHAN: Dihapus '127.0.0.1:' agar bisa diakses dari luar localhost
+            - '8081:80'
         depends_on:
             mysql:
                 condition: service_healthy
         networks: [staging]
         restart: unless-stopped
+
+    app:
+        container_name: ubp-staging-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+                NEXTAUTH_URL: http://localhost:4000
+        env_file:
+            - .env.staging
+        environment:
+            NODE_ENV: production
+            PORT: 4000
+            HOST: 0.0.0.0
+            # Pastikan ini sesuai dengan env staging Anda
+            NEXTAUTH_URL: http://localhost:4000
+
+        depends_on:
+            mysql:
+                condition: service_healthy
+        ports:
+            - '4000:4000'
+        networks: [staging]
+        restart: unless-stopped
+        # DIHAPUS: 'command' yang lama dihapus. Proses start diatur oleh Dockerfile & entrypoint.sh
