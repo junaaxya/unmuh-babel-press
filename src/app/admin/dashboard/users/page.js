@@ -11,6 +11,7 @@ export default function UsersPage() {
   const [invites, setInvites] = useState([]);
   const [form, setForm] = useState({ email: "", role: "VIEWER" });
 
+
   const loadUsers = async () => {
     const res = await fetch("/api/admin/users");
     if (res.ok) {
@@ -33,6 +34,7 @@ export default function UsersPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   const handleInvite = async () => {
     await fetch("/api/admin/invitations", {
       method: "POST",
@@ -42,6 +44,7 @@ export default function UsersPage() {
     setForm({ email: "", role: "VIEWER" });
     loadInvites();
   };
+
 
   const changeRole = async (id, role) => {
     await fetch("/api/admin/users", {
@@ -80,10 +83,12 @@ export default function UsersPage() {
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             className="border p-2"
           />
+
           <select
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
             className="border p-2"
+
           >
             <option value="ADMIN">ADMIN</option>
             <option value="EDITOR">EDITOR</option>

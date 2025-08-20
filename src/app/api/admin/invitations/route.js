@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/db';
@@ -59,6 +60,7 @@ export async function POST(request) {
       to: normalizedEmail,
       subject: 'You are invited',
       text: `Please complete your account: ${link}`,
+
     });
   }
 

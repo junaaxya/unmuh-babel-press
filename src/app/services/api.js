@@ -96,6 +96,13 @@ export const updateHeroText = async (payload) => {
     return await apiRequest('/api/beranda/hero-text', 'PUT', payload);
 };
 
+// POST: Upload favicon for site settings
+export const uploadFavicon = async (file) => {
+    const form = new FormData();
+    form.append('file', file);
+    return await apiRequest('/api/upload/favicon', 'POST', form, true);
+};
+
 // ====================================================================
 // ||                TAMBAHAN UNTUK BERITA & EVENT                   ||
 // ====================================================================

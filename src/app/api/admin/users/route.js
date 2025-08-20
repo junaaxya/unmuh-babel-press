@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+
 const prisma = new PrismaClient();
 
 export async function GET(request) {
@@ -25,7 +26,9 @@ export async function GET(request) {
   return NextResponse.json({ data, meta: { total, page, limit } });
 }
 
+
 // User creation is handled via invitation flow
+
 
 export async function PUT(request) {
   const session = await getServerSession(authOptions);

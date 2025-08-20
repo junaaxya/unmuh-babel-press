@@ -59,7 +59,16 @@ export async function PUT(request, context) {
         );
 
     try {
-        const body = await request.json();
+        let body = await request.json();
+
+        if (!body.registrationEnabled) {
+            body.registrationTitle = '';
+            body.registrationDescription = '';
+            body.registrationButtonText = '';
+            body.registrationLink = null;
+            body.registrationDeadline = null;
+        }
+
         const parsed = eventSchema.safeParse(body);
         if (!parsed.success) {
             return Response.json(

@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { getSettings, updateSettings } from "@/app/services/api";
@@ -25,6 +26,7 @@ const settingGroups = {
     label: "Security",
     fields: ["require2FA", "passwordMinLength", "sessionMaxAgeHours"],
   },
+
 };
 
 export default function SettingsPage() {
@@ -36,6 +38,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState('general');
 
   useEffect(() => {
     (async () => {
@@ -47,6 +50,7 @@ export default function SettingsPage() {
     })();
   }, []);
 
+
   const handleChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
@@ -57,6 +61,7 @@ export default function SettingsPage() {
     await updateSettings(settings);
     setSaving(false);
   };
+
 
   if (loading) return <div>Loading settings…</div>;
   if (!settings) return <div>No settings found.</div>;
@@ -109,6 +114,7 @@ export default function SettingsPage() {
         ))}
       </section>
     </main>
+
   );
 }
 
