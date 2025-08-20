@@ -13,8 +13,9 @@ import {
 // --- Komponen Halaman Utama (Server Component) ---
 // Ini adalah komponen default yang diekspor. Ia berjalan di server.
 export default async function BookDetailPage({ params }) {
+    const { id } = await params;
     try {
-        const response = await getBookById(params.id);
+        const response = await getBookById(id);
         const book = response.data;
 
         if (!book || book.status !== 'published') {
@@ -73,7 +74,8 @@ export default async function BookDetailPage({ params }) {
 // Fungsi ini sekarang bisa diekspor karena file ini adalah Server Component.
 export async function generateMetadata({ params }) {
     try {
-        const response = await getBookById(params.id);
+        const { id } = await params;
+        const response = await getBookById(id);
         const book = response.data;
 
         if (!book || book.status !== 'published') {

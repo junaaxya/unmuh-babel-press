@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AcceptInvitationPage({ params }) {
   const router = useRouter();
-  const { token } = params;
+  const { token } = use(params);
   const [form, setForm] = useState({ name: "", password: "" });
   const [error, setError] = useState(null);
 
