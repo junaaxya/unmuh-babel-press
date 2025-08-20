@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { hashPassword } from '@/lib/hash';
-
 const prisma = new PrismaClient();
 
 export async function GET(request) {
@@ -27,19 +25,7 @@ export async function GET(request) {
   return NextResponse.json({ data, meta: { total, page, limit } });
 }
 
-export async function POST(request) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  if (session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
-  const { email, password, role } = await request.json();
-  const hashed = await hashPassword(password);
-  const user = await prisma.user.create({
-    data: { email: email.trim().toLowerCase(), password: hashed, role },
-  });
-  return NextResponse.json({ id: user.id });
-}
+// User creation is handled via invitation flow
 
 export async function PUT(request) {
   const session = await getServerSession(authOptions);

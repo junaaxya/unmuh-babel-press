@@ -1,121 +1,117 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { getSettings, updateSettings } from '@/app/services/api';
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { getSettings, updateSettings } from "@/app/services/api";
 
-const stringFields = [
-  'siteName','contactEmail','contactPhone','address','facebook','instagram','twitter','faviconUrl','logoUrl','defaultTitle','defaultDescription','ogImageUrl','smtpHost','smtpUser','smtpPass','fromName','fromEmail','imageDomains','ga4MeasurementId','metaPixelId','webhookUrl'
-];
-const numberFields = ['smtpPort','passwordMinLength','sessionMaxAgeHours','revalidateSeconds'];
-const booleanFields = ['require2FA'];
-const labels = {
-  siteName: 'Site Name',
-  contactEmail: 'Contact Email',
-  contactPhone: 'Contact Phone',
-  address: 'Address',
-  facebook: 'Facebook',
-  instagram: 'Instagram',
-  twitter: 'Twitter',
-  faviconUrl: 'Favicon URL',
-  logoUrl: 'Logo URL',
-  defaultTitle: 'Default Title',
-  defaultDescription: 'Default Description',
-  ogImageUrl: 'OG Image URL',
-  smtpHost: 'SMTP Host',
-  smtpUser: 'SMTP User',
-  smtpPass: 'SMTP Pass',
-  fromName: 'From Name',
-  fromEmail: 'From Email',
-  imageDomains: 'Image Domains',
-  ga4MeasurementId: 'GA4 Measurement ID',
-  metaPixelId: 'Meta Pixel ID',
-  webhookUrl: 'Webhook URL',
-  smtpPort: 'SMTP Port',
-  passwordMinLength: 'Password Min Length',
-  sessionMaxAgeHours: 'Session Max Age (hours)',
-  revalidateSeconds: 'Revalidate Seconds',
-  require2FA: 'Require 2FA',
+const settingGroups = {
+  general: {
+    label: "General",
+    fields: ["siteName", "logoUrl", "contactEmail", "fromName", "fromEmail"],
+  },
+  seo: {
+    label: "SEO & Social",
+    fields: [
+      "defaultTitle",
+      "defaultDescription",
+      "ogImageUrl",
+      "facebook",
+      "instagram",
+      "twitter",
+      "ga4MeasurementId",
+      "metaPixelId",
+    ],
+  },
+  security: {
+    label: "Security",
+    fields: ["require2FA", "passwordMinLength", "sessionMaxAgeHours"],
+  },
+  technical: {
+    label: "Technical",
+    fields: ["smtpHost", "smtpPort", "smtpUser", "smtpPass", "revalidateSeconds"],
+  },
 };
 
 export default function SettingsPage() {
   const { data: session } = useSession();
-  const role = session?.user?.role || 'VIEWER';
-  const canEdit = role === 'ADMIN' || role === 'EDITOR';
+  const role = session?.user?.role ?? "VIEWER";
+  const canEdit = role === "ADMIN" || role === "EDITOR";
+
+  const [activeTab, setActiveTab] = useState("general");
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    getSettings()
-      .then(data => { setSettings(data); setLoading(false); })
-      .catch(() => setLoading(false));
+    (async () => {
+      setLoading(true);
+      const data = await getSettings();
+      setSettings(data);
+      setLoading(false);
+    })();
   }, []);
 
-    const handleChange = (e) => {
-      const { name, value, type, checked } = e.target;
-      setSettings({
-        ...settings,
-        [name]: type === 'number' ? Number(value) : type === 'checkbox' ? checked : value,
-      });
-    };
+  const handleChange = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSave = async () => {
+    if (!canEdit) return;
     setSaving(true);
     await updateSettings(settings);
     setSaving(false);
   };
 
-  if (loading || !settings) return <div>Loading...</div>;
+  if (loading) return <div>Loading settings…</div>;
+  if (!settings) return <div>No settings found.</div>;
 
-    return (
-      <div className="p-4 space-y-4">
-        <h1 className="text-2xl">
-          Site Settings { !canEdit && <span className="ml-2 text-sm text-gray-500">(Read-only)</span> }
+  const fields = settingGroups[activeTab].fields;
+
+  return (
+    <main className="p-4 space-y-4">
+      <header className="flex items-center justify-between">
+        <h1>
+          Settings {!canEdit && <span className="ml-2 text-sm">(Read-only)</span>}
         </h1>
-        {stringFields.map((f) => (
-          <div key={f}>
-            <label className="block text-sm">{labels[f]}</label>
+        {canEdit && (
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-4 py-2 bg-blue-600 text-white"
+          >
+            {saving ? "Saving…" : "Save Settings"}
+          </button>
+        )}
+      </header>
+
+      <nav className="flex space-x-2 border-b">
+        {Object.entries(settingGroups).map(([key, g]) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`px-3 py-2 ${
+              activeTab === key ? "border-b-2 border-blue-600" : ""
+            }`}
+          >
+            {g.label}
+          </button>
+        ))}
+      </nav>
+
+      <section className="space-y-4">
+        {fields.map((f) => (
+          <div key={f} className="flex flex-col">
+            <label className="text-sm mb-1">{f}</label>
             <input
-              name={f}
-              value={settings[f] || ''}
-              onChange={handleChange}
-              className="border p-2 w-full"
+              type={f.toLowerCase().includes("password") ? "password" : "text"}
+              value={settings[f] ?? ""}
+              onChange={(e) => handleChange(f, e.target.value)}
               readOnly={!canEdit}
+              className="border p-2"
             />
           </div>
         ))}
-        {numberFields.map((f) => (
-          <div key={f}>
-            <label className="block text-sm">{labels[f]}</label>
-            <input
-              type="number"
-              name={f}
-              value={settings[f] ?? ''}
-              onChange={handleChange}
-              className="border p-2 w-full"
-              readOnly={!canEdit}
-            />
-          </div>
-        ))}
-        {booleanFields.map((f) => (
-          <div key={f} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name={f}
-              checked={settings[f] || false}
-              onChange={handleChange}
-              disabled={!canEdit}
-            />
-            <label className="text-sm" htmlFor={f}>{labels[f]}</label>
-          </div>
-        ))}
-        <button
-          onClick={handleSave}
-          className="px-4 py-2 bg-blue-600 text-white"
-          disabled={!canEdit || saving}
-        >
-          {saving ? 'Saving...' : 'Save'}
-        </button>
-      </div>
-    );
-  }
+      </section>
+    </main>
+  );
+}
+
