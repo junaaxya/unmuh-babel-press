@@ -25,10 +25,6 @@ const settingGroups = {
     label: "Security",
     fields: ["require2FA", "passwordMinLength", "sessionMaxAgeHours"],
   },
-  technical: {
-    label: "Technical",
-    fields: ["smtpHost", "smtpPort", "smtpUser", "smtpPass", "revalidateSeconds"],
-  },
 };
 
 export default function SettingsPage() {
@@ -45,7 +41,8 @@ export default function SettingsPage() {
     (async () => {
       setLoading(true);
       const data = await getSettings();
-      setSettings(data);
+      const { id, createdAt, updatedAt, ...editable } = data || {};
+      setSettings(editable);
       setLoading(false);
     })();
   }, []);

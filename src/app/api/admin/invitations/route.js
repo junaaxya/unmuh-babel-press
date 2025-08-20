@@ -38,20 +38,24 @@ export async function POST(request) {
   await prisma.user.create({ data: { email: normalizedEmail, role, status: 'INVITED' } });
   await prisma.invitation.create({ data: { email: normalizedEmail, token, expires } });
 
-  const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
-  if (settings?.smtpHost && settings?.smtpPort && settings?.smtpUser && settings?.smtpPass) {
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (host && port && user && pass) {
     const transporter = nodemailer.createTransport({
-      host: settings.smtpHost,
-      port: settings.smtpPort,
-      auth: {
-        user: settings.smtpUser,
-        pass: settings.smtpPass,
-      },
+      host,
+      port: Number(port),
+      auth: { user, pass },
     });
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXTAUTH_URL ||
+      'http://localhost:3000';
     const link = `${baseUrl}/accept-invitation/${token}`;
     await transporter.sendMail({
-      from: settings.fromEmail || settings.smtpUser,
+      from: process.env.EMAIL_FROM || user,
       to: normalizedEmail,
       subject: 'You are invited',
       text: `Please complete your account: ${link}`,
