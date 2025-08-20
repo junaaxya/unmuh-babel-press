@@ -27,6 +27,9 @@ export async function GET(request) {
 }
 
 
+// User creation is handled via invitation flow
+
+
 export async function PUT(request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

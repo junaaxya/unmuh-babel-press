@@ -8,7 +8,10 @@
         "start": "next start",
         "lint": "next lint",
         "postbuild": "next-sitemap",
-        "test": "echo \"No tests yet\" && exit 0"
+        "test": "echo \"No tests yet\" && exit 0",
+        "predev": "prisma generate",
+        "prebuild": "prisma generate",
+        "prestart": "prisma generate"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.7.2",

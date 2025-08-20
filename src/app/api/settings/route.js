@@ -13,10 +13,20 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
-  return NextResponse.json(settings || {});
+  if (!settings) return NextResponse.json({});
+
+  const {
+    smtpHost,
+    smtpPort,
+    smtpUser,
+    smtpPass,
+    revalidateSeconds,
+    ...safeSettings
+  } = settings;
+  return NextResponse.json(safeSettings);
 }
 
-export async function PUT(request) {
+export async function POST(request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -24,7 +34,18 @@ export async function PUT(request) {
   if (!['ADMIN', 'EDITOR'].includes(session.user.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
-  const data = await request.json();
+  const payload = await request.json();
+  const {
+    id,
+    createdAt,
+    updatedAt,
+    smtpHost,
+    smtpPort,
+    smtpUser,
+    smtpPass,
+    revalidateSeconds,
+    ...data
+  } = payload;
   const updated = await prisma.siteSetting.update({
     where: { id: 1 },
     data,

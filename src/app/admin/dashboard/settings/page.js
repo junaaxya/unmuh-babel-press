@@ -1,164 +1,120 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { getSettings, updateSettings, uploadFavicon } from '@/app/services/api';
 
-const tabs = [
-  { key: 'general', label: 'Umum' },
-  { key: 'seo', label: 'SEO & Media Sosial' },
-  { key: 'security', label: 'Keamanan' },
-  { key: 'technical', label: 'Teknis' },
-];
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { getSettings, updateSettings } from "@/app/services/api";
 
-const fields = {
-  general: ['siteName', 'contactEmail', 'faviconUrl', 'logoUrl'],
-  seo: ['defaultTitle', 'defaultDescription', 'ogImageUrl', 'facebook', 'instagram', 'twitter', 'ga4MeasurementId', 'metaPixelId'],
-  security: ['require2FA', 'passwordMinLength', 'sessionMaxAgeHours'],
-  technical: ['smtpHost', 'smtpPort', 'smtpUser', 'smtpPass', 'fromName', 'fromEmail', 'revalidateSeconds'],
-};
+const settingGroups = {
+  general: {
+    label: "General",
+    fields: ["siteName", "logoUrl", "contactEmail", "fromName", "fromEmail"],
+  },
+  seo: {
+    label: "SEO & Social",
+    fields: [
+      "defaultTitle",
+      "defaultDescription",
+      "ogImageUrl",
+      "facebook",
+      "instagram",
+      "twitter",
+      "ga4MeasurementId",
+      "metaPixelId",
+    ],
+  },
+  security: {
+    label: "Security",
+    fields: ["require2FA", "passwordMinLength", "sessionMaxAgeHours"],
+  },
 
-const labels = {
-  siteName: 'Site Name',
-  contactEmail: 'Contact Email',
-  faviconUrl: 'Favicon',
-  logoUrl: 'Logo URL',
-  defaultTitle: 'Default Title',
-  defaultDescription: 'Default Description',
-  ogImageUrl: 'OG Image URL',
-  facebook: 'Facebook',
-  instagram: 'Instagram',
-  twitter: 'Twitter',
-  ga4MeasurementId: 'GA4 Measurement ID',
-  metaPixelId: 'Meta Pixel ID',
-  require2FA: 'Require 2FA',
-  passwordMinLength: 'Password Min Length',
-  sessionMaxAgeHours: 'Session Max Age (hours)',
-  smtpHost: 'SMTP Host',
-  smtpPort: 'SMTP Port',
-  smtpUser: 'SMTP User',
-  smtpPass: 'SMTP Pass',
-  fromName: 'From Name',
-  fromEmail: 'From Email',
-  revalidateSeconds: 'Revalidate Seconds',
-};
-
-const fieldTypes = {
-  smtpPort: 'number',
-  passwordMinLength: 'number',
-  sessionMaxAgeHours: 'number',
-  revalidateSeconds: 'number',
-  require2FA: 'boolean',
 };
 
 export default function SettingsPage() {
   const { data: session } = useSession();
-  const role = session?.user?.role || 'VIEWER';
-  const canEdit = role === 'ADMIN' || role === 'EDITOR';
+  const role = session?.user?.role ?? "VIEWER";
+  const canEdit = role === "ADMIN" || role === "EDITOR";
+
+  const [activeTab, setActiveTab] = useState("general");
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
 
   useEffect(() => {
-    getSettings()
-      .then(data => { setSettings(data); setLoading(false); })
-      .catch(() => setLoading(false));
+    (async () => {
+      setLoading(true);
+      const data = await getSettings();
+      const { id, createdAt, updatedAt, ...editable } = data || {};
+      setSettings(editable);
+      setLoading(false);
+    })();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setSettings({
-      ...settings,
-      [name]: type === 'number' ? Number(value) : type === 'checkbox' ? checked : value,
-    });
-  };
 
-  const handleFavicon = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const res = await uploadFavicon(file);
-    if (res?.url) {
-      setSettings({ ...settings, faviconUrl: res.url });
-    }
+  const handleChange = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSave = async () => {
+    if (!canEdit) return;
     setSaving(true);
     await updateSettings(settings);
     setSaving(false);
   };
 
-  const renderField = (f) => {
-    if (f === 'faviconUrl') {
-      return (
-        <div key={f}>
-          <label className="block text-sm">{labels[f]}</label>
-          {settings[f] && <img src={settings[f]} alt="favicon" className="w-8 h-8 mb-2" />}
-          {canEdit && (
-            <input type="file" accept="image/x-icon,image/png" onChange={handleFavicon} />
-          )}
-        </div>
-      );
-    }
-    const type = fieldTypes[f];
-    if (type === 'boolean') {
-      return (
-        <div key={f} className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name={f}
-            checked={settings[f] || false}
-            onChange={handleChange}
-            disabled={!canEdit}
-          />
-          <label className="text-sm" htmlFor={f}>{labels[f]}</label>
-        </div>
-      );
-    }
-    return (
-      <div key={f}>
-        <label className="block text-sm">{labels[f]}</label>
-        <input
-          type={type === 'number' ? 'number' : 'text'}
-          name={f}
-          value={settings[f] ?? ''}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          readOnly={!canEdit}
-        />
-      </div>
-    );
-  };
 
-  if (loading || !settings) return <div>Loading...</div>;
+  if (loading) return <div>Loading settings…</div>;
+  if (!settings) return <div>No settings found.</div>;
+
+  const fields = settingGroups[activeTab].fields;
 
   return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl">
-        Site Settings { !canEdit && <span className="ml-2 text-sm text-gray-500">(Read-only)</span> }
-      </h1>
-      <div className="flex space-x-4 border-b">
-        {tabs.map(t => (
+    <main className="p-4 space-y-4">
+      <header className="flex items-center justify-between">
+        <h1>
+          Settings {!canEdit && <span className="ml-2 text-sm">(Read-only)</span>}
+        </h1>
+        {canEdit && (
           <button
-            key={t.key}
-            className={`pb-2 ${activeTab === t.key ? 'border-b-2 border-blue-600' : ''}`}
-            onClick={() => setActiveTab(t.key)}
+            onClick={handleSave}
+            disabled={saving}
+            className="px-4 py-2 bg-blue-600 text-white"
           >
-            {t.label}
+            {saving ? "Saving…" : "Save Settings"}
+          </button>
+        )}
+      </header>
+
+      <nav className="flex space-x-2 border-b">
+        {Object.entries(settingGroups).map(([key, g]) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`px-3 py-2 ${
+              activeTab === key ? "border-b-2 border-blue-600" : ""
+            }`}
+          >
+            {g.label}
           </button>
         ))}
-      </div>
-      <div className="space-y-4 pt-4">
-        {fields[activeTab].map(renderField)}
-      </div>
-      <button
-        onClick={handleSave}
-        className="px-4 py-2 bg-blue-600 text-white"
-        disabled={!canEdit || saving}
-      >
-        {saving ? 'Saving...' : 'Save'}
-      </button>
-    </div>
+      </nav>
+
+      <section className="space-y-4">
+        {fields.map((f) => (
+          <div key={f} className="flex flex-col">
+            <label className="text-sm mb-1">{f}</label>
+            <input
+              type={f.toLowerCase().includes("password") ? "password" : "text"}
+              value={settings[f] ?? ""}
+              onChange={(e) => handleChange(f, e.target.value)}
+              readOnly={!canEdit}
+              className="border p-2"
+            />
+          </div>
+        ))}
+      </section>
+    </main>
+
   );
 }
 

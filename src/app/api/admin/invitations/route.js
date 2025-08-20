@@ -1,46 +1,66 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { PrismaClient } from '@prisma/client';
-import { randomBytes } from 'crypto';
-import nodemailer from 'nodemailer';
 
-const prisma = new PrismaClient();
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+import { prisma } from '@/lib/db';
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  const invites = await prisma.invitation.findMany({ orderBy: { createdAt: 'desc' } });
+  return NextResponse.json(invites);
+}
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (session.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
-
   const { email, role } = await request.json();
-  const lowerEmail = email.trim().toLowerCase();
-
-  const existingUser = await prisma.user.findUnique({ where: { email: lowerEmail } });
-  const existingInvite = await prisma.invitation.findUnique({ where: { email: lowerEmail } });
-  if (existingUser || existingInvite) {
-    return NextResponse.json({ error: 'Email already used' }, { status: 400 });
+  const normalizedEmail = email.trim().toLowerCase();
+  const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  if (existingUser) {
+    return NextResponse.json({ error: 'Email already exists' }, { status: 400 });
+  }
+  const existingInvite = await prisma.invitation.findUnique({ where: { email: normalizedEmail } });
+  if (existingInvite) {
+    return NextResponse.json({ error: 'Invitation already sent' }, { status: 400 });
   }
 
-  const token = randomBytes(32).toString('hex');
-  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
-  await prisma.invitation.create({ data: { email: lowerEmail, role, token, expires } });
+  const token = crypto.randomBytes(32).toString('hex');
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-  const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
-  if (settings?.smtpHost && settings?.smtpUser && settings?.smtpPass && settings?.fromEmail) {
+  await prisma.user.create({ data: { email: normalizedEmail, role, status: 'INVITED' } });
+  await prisma.invitation.create({ data: { email: normalizedEmail, token, expires } });
+
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (host && port && user && pass) {
     const transporter = nodemailer.createTransport({
-      host: settings.smtpHost,
-      port: settings.smtpPort || 587,
-      secure: false,
-      auth: { user: settings.smtpUser, pass: settings.smtpPass },
+      host,
+      port: Number(port),
+      auth: { user, pass },
     });
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const url = `${baseUrl}/accept-invitation?token=${token}`;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXTAUTH_URL ||
+      'http://localhost:3000';
+    const link = `${baseUrl}/accept-invitation/${token}`;
     await transporter.sendMail({
-      from: `${settings.fromName || settings.fromEmail} <${settings.fromEmail}>`,
-      to: lowerEmail,
-      subject: 'User Invitation',
-      text: `Anda diundang untuk bergabung. Silakan atur kata sandi: ${url}`,
+      from: process.env.EMAIL_FROM || user,
+      to: normalizedEmail,
+      subject: 'You are invited',
+      text: `Please complete your account: ${link}`,
+
     });
   }
 
