@@ -255,14 +255,14 @@ export default function DashboardPage() {
                 title="Buat Berita"
                 description="Publikasikan berita dan artikel terbaru"
                 icon={faNewspaper}
-                href="/admin/dashboard/berita/add"
+                href="/admin/dashboard/berita"
                 color="green"
               />
               <QuickActionCard
                 title="Jadwalkan Event"
                 description="Buat dan kelola event mendatang"
                 icon={faCalendarAlt}
-                href="/admin/dashboard/event/add"
+                href="/admin/dashboard/event"
                 color="yellow"
               />
               <QuickActionCard
@@ -303,7 +303,6 @@ export default function DashboardPage() {
             { title: 'Profil', path: '/admin/dashboard/profil', desc: 'Tentang universitas dan visi misi' },
             { title: 'Layanan', path: '/admin/dashboard/layanan', desc: 'Layanan yang ditawarkan' },
             { title: 'Kontak', path: '/admin/dashboard/kontak', desc: 'Informasi kontak dan alamat' },
-            { title: 'Menu Navigasi', path: '/admin/dashboard/navbar', desc: 'Kelola menu dan submenu' },
             { title: 'Pengaturan', path: '/admin/dashboard/settings', desc: 'Konfigurasi website', minRole: 'EDITOR' },
           ]
             .filter((item) => canEdit || !item.minRole)
