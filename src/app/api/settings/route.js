@@ -7,17 +7,20 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 const SettingsSchema = z
   .object({
-    siteName: z.string().trim().min(1),
-    faviconUrl: z.preprocess(
-      (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
-      z
-        .string()
-        .trim()
-        .url()
-        .or(z.string().trim().startsWith('/'))
-        .optional()
-    ),
-    sessionMaxAgeHours: z.coerce.number().int().min(1).max(720),
+    siteName: z.string().trim().min(1, 'Site name is required'),
+    sessionMaxAgeHours: z.coerce
+      .number()
+      .int({ message: 'Must be an integer' })
+      .min(1)
+      .max(720),
+    faviconUrl: z
+      .string()
+      .trim()
+      .url()
+      .or(z.string().trim().startsWith('/'))
+      .optional()
+      .or(z.literal(''))
+      .transform((v) => (v ? v : undefined)),
   })
   .strip();
 
@@ -57,10 +60,12 @@ export async function PUT(request) {
       { status: 400 }
     );
   }
+  const data = { ...parsed.data };
+  if (data.faviconUrl === undefined) delete data.faviconUrl;
   const updated = await prisma.siteSetting.upsert({
     where: { id: 1 },
-    update: parsed.data,
-    create: parsed.data,
+    update: data,
+    create: data,
   });
   return NextResponse.json(updated);
 }

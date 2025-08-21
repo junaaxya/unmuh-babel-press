@@ -42,11 +42,14 @@ export default function SettingsPage() {
     setErrors({});
     setMessage('');
     try {
-      await updateSettings({
-        siteName: settings.siteName,
-        faviconUrl: settings.faviconUrl || undefined,
-        sessionMaxAgeHours: Number(settings.sessionMaxAgeHours),
-      });
+      const payload = {
+        siteName: settings.siteName.trim(),
+        sessionMaxAgeHours: parseInt(settings.sessionMaxAgeHours, 10),
+      };
+      if (settings.faviconUrl) {
+        payload.faviconUrl = settings.faviconUrl;
+      }
+      await updateSettings(payload);
     } catch (err) {
       setErrors(err.fieldErrors || {});
       setMessage(err.message || 'Failed to save settings');
