@@ -1,0 +1,10 @@
+ALTER TABLE `SiteSetting`
+  DROP COLUMN `facebook`,
+  DROP COLUMN `instagram`,
+  DROP COLUMN `twitter`,
+  DROP COLUMN `defaultTitle`,
+  DROP COLUMN `defaultDescription`,
+  DROP COLUMN `ogImageUrl`,
+  DROP COLUMN `ga4MeasurementId`,
+  DROP COLUMN `metaPixelId`,
+  DROP COLUMN `passwordMinLength`;

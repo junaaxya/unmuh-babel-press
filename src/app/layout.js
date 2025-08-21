@@ -18,13 +18,6 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
     const settings = await getSiteSettings();
     return {
-        title: settings.defaultTitle || 'Unmuh Babel Press',
-        description: settings.defaultDescription || 'Unmuh Babel Press',
-        openGraph: {
-            title: settings.defaultTitle || 'Unmuh Babel Press',
-            description: settings.defaultDescription || 'Unmuh Babel Press',
-            images: settings.ogImageUrl ? [settings.ogImageUrl] : undefined,
-        },
         icons: {
             icon: settings.faviconUrl || '/favicon.ico',
         },

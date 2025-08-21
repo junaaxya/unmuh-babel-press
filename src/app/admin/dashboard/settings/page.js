@@ -3,30 +3,17 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { getSettings, updateSettings } from "@/app/services/api";
+import FaviconUploader from "./FaviconUploader";
 
 const settingGroups = {
   general: {
     label: "General",
-    fields: ["siteName"],
-  },
-  seo: {
-    label: "SEO & Social",
-    fields: [
-      "defaultTitle",
-      "defaultDescription",
-      "ogImageUrl",
-      "facebook",
-      "instagram",
-      "twitter",
-      "ga4MeasurementId",
-      "metaPixelId",
-    ],
+    fields: ["siteName", "faviconUrl"],
   },
   security: {
     label: "Security",
-    fields: ["require2FA", "passwordMinLength", "sessionMaxAgeHours"],
+    fields: ["require2FA", "sessionMaxAgeHours"],
   },
-
 };
 
 export default function SettingsPage() {
@@ -52,7 +39,7 @@ export default function SettingsPage() {
 
   const handleChange = (key, value) => {
     let parsed = value;
-    if (["passwordMinLength", "sessionMaxAgeHours"].includes(key)) {
+    if (key === "sessionMaxAgeHours") {
       parsed = Number(value);
     }
     setSettings((prev) => ({ ...prev, [key]: parsed }));
@@ -105,11 +92,18 @@ export default function SettingsPage() {
       <section className="space-y-4">
         {fields.map((f) => {
           const isBoolean = f === "require2FA";
-          const isNumber = ["passwordMinLength", "sessionMaxAgeHours"].includes(f);
+          const isNumber = f === "sessionMaxAgeHours";
+          const isFavicon = f === "faviconUrl";
           return (
             <div key={f} className="flex flex-col">
               <label className="text-sm mb-1">{f}</label>
-              {isBoolean ? (
+              {isFavicon ? (
+                <FaviconUploader
+                  value={settings[f]}
+                  onChange={(url) => handleChange(f, url)}
+                  disabled={!canEdit}
+                />
+              ) : isBoolean ? (
                 <input
                   type="checkbox"
                   checked={settings[f] ?? false}

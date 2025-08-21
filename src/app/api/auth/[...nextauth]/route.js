@@ -31,6 +31,7 @@ export const authOptions = {
         const email = credentials.email.trim().toLowerCase();
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user || user.status !== 'ACTIVE' || !user.hashedPassword) return null;
+        // TODO: enforce 2FA when require2FA is enabled
         const valid = await comparePassword(credentials.password, user.hashedPassword);
         if (!valid) return null;
         return { id: user.id, email: user.email, role: user.role };
@@ -58,5 +59,13 @@ export const authOptions = {
   },
 };
 
-const handler = NextAuth(authOptions);
+const handler = NextAuth(async () => {
+  const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
+  const maxAge = (settings?.sessionMaxAgeHours ?? 24) * 60 * 60;
+  return {
+    ...authOptions,
+    session: { ...authOptions.session, maxAge },
+  };
+});
+
 export { handler as GET, handler as POST };

@@ -4,13 +4,12 @@ Authentication is handled by NextAuth using the Credentials provider. Submit a `
 
 ## Security Settings
 
-The application exposes several security-related options under the **Settings → Security** section in the admin dashboard:
+The application exposes a couple of security-related options under the **Settings → Security** section in the admin dashboard:
 
-- **require2FA** – when enabled, users must configure two factor authentication before accessing the admin area.
-- **passwordMinLength** – minimum length for user passwords. The server rejects shorter passwords.
+- **require2FA** – setting exists but two factor authentication enforcement is not yet implemented.
 - **sessionMaxAgeHours** – how long a login session remains valid before the user needs to sign in again.
 
-These values are stored in the database and can be edited by administrators. Email sender name and address are now configured via environment variables `EMAIL_FROM_NAME` and `EMAIL_FROM` rather than the settings table.
+Password length is fixed at 8 characters and validated when invitations are accepted. Email sender name and address are configured via environment variables `EMAIL_FROM_NAME` and `EMAIL_FROM` rather than the settings table.
 
 api-books
 
