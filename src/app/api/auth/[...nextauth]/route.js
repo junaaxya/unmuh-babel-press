@@ -59,13 +59,13 @@ export const authOptions = {
   },
 };
 
-const handler = NextAuth(async (req, res) => {
+async function authHandler(req, res) {
   const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
   const maxAge = (settings?.sessionMaxAgeHours ?? 24) * 60 * 60;
-  return {
+  return NextAuth(req, res, {
     ...authOptions,
     session: { ...authOptions.session, maxAge },
-  };
-});
+  });
+}
 
-export { handler as GET, handler as POST };
+export { authHandler as GET, authHandler as POST };
