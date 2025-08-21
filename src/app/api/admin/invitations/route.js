@@ -55,8 +55,10 @@ export async function POST(request) {
       process.env.NEXTAUTH_URL ||
       'http://localhost:3000';
     const link = `${baseUrl}/accept-invitation/${token}`;
+    const fromName = process.env.MAIL_FROM_NAME || '';
+    const fromEmail = process.env.MAIL_FROM_EMAIL || user;
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || user,
+      from: `${fromName} <${fromEmail}>`,
       to: normalizedEmail,
       subject: 'You are invited',
       text: `Please complete your account: ${link}`,

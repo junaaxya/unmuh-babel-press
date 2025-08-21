@@ -3,8 +3,16 @@ import { NextResponse } from 'next/server';
 import { hashPassword } from '@/lib/hash';
 import { prisma } from '@/lib/db';
 
+const PASSWORD_MIN_LENGTH = Number(process.env.PASSWORD_MIN_LENGTH ?? 8);
+
 export async function POST(request) {
   const { token, name, password } = await request.json();
+  if (!password || password.length < PASSWORD_MIN_LENGTH) {
+    return NextResponse.json(
+      { error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters` },
+      { status: 400 }
+    );
+  }
 
   const invite = await prisma.invitation.findUnique({ where: { token } });
   if (!invite || invite.expires < new Date()) {

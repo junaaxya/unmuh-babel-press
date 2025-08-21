@@ -291,5 +291,5 @@ export const getSettings = () => {
 };
 
 export const updateSettings = (payload) => {
-    return apiRequest('/api/settings', 'POST', payload);
+    return apiRequest('/api/settings', 'PUT', payload);
 };

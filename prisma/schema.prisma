@@ -158,29 +158,10 @@ model Invitation {
 }
 
 model SiteSetting {
-
   id                 Int      @id @default(1)
-  siteName           String?
-  logoUrl            String?
-  contactEmail       String?
-  facebook           String?
-  instagram          String?
-  twitter            String?
-  defaultTitle       String?
-  defaultDescription String?
-  ogImageUrl         String?
-  smtpHost           String?
-  smtpPort           Int?
-  smtpUser           String?
-  smtpPass           String?
-  fromName           String?
-  fromEmail          String?
-  require2FA         Boolean  @default(false)
-  passwordMinLength  Int      @default(8)
+  siteName           String   @default("")
+  faviconUrl         String?
   sessionMaxAgeHours Int      @default(24)
-  revalidateSeconds  Int      @default(60)
-  ga4MeasurementId   String?
-  metaPixelId        String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
