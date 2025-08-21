@@ -10,7 +10,12 @@ const SettingsSchema = z
     siteName: z.string().trim().min(1),
     faviconUrl: z.preprocess(
       (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
-      z.string().url().optional()
+      z
+        .string()
+        .trim()
+        .url()
+        .or(z.string().trim().startsWith('/'))
+        .optional()
     ),
     sessionMaxAgeHours: z.coerce.number().int().min(1).max(720),
   })
