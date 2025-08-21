@@ -13,7 +13,8 @@ const geistMono = Geist_Mono({
     subsets: ['latin'],
 });
 
-export const metadata = {
+// Default metadata used when site settings do not override values
+const defaultMetadata = {
     title: 'Unmuh Babel Press - Penerbit Buku Digital Muhammadiyah Babel',
     description: 'Unmuh Babel Press adalah platform penerbitan buku digital resmi Universitas Muhammadiyah Babel.',
     keywords: 'buku, penerbitan, digital, universitas muhammadiyah bangka belitung, unmuhpress',
@@ -50,15 +51,23 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
     const settings = await getSiteSettings();
     return {
-        title: settings.defaultTitle || 'Unmuh Babel Press',
-        description: settings.defaultDescription || 'Unmuh Babel Press',
+        ...defaultMetadata,
+        title: settings.defaultTitle || defaultMetadata.title,
+        description: settings.defaultDescription || defaultMetadata.description,
         openGraph: {
-            title: settings.defaultTitle || 'Unmuh Babel Press',
-            description: settings.defaultDescription || 'Unmuh Babel Press',
-            images: settings.ogImageUrl ? [settings.ogImageUrl] : undefined,
+            ...defaultMetadata.openGraph,
+            title: settings.defaultTitle || defaultMetadata.openGraph.title,
+            description: settings.defaultDescription || defaultMetadata.openGraph.description,
+            images: settings.ogImageUrl ? [settings.ogImageUrl] : defaultMetadata.openGraph.images,
+        },
+        twitter: {
+            ...defaultMetadata.twitter,
+            title: settings.defaultTitle || defaultMetadata.twitter.title,
+            description: settings.defaultDescription || defaultMetadata.twitter.description,
+            images: settings.ogImageUrl ? [settings.ogImageUrl] : defaultMetadata.twitter.images,
         },
         icons: {
-            icon: settings.faviconUrl || '/favicon.ico',
+            icon: settings.faviconUrl || defaultMetadata.icons.icon,
         },
     };
 }
