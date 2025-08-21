@@ -7,7 +7,7 @@ import { getSettings, updateSettings } from "@/app/services/api";
 const settingGroups = {
   general: {
     label: "General",
-    fields: ["siteName", "logoUrl", "contactEmail", "fromName", "fromEmail"],
+    fields: ["siteName"],
   },
   seo: {
     label: "SEO & Social",
@@ -38,7 +38,6 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('general');
 
   useEffect(() => {
     (async () => {
@@ -52,7 +51,11 @@ export default function SettingsPage() {
 
 
   const handleChange = (key, value) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
+    let parsed = value;
+    if (["passwordMinLength", "sessionMaxAgeHours"].includes(key)) {
+      parsed = Number(value);
+    }
+    setSettings((prev) => ({ ...prev, [key]: parsed }));
   };
 
   const handleSave = async () => {
@@ -100,18 +103,31 @@ export default function SettingsPage() {
       </nav>
 
       <section className="space-y-4">
-        {fields.map((f) => (
-          <div key={f} className="flex flex-col">
-            <label className="text-sm mb-1">{f}</label>
-            <input
-              type={f.toLowerCase().includes("password") ? "password" : "text"}
-              value={settings[f] ?? ""}
-              onChange={(e) => handleChange(f, e.target.value)}
-              readOnly={!canEdit}
-              className="border p-2"
-            />
-          </div>
-        ))}
+        {fields.map((f) => {
+          const isBoolean = f === "require2FA";
+          const isNumber = ["passwordMinLength", "sessionMaxAgeHours"].includes(f);
+          return (
+            <div key={f} className="flex flex-col">
+              <label className="text-sm mb-1">{f}</label>
+              {isBoolean ? (
+                <input
+                  type="checkbox"
+                  checked={settings[f] ?? false}
+                  onChange={(e) => handleChange(f, e.target.checked)}
+                  disabled={!canEdit}
+                />
+              ) : (
+                <input
+                  type={isNumber ? "number" : "text"}
+                  value={settings[f] ?? ""}
+                  onChange={(e) => handleChange(f, e.target.value)}
+                  readOnly={!canEdit}
+                  className="border p-2"
+                />
+              )}
+            </div>
+          );
+        })}
       </section>
     </main>
 

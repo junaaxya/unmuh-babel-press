@@ -56,7 +56,7 @@ export async function POST(request) {
       'http://localhost:3000';
     const link = `${baseUrl}/accept-invitation/${token}`;
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || user,
+      from: `${process.env.EMAIL_FROM_NAME || ''} <${process.env.EMAIL_FROM || user}>`,
       to: normalizedEmail,
       subject: 'You are invited',
       text: `Please complete your account: ${link}`,

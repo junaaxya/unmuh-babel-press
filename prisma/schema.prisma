@@ -161,8 +161,6 @@ model SiteSetting {
 
   id                 Int      @id @default(1)
   siteName           String?
-  logoUrl            String?
-  contactEmail       String?
   facebook           String?
   instagram          String?
   twitter            String?
@@ -173,8 +171,6 @@ model SiteSetting {
   smtpPort           Int?
   smtpUser           String?
   smtpPass           String?
-  fromName           String?
-  fromEmail          String?
   require2FA         Boolean  @default(false)
   passwordMinLength  Int      @default(8)
   sessionMaxAgeHours Int      @default(24)

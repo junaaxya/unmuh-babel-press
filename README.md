@@ -2,6 +2,16 @@
 
 Authentication is handled by NextAuth using the Credentials provider. Submit a `POST` request to `/api/auth/callback/credentials` with `email` and `password` or use the `/admin/login` page. A successful login creates a session and redirects to `/admin/dashboard`. Use NextAuth's `signOut` to log out.
 
+## Security Settings
+
+The application exposes several security-related options under the **Settings → Security** section in the admin dashboard:
+
+- **require2FA** – when enabled, users must configure two factor authentication before accessing the admin area.
+- **passwordMinLength** – minimum length for user passwords. The server rejects shorter passwords.
+- **sessionMaxAgeHours** – how long a login session remains valid before the user needs to sign in again.
+
+These values are stored in the database and can be edited by administrators. Email sender name and address are now configured via environment variables `EMAIL_FROM_NAME` and `EMAIL_FROM` rather than the settings table.
+
 api-books
 
 ## 📁 Struktur Folder
