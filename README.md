@@ -6,10 +6,12 @@ Authentication is handled by NextAuth using the Credentials provider. Submit a `
 
 The application exposes a couple of security-related options under the **Settings → Security** section in the admin dashboard:
 
-- **require2FA** – setting exists but two factor authentication enforcement is not yet implemented.
-- **sessionMaxAgeHours** – how long a login session remains valid before the user needs to sign in again.
+- **require2FA** – toggle intended to enforce two-factor authentication. When enabled, logins should verify a TOTP code for users who have configured 2FA. (The actual 2FA flow is not yet implemented.)
+- **sessionMaxAgeHours** – numeric field that determines how long a login session remains valid before the user must sign in again.
 
-Password length is fixed at 8 characters and validated when invitations are accepted. Email sender name and address are configured via environment variables `EMAIL_FROM_NAME` and `EMAIL_FROM` rather than the settings table.
+Invitation passwords are validated server‑side with a fixed minimum of eight characters. To change this value, edit the check in `src/app/api/auth/accept-invitation/route.js`. Email sender name and address are configured via environment variables `EMAIL_FROM_NAME` and `EMAIL_FROM` instead of the settings table.
+
+After pulling new code, run `npx prisma migrate deploy` to ensure the database schema is up to date (e.g., to add the `faviconUrl` column).
 
 api-books
 

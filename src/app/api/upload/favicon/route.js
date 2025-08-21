@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -27,10 +27,20 @@ export async function POST(request) {
   const filename = `favicon-${Date.now()}${ext}`;
   await fs.writeFile(path.join(uploadDir, filename), buffer);
   const url = `/uploads/${filename}`;
-  await prisma.siteSetting.upsert({
-    where: { id: 1 },
-    update: { faviconUrl: url },
-    create: { faviconUrl: url },
-  });
+  try {
+    await prisma.siteSetting.upsert({
+      where: { id: 1 },
+      update: { faviconUrl: url },
+      create: { faviconUrl: url },
+    });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2022') {
+      return NextResponse.json(
+        { error: 'Database not migrated: missing faviconUrl column' },
+        { status: 500 }
+      );
+    }
+    throw err;
+  }
   return NextResponse.json({ url });
 }

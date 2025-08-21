@@ -52,20 +52,6 @@ export async function generateMetadata() {
     const settings = await getSiteSettings();
     return {
         ...defaultMetadata,
-        title: settings.defaultTitle || defaultMetadata.title,
-        description: settings.defaultDescription || defaultMetadata.description,
-        openGraph: {
-            ...defaultMetadata.openGraph,
-            title: settings.defaultTitle || defaultMetadata.openGraph.title,
-            description: settings.defaultDescription || defaultMetadata.openGraph.description,
-            images: settings.ogImageUrl ? [settings.ogImageUrl] : defaultMetadata.openGraph.images,
-        },
-        twitter: {
-            ...defaultMetadata.twitter,
-            title: settings.defaultTitle || defaultMetadata.twitter.title,
-            description: settings.defaultDescription || defaultMetadata.twitter.description,
-            images: settings.ogImageUrl ? [settings.ogImageUrl] : defaultMetadata.twitter.images,
-        },
         icons: {
             icon: settings.faviconUrl || defaultMetadata.icons.icon,
         },
