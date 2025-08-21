@@ -14,6 +14,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -39,6 +40,7 @@ export default function SettingsPage() {
     if (!canEdit) return;
     setSaving(true);
     setErrors({});
+    setMessage('');
     try {
       await updateSettings({
         siteName: settings.siteName,
@@ -46,7 +48,8 @@ export default function SettingsPage() {
         sessionMaxAgeHours: Number(settings.sessionMaxAgeHours),
       });
     } catch (err) {
-      setErrors(err);
+      setErrors(err.fieldErrors || {});
+      setMessage(err.message || 'Failed to save settings');
     } finally {
       setSaving(false);
     }
@@ -70,6 +73,7 @@ export default function SettingsPage() {
           </button>
         )}
       </header>
+      {message && <p className="text-red-500 text-sm">{message}</p>}
 
       <nav className="flex space-x-2 border-b">
         {['general', 'security'].map((key) => (

@@ -5,52 +5,45 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 // Fungsi request umum dengan penanganan error yang disempurnakan
 async function apiRequest(url, method = 'GET', body = null, isFormData = false) {
-    const headers = {};
+  const headers = {};
+  if (body && !isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
-    if (body && !isFormData) {
-        headers['Content-Type'] = 'application/json';
+  const isServer = typeof window === 'undefined';
+  const fullUrl = isServer ? `${BASE_URL}${url}` : url;
+
+  let res;
+  try {
+    res = await fetch(fullUrl, {
+      method,
+      headers,
+      credentials: 'include',
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+    });
+  } catch (err) {
+    throw { message: err.message };
+  }
+
+  const contentType = res.headers.get('content-type');
+  if (res.ok) {
+    if (contentType && contentType.includes('application/json')) {
+      return res.json();
     }
+    return {};
+  }
 
-    const isServer = typeof window === 'undefined';
-    const fullUrl = isServer ? `${BASE_URL}${url}` : url;
+  let errorBody = {};
+  if (contentType && contentType.includes('application/json')) {
+    errorBody = await res.json();
+  } else {
+    errorBody = { message: await res.text() };
+  }
 
-    try {
-        const res = await fetch(fullUrl, {
-            method,
-            headers,
-            credentials: 'include',
-            body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
-        });
-
-        if (res.ok) {
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                return res.json();
-            }
-            return { status: 'success', message: 'Operation successful' };
-        }
-
-        // Jika response tidak OK, lempar error agar bisa ditangkap blok catch
-        const errorText = await res.text();
-        throw new Error(errorText);
-
-    } catch (error) {
-        // --- START OF CHANGE ---
-        // Tujuan: Melempar objek error (fieldErrors) dari Zod, bukan string.
-        try {
-            const errorBody = JSON.parse(error.message);
-            // Jika ada fieldErrors, lempar objek itu. Ini kuncinya.
-            if (errorBody && errorBody.errors && errorBody.errors.fieldErrors) {
-                throw errorBody.errors.fieldErrors;
-            }
-        } catch (e) {
-            // Jika gagal parse (bukan error dari Zod), biarkan error asli yang dilempar
-        }
-        
-        // Lemparkan error asli jika tidak ada fieldErrors terstruktur
-        throw error;
-        // --- END OF CHANGE ---
-    }
+  throw {
+    message: errorBody.message || 'Request failed',
+    fieldErrors: errorBody.fieldErrors,
+  };
 }
 
 
