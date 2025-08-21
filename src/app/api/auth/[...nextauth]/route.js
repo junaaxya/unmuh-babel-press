@@ -59,7 +59,7 @@ export const authOptions = {
   },
 };
 
-const handler = NextAuth(async () => {
+const handler = NextAuth(async (req, res) => {
   const settings = await prisma.siteSetting.findUnique({ where: { id: 1 } });
   const maxAge = (settings?.sessionMaxAgeHours ?? 24) * 60 * 60;
   return {
