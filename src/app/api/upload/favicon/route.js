@@ -23,6 +23,8 @@ export async function POST(request) {
   if (buffer.length > 512 * 1024) {
     return NextResponse.json({ error: 'File too large' }, { status: 400 });
   }
+  // Grab existing setting to remove any previously uploaded favicon
+  const existing = await prisma.siteSetting.findUnique({ where: { id: 1 } });
   const uploadDir = path.join(process.cwd(), 'public', 'uploads');
   // In Docker deployments, ensure this path is persisted via a volume or bind mount
   await fs.mkdir(uploadDir, { recursive: true });
@@ -38,5 +40,16 @@ export async function POST(request) {
     update: { faviconUrl: url },
     create: { faviconUrl: url },
   });
+  if (existing?.faviconUrl) {
+    const oldPath = existing.faviconUrl.split('?')[0];
+    if (oldPath.startsWith('/uploads/')) {
+      const oldFile = path.join(process.cwd(), 'public', oldPath);
+      try {
+        await fs.unlink(oldFile);
+      } catch {
+        // ignore if file is missing
+      }
+    }
+  }
   return NextResponse.json({ url });
 }
