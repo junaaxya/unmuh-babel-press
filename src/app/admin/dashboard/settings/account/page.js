@@ -1,6 +1,7 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { updateProfile, uploadAvatarImage } from '@/app/services/api';
 import Notification from '@/components/ui/Notification/Notification';
 
@@ -11,12 +12,20 @@ export default function MyAccountPage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(session?.user?.image || '');
   const [loading, setLoading] = useState(false);
   const [notif, setNotif] = useState(null);
 
   const handleSave = async () => {
     setLoading(true);
+    if (newPassword !== confirmPassword) {
+      setNotif({ id: Date.now(), type: 'error', message: 'New passwords do not match' });
+      setLoading(false);
+      return;
+    }
     try {
       await updateProfile({
         name,
@@ -98,30 +107,57 @@ export default function MyAccountPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Current Password</label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className="mt-1 block w-full border rounded-md p-2"
-          />
+          <div className="relative">
+            <input
+              type={showCurrent ? 'text' : 'password'}
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="mt-1 block w-full border rounded-md p-2 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowCurrent((prev) => !prev)}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+            >
+              {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">New Password</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="mt-1 block w-full border rounded-md p-2"
-          />
+          <div className="relative">
+            <input
+              type={showNew ? 'text' : 'password'}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="mt-1 block w-full border rounded-md p-2 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowNew((prev) => !prev)}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+            >
+              {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Confirm New Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mt-1 block w-full border rounded-md p-2"
-          />
+          <div className="relative">
+            <input
+              type={showConfirm ? 'text' : 'password'}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="mt-1 block w-full border rounded-md p-2 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm((prev) => !prev)}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+            >
+              {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
         <button
           onClick={handleSave}
