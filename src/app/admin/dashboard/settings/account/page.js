@@ -7,6 +7,8 @@ import Notification from '@/components/ui/Notification/Notification';
 export default function MyAccountPage() {
   const { data: session, update } = useSession();
   const [name, setName] = useState(session?.user?.name || '');
+  const email = session?.user?.email || '';
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [avatarPreview, setAvatarPreview] = useState(session?.user?.image || '');
@@ -16,8 +18,14 @@ export default function MyAccountPage() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await updateProfile({ name, password: newPassword, confirmPassword });
+      await updateProfile({
+        name,
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
       await update();
+      setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setNotif({ id: Date.now(), type: 'success', message: 'Profile updated' });
@@ -76,8 +84,26 @@ export default function MyAccountPage() {
           />
         </div>
         <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            value={email}
+            readOnly
+            className="mt-1 block w-full border rounded-md p-2 bg-gray-100 cursor-not-allowed"
+          />
+        </div>
+        <div>
           <label className="block text-sm font-medium text-gray-700">Role</label>
           <p className="mt-1 text-gray-600">You are an {session?.user?.role}</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Current Password</label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">New Password</label>
@@ -89,7 +115,7 @@ export default function MyAccountPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <label className="block text-sm font-medium text-gray-700">Confirm New Password</label>
           <input
             type="password"
             value={confirmPassword}

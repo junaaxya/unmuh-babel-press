@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/db';
-import { hashPassword } from '@/lib/hash';
+import { hashPassword, comparePassword } from '@/lib/hash';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -24,17 +24,31 @@ export async function PUT(req) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { name, password, confirmPassword } = await req.json();
+  const { name, currentPassword, newPassword, confirmPassword } = await req.json();
   const data = {};
   if (typeof name === 'string') {
     data.name = name.trim();
   }
 
-  if (password) {
-    if (password !== confirmPassword) {
+  if (newPassword || currentPassword || confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return NextResponse.json({ error: 'All password fields are required' }, { status: 400 });
+    }
+    if (newPassword !== confirmPassword) {
       return NextResponse.json({ error: 'Passwords do not match' }, { status: 400 });
     }
-    data.hashedPassword = await hashPassword(password);
+    if (newPassword.length < 8) {
+      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { hashedPassword: true },
+    });
+    const valid = await comparePassword(currentPassword, user?.hashedPassword || '');
+    if (!valid) {
+      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
+    }
+    data.hashedPassword = await hashPassword(newPassword);
   }
 
   if (Object.keys(data).length === 0) {
