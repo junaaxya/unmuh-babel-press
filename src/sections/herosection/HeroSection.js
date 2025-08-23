@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -32,7 +31,7 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section className="bg-blue-50 dark:bg-gray-900 py-16 px-6 md:px-20">
+        <section className="bg-gray-900 py-16 px-6 md:px-20">
             <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
                 {/* Left: Text */}
                 <div className="flex-1 text-center md:text-left">
@@ -67,7 +66,10 @@ export default function HeroSection() {
                                 Lihat Katalog
                             </Button>
                         </Link>
-                        <Link href="/kontak" className="flex flex-col text-center">
+                        <Link
+                            href="/kontak"
+                            className="flex flex-col text-center"
+                        >
                             <Button icon={faEnvelope} variant="outline">
                                 Hubungi Kami
                             </Button>

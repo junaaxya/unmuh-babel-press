@@ -1,7 +1,7 @@
-
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { getSiteSettings } from '@/lib/settings';
+import { MyThemeProvider } from '../components/common/ThemeProvider';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -34,12 +34,20 @@ export async function generateMetadata() {
 export default async function RootLayout({ children }) {
     const settings = await getSiteSettings();
     return (
-        <html lang="id">
+        <html lang="id" suppressHydrationWarning>
             <head>
                 <link rel="icon" href={settings.faviconUrl || '/favicon.ico'} />
             </head>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <main>{children}</main>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+                <MyThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                >
+                    {children}
+                </MyThemeProvider>
             </body>
         </html>
     );

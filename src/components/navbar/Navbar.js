@@ -1,15 +1,22 @@
-
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faCircleUser, faBook, faNewspaper, faHandshake, faEnvelope, faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
-import DarkModeToggle from "../ui/DarkModeToggle/DarkModeToggle";
-import SearchBar from "../searchbar/SearchBar";
+'use client';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faHouse,
+    faCircleUser,
+    faBook,
+    faNewspaper,
+    faHandshake,
+    faEnvelope,
+    faBars,
+    faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import DarkModeToggle from '../ui/DarkModeToggle/DarkModeToggle';
+import SearchBar from '../searchbar/SearchBar';
 
 export default function Navbar() {
-
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
@@ -55,7 +62,7 @@ export default function Navbar() {
     }, [menuOpen]);
 
     return (
-        <nav className="bg-cyan-50 text-white shadow">
+        <nav className="bg-gray-900 dark:bg-cyan-50 text-white shadow dark:shadow-gray-700">
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo + Title */}
                 <Link href="/" className="flex items-center space-x-4">
@@ -76,6 +83,21 @@ export default function Navbar() {
                         </p>
                     </div>
                 </Link>
+                {/* Search + DarkMode + Toggle */}
+                <div className="flex items-center gap-3">
+                    <div className="hidden md:block">
+                        <SearchBar />
+                    </div>
+                    <DarkModeToggle />
+                    <button
+                        ref={buttonRef}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="md:hidden text-blue-700 text-lg"
+                        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                    >
+                        <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+                    </button>
+                </div>
             </div>
             {/* Menu Items */}
             <div
@@ -142,8 +164,7 @@ export default function Navbar() {
                                 icon={faHandshake}
                                 className="mr-2 w-4 text-center"
                             />
-                           Paket Penerbitan
-
+                            Paket Penerbitan
                         </Link>
                     </li>
                     <li>
@@ -161,12 +182,11 @@ export default function Navbar() {
                     </li>
                 </ul>
 
-
-        {/* Search Mobile */}
-        <div className="block md:hidden px-4 pb-4">
-          <SearchBar />
-        </div>
-      </div>
-    </nav>
-  );
+                {/* Search Mobile */}
+                <div className="block md:hidden px-4 pb-4">
+                    <SearchBar />
+                </div>
+            </div>
+        </nav>
+    );
 }
