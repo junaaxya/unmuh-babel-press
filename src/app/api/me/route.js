@@ -5,56 +5,101 @@ import { prisma } from '@/lib/db';
 import { hashPassword, comparePassword } from '@/lib/hash';
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, name: true, email: true, role: true, image: true },
-  });
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, name: true, email: true, role: true, image: true },
+    });
 
-  return NextResponse.json(user);
+    return NextResponse.json(user);
 }
 
 export async function PUT(req) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const { name, currentPassword, newPassword, confirmPassword } = await req.json();
-  const data = {};
-  if (typeof name === 'string') {
-    data.name = name.trim();
-  }
+    const { name, currentPassword, newPassword } = await req.json();
+    const dataToUpdate = {};
 
-  if (newPassword || currentPassword || confirmPassword) {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      return NextResponse.json({ error: 'All password fields are required' }, { status: 400 });
+    // 1. Siapkan data nama untuk diupdate jika ada
+    if (typeof name === 'string' && name.trim() !== session.user.name) {
+        dataToUpdate.name = name.trim();
     }
-    if (newPassword !== confirmPassword) {
-      return NextResponse.json({ error: 'Passwords do not match' }, { status: 400 });
+
+    // 2. Lakukan validasi dan proses perubahan password jika field terkait diisi
+    const isChangingPassword = currentPassword || newPassword;
+    if (isChangingPassword) {
+        // Pastikan kedua field (lama dan baru) diisi
+        if (!currentPassword || !newPassword) {
+            return NextResponse.json(
+                { message: 'Password lama dan password baru wajib diisi.' },
+                { status: 400 }
+            );
+        }
+
+        // Validasi panjang password baru
+        const PASSWORD_MIN_LENGTH = 8;
+        if (newPassword.length < PASSWORD_MIN_LENGTH) {
+            return NextResponse.json(
+                {
+                    message: `Password baru minimal harus ${PASSWORD_MIN_LENGTH} karakter.`,
+                },
+                { status: 400 }
+            );
+        }
+
+        // Ambil hash password pengguna dari database
+        const user = await prisma.user.findUnique({
+            where: { id: session.user.id },
+            select: { hashedPassword: true },
+        });
+
+        // Bandingkan password lama yang dimasukkan dengan yang ada di database
+        const isCurrentPasswordValid = await comparePassword(
+            currentPassword,
+            user?.hashedPassword || ''
+        );
+        if (!isCurrentPasswordValid) {
+            return NextResponse.json(
+                { message: 'Password Anda saat ini salah.' },
+                { status: 400 }
+            );
+        }
+
+        // -- VALIDASI BARU DITAMBAHKAN DI SINI --
+        // Pastikan password baru tidak sama dengan password lama
+        if (currentPassword === newPassword) {
+            return NextResponse.json(
+                {
+                    message:
+                        'Password baru tidak boleh sama dengan password lama.',
+                },
+                { status: 400 }
+            );
+        }
+
+        // Hash password baru sebelum disimpan
+        dataToUpdate.hashedPassword = await hashPassword(newPassword);
     }
-    if (newPassword.length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
+
+    // 3. Jika tidak ada data yang perlu diubah, kembalikan respons
+    if (Object.keys(dataToUpdate).length === 0) {
+        return NextResponse.json({
+            message: 'Tidak ada perubahan yang disimpan.',
+        });
     }
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { hashedPassword: true },
+
+    // 4. Update data pengguna di database
+    await prisma.user.update({
+        where: { id: session.user.id },
+        data: dataToUpdate,
     });
-    const valid = await comparePassword(currentPassword, user?.hashedPassword || '');
-    if (!valid) {
-      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
-    }
-    data.hashedPassword = await hashPassword(newPassword);
-  }
 
-  if (Object.keys(data).length === 0) {
-    return NextResponse.json({ message: 'No changes' });
-  }
-
-  await prisma.user.update({ where: { id: session.user.id }, data });
-  return NextResponse.json({ message: 'Profile updated' });
+    return NextResponse.json({ message: 'Profile updated successfully' });
 }
