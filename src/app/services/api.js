@@ -286,3 +286,21 @@ export const getSettings = () => {
 export const updateSettings = (payload) => {
     return apiRequest('/api/settings', 'PUT', payload);
 };
+
+// ==============================
+// User Profile API
+// ==============================
+
+export const getProfile = () => {
+    return apiRequest('/api/me');
+};
+
+export const updateProfile = (payload) => {
+    return apiRequest('/api/me', 'PUT', payload);
+};
+
+export const uploadAvatarImage = (file) => {
+    const form = new FormData();
+    form.append('file', file);
+    return apiRequest('/api/me/avatar', 'POST', form, true);
+};

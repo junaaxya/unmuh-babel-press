@@ -70,9 +70,19 @@ export const authOptions = {
       session.user = session.user || {};
       session.user.id = token.id;
       session.user.role = token.role || 'VIEWER';
+
+      const dbUser = await prisma.user.findUnique({
+        where: { id: token.id },
+        select: { name: true, image: true },
+      });
+
+      session.user.name = dbUser?.name || '';
+      session.user.image = dbUser?.image || null;
+
       if (token.exp) {
         session.expires = new Date(token.exp * 1000).toISOString();
       }
+
       return session;
     },
   },

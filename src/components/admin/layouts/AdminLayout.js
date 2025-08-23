@@ -11,7 +11,6 @@ import {
   faNewspaper,
   faCalendarAlt,
   faHome,
-  faUser,
   faServicestack,
   faEnvelope,
   faBars,
@@ -68,9 +67,10 @@ const MENU_ITEMS = [
   {
     title: 'Pengaturan',
     icon: faCog,
-    path: '/admin/dashboard/settings',
-    single: true,
-    minRole: 'EDITOR',
+    submenu: [
+      { title: 'Akun Saya', path: '/admin/dashboard/settings/account' },
+      { title: 'Pengaturan Situs', path: '/admin/dashboard/settings', minRole: 'EDITOR' },
+    ],
   },
   {
     title: 'Users',
@@ -328,27 +328,31 @@ export default function AdminLayout({ children }) {
                             : 'max-h-0 opacity-0 transform -translate-y-2'
                         }`}
                       >
-                        {item.submenu.map((sub, i) => (
-                          <Link
-                            key={i}
-                            href={sub.path}
-                            onClick={handleSubmenuItemClick}
-                            className={`flex items-center px-4 py-2 ml-6 rounded-lg text-sm transition-all duration-200 hover:bg-blue-600/30 group ${
-                              pathname.startsWith(sub.path)
-                                ? 'bg-blue-600 text-white shadow-md'
-                                : 'text-blue-100 hover:text-white'
-                            }`}
-                          >
-                            <div
-                              className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
+                        {item.submenu
+                          .filter(
+                            (sub) => !sub.minRole || roleRank[role] >= roleRank[sub.minRole]
+                          )
+                          .map((sub, i) => (
+                            <Link
+                              key={i}
+                              href={sub.path}
+                              onClick={handleSubmenuItemClick}
+                              className={`flex items-center px-4 py-2 ml-6 rounded-lg text-sm transition-all duration-200 hover:bg-blue-600/30 group ${
                                 pathname.startsWith(sub.path)
-                                  ? 'bg-white'
-                                  : 'bg-blue-300 group-hover:bg-white'
+                                  ? 'bg-blue-600 text-white shadow-md'
+                                  : 'text-blue-100 hover:text-white'
                               }`}
-                            />
-                            {sub.title}
-                          </Link>
-                        ))}
+                            >
+                              <div
+                                className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
+                                  pathname.startsWith(sub.path)
+                                    ? 'bg-white'
+                                    : 'bg-blue-300 group-hover:bg-white'
+                                }`}
+                              />
+                              {sub.title}
+                            </Link>
+                          ))}
                       </div>
                     )}
                   </>
@@ -424,11 +428,23 @@ export default function AdminLayout({ children }) {
             {/* User Info */}
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600 hidden sm:block">
-                Selamat datang, <span className="font-medium">Admin</span>
+                Selamat datang, <span className="font-medium">{session?.user?.name || 'Pengguna'}</span>
               </span>
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200">
-                <FontAwesomeIcon icon={faUser} className="w-4 h-4 text-white" />
-              </div>
+              <Link href="/admin/dashboard/settings/account">
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || 'avatar'}
+                    className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200">
+                    <span className="text-white text-sm font-medium">
+                      {(session?.user?.name || 'U').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+              </Link>
             </div>
           </header>
 
