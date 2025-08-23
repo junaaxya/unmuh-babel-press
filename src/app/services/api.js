@@ -41,7 +41,7 @@ async function apiRequest(url, method = 'GET', body = null, isFormData = false) 
   }
 
   throw {
-    message: errorBody.message || 'Request failed',
+    message: errorBody.error || errorBody.message || 'Request failed',
     fieldErrors: errorBody.fieldErrors,
   };
 }
