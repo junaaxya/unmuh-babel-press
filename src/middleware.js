@@ -13,8 +13,7 @@ export async function middleware(req) {
   if (!token) {
     if (
       pathname === '/admin/login' ||
-      pathname.startsWith('/admin/forgot-password') ||
-      pathname.startsWith('/admin/reset-password')
+      pathname.startsWith('/admin/forgot-password')
     ) {
       return NextResponse.next();
     }

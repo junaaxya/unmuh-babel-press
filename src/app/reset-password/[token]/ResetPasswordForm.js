@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 
-export default function ResetPasswordPage({ params }) {
-  const { token } = params;
+export default function ResetPasswordForm({ token }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -75,9 +74,7 @@ export default function ResetPasswordPage({ params }) {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            className={`w-full py-2 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
           >
             {loading ? "Memproses..." : "Reset Password"}
           </button>

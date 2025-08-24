@@ -33,7 +33,7 @@ export async function POST(request) {
   });
 
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const resetLink = `${baseUrl}/admin/reset-password/${token}`;
+  const resetLink = `${baseUrl}/reset-password/${token}`;
   const fromName = process.env.MAIL_FROM_NAME;
   const fromEmail = process.env.MAIL_FROM_EMAIL;
 
