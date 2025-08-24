@@ -98,7 +98,11 @@ export const GET = handler;
 
 export async function POST(request, context) {
   if (request.nextUrl?.pathname === '/api/auth/callback/credentials') {
-    const rateLimitResponse = await applyRateLimit(request);
+    const rateLimitResponse = await applyRateLimit(
+      request,
+      10,
+      `${request.nextUrl.origin}/admin/login?error=RateLimit`
+    );
     if (rateLimitResponse) return rateLimitResponse;
   }
   return handler(request, context);

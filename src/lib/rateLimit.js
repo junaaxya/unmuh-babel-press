@@ -8,24 +8,22 @@ const limiter = rateLimit({
 });
 
 /**
- * Apply rate limiting based on the request IP address.
+ * Apply rate limiting based on the request.
  * Returns a NextResponse with 429 status when the limit is exceeded,
  * otherwise returns null allowing the request to proceed.
+ *
+ * When a `url` is provided, it will be included in the JSON body to
+ * satisfy clients (like NextAuth) that expect a redirect URL even on
+ * error responses.
  */
-export async function applyRateLimit(request, limit = 10) {
-  const ip =
-    request.ip ||
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    '127.0.0.1';
-
+export async function applyRateLimit(request, limit = 10, url) {
   try {
-    // next-rate-limit expects an object with setHeader, so provide a minimal stub
-    await limiter.check({ setHeader: () => {} }, limit, ip);
+    limiter.checkNext(request, limit);
     return null;
   } catch {
-    return NextResponse.json(
-      { error: 'Terlalu banyak permintaan. Coba lagi nanti.' },
-      { status: 429 }
-    );
+    const body = url
+      ? { url }
+      : { error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
+    return NextResponse.json(body, { status: 429 });
   }
 }
