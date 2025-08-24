@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@/lib/prismaAdapter';
 import { prisma } from '@/lib/db';
 import { comparePassword } from '@/lib/hash';
+import { applyRateLimit } from '@/lib/rateLimit';
 
 // ensure NEXTAUTH_URL is always set to avoid configuration errors
 if (!process.env.NEXTAUTH_URL) {
@@ -92,4 +93,17 @@ export const authOptions = {
 };
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+
+export const GET = handler;
+
+export async function POST(request, context) {
+  if (request.nextUrl?.pathname === '/api/auth/callback/credentials') {
+    const rateLimitResponse = await applyRateLimit(
+      request,
+      10,
+      `${request.nextUrl.origin}/admin/login?error=RateLimit`
+    );
+    if (rateLimitResponse) return rateLimitResponse;
+  }
+  return handler(request, context);
+}

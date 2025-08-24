@@ -7,11 +7,14 @@ import crypto from 'crypto';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 import InvitationEmail from '@/components/emails/InvitationEmail'; // Pastikan template email diimpor
+import { applyRateLimit } from '@/lib/rateLimit';
 
 // Inisialisasi Resend di luar fungsi
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request) {
+  const rateLimitResponse = await applyRateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== 'ADMIN') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -21,6 +24,8 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const rateLimitResponse = await applyRateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== 'ADMIN') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

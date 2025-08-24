@@ -2,11 +2,21 @@ import { NextResponse } from 'next/server';
 
 import { hashPassword } from '@/lib/hash';
 import { prisma } from '@/lib/db';
+import { applyRateLimit } from '@/lib/rateLimit';
 
 const PASSWORD_MIN_LENGTH = Number(process.env.PASSWORD_MIN_LENGTH ?? 8);
 
 export async function POST(request) {
-    const { token, name, password } = await request.json();
+    const rateLimitResponse = await applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
+
+    const { token, name, password, confirmPassword } = await request.json();
+    if (password !== confirmPassword) {
+        return NextResponse.json(
+            { error: 'Konfirmasi kata sandi tidak cocok' },
+            { status: 400 }
+        );
+    }
     if (!password || password.length < PASSWORD_MIN_LENGTH) {
         return NextResponse.json(
             {
