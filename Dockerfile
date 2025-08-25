@@ -2,7 +2,6 @@
 
 # [Stage 1: Builder]
 # Tahap ini fokus untuk meng-install dependencies dan membangun aplikasi Next.js
-# Menggunakan base image yang lebih lengkap untuk build
 FROM node:20-bookworm AS builder
 WORKDIR /app
 
@@ -24,14 +23,12 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 # Build aplikasi Next.js
-# Menyalin sisa kode setelah install dependencies adalah praktik terbaik
 COPY . .
 RUN npm run build
 
 
 # ---------- [Stage 2: Runner] ----------
 # Tahap ini fokus untuk menjalankan aplikasi yang sudah di-build
-# Menggunakan base image yang lebih kecil dan aman
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -46,12 +43,20 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
+# Ini akan menimpa node_modules minimal dari 'standalone' dan memastikan
+# semua dependencies (seperti bcryptjs untuk seed) tersedia.
+COPY --from=builder /app/node_modules ./node_modules
+
+
 # Salin entrypoint script untuk migrasi
 COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
 # Salin folder prisma agar migrasi bisa dijalankan
 COPY --from=builder /app/prisma ./prisma
 # Salin package.json agar npx bisa menemukan prisma
 COPY --from=builder /app/package.json ./package.json
+
+# === PERBAIKAN: Salin folder 'src' agar bisa diakses oleh seed.js ===
+COPY --from=builder /app/src ./src
 
 RUN chmod +x ./entrypoint.sh
 
