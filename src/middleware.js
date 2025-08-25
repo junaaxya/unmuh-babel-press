@@ -11,7 +11,12 @@ export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
-    if (pathname === '/admin/login') return NextResponse.next();
+    if (
+      pathname === '/admin/login' ||
+      pathname.startsWith('/admin/forgot-password')
+    ) {
+      return NextResponse.next();
+    }
     const loginUrl = new URL('/admin/login', req.url);
     loginUrl.searchParams.set('callbackUrl', pathname);
     return NextResponse.redirect(loginUrl);
