@@ -20,7 +20,14 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
   const invites = await prisma.invitation.findMany({ orderBy: { createdAt: 'desc' } });
-  return NextResponse.json(invites);
+  const emails = invites.map((inv) => inv.email);
+  const users = await prisma.user.findMany({
+    where: { email: { in: emails } },
+    select: { email: true, role: true },
+  });
+  const roles = Object.fromEntries(users.map((u) => [u.email, u.role]));
+  const data = invites.map((inv) => ({ ...inv, role: roles[inv.email] }));
+  return NextResponse.json(data);
 }
 
 export async function POST(request) {

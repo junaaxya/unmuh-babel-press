@@ -1,16 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faUsers, 
-  faPlus, 
-  faTrash, 
-  faEnvelope, 
-  faUserShield, 
-  faUserEdit, 
-  faEye, 
-  faClock, 
+  faUsers,
+  faPlus,
+  faTrash,
+  faEnvelope,
+  faPaperPlane,
+  faUserShield,
+  faUserEdit,
+  faEye,
+  faClock,
   faExclamationTriangle,
   faSpinner,
   faCheck,
@@ -40,9 +41,10 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('ALL');
   const [showInvites, setShowInvites] = useState(true);
+  const [resendingEmail, setResendingEmail] = useState(null);
 
   // Existing functions remain the same
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/users');
       if (res.ok) {
@@ -58,9 +60,9 @@ export default function UsersPage() {
         message: 'Gagal memuat data pengguna. Silakan refresh halaman.',
       });
     }
-  };
+  }, []);
 
-  const loadInvites = async () => {
+  const loadInvites = useCallback(async () => {
     if (!canManage) return;
     try {
       const res = await fetch('/api/admin/invitations');
@@ -76,16 +78,18 @@ export default function UsersPage() {
         message: 'Gagal memuat data undangan.',
       });
     }
-  };
+  }, [canManage]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([loadUsers(), loadInvites()]);
+      const tasks = [loadUsers()];
+      if (canManage) tasks.push(loadInvites());
+      await Promise.all(tasks);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [loadUsers, loadInvites, canManage]);
 
   const validateForm = () => {
     const errors = {};
@@ -134,6 +138,37 @@ export default function UsersPage() {
       });
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleResendInvite = async (email) => {
+    setResendingEmail(email);
+    try {
+      const res = await fetch('/api/admin/invitations/resend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        setNotification({
+          id: Date.now(),
+          type: 'success',
+          message: `Undangan berhasil dikirim ulang ke ${email}`,
+        });
+        await loadInvites();
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Gagal mengirim ulang undangan');
+      }
+    } catch (error) {
+      setNotification({
+        id: Date.now(),
+        type: 'error',
+        message: error.message || 'Gagal mengirim ulang undangan',
+      });
+    } finally {
+      setResendingEmail(null);
     }
   };
 
@@ -520,6 +555,23 @@ export default function UsersPage() {
                           <FontAwesomeIcon icon={getRoleIcon(invite.role)} className="w-3 h-3 mr-1" />
                           {getRoleLabel(invite.role)}
                         </span>
+                        <button
+                          onClick={() => handleResendInvite(invite.email)}
+                          disabled={resendingEmail === invite.email}
+                          className="inline-flex items-center px-3 py-1.5 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all duration-200 text-xs font-medium disabled:opacity-50"
+                        >
+                          {resendingEmail === invite.email ? (
+                            <>
+                              <FontAwesomeIcon icon={faSpinner} className="w-3 h-3 mr-2 animate-spin" />
+                              Mengirim...
+                            </>
+                          ) : (
+                            <>
+                              <FontAwesomeIcon icon={faPaperPlane} className="w-3 h-3 mr-2" />
+                              Kirim Ulang
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
                   ))}
