@@ -97,7 +97,7 @@ export default function MyAccountPage() {
                 payload.newPassword = newPassword;
             }
 
-            await updateProfile(payload);
+            const res = await updateProfile(payload);
             await update();
 
             setCurrentPassword('');
@@ -106,7 +106,7 @@ export default function MyAccountPage() {
             setNotif({
                 id: Date.now(),
                 type: 'success',
-                message: 'Profil berhasil diperbarui',
+                message: res.message || 'Profil berhasil diperbarui',
             });
         } catch (err) {
             setNotif({

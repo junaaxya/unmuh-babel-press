@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -44,7 +44,7 @@ export default function UsersPage() {
   const [resendingEmail, setResendingEmail] = useState(null);
 
   // Existing functions remain the same
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/users');
       if (res.ok) {
@@ -60,9 +60,9 @@ export default function UsersPage() {
         message: 'Gagal memuat data pengguna. Silakan refresh halaman.',
       });
     }
-  };
+  }, []);
 
-  const loadInvites = async () => {
+  const loadInvites = useCallback(async () => {
     if (!canManage) return;
     try {
       const res = await fetch('/api/admin/invitations');
@@ -78,16 +78,18 @@ export default function UsersPage() {
         message: 'Gagal memuat data undangan.',
       });
     }
-  };
+  }, [canManage]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([loadUsers(), loadInvites()]);
+      const tasks = [loadUsers()];
+      if (canManage) tasks.push(loadInvites());
+      await Promise.all(tasks);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [loadUsers, loadInvites, canManage]);
 
   const validateForm = () => {
     const errors = {};

@@ -101,5 +101,17 @@ export async function PUT(req) {
         data: dataToUpdate,
     });
 
-    return NextResponse.json({ message: 'Profile updated successfully' });
+    const hasPasswordChange = 'hashedPassword' in dataToUpdate;
+    const hasProfileChange = Object.keys(dataToUpdate).some(
+        (key) => key !== 'hashedPassword'
+    );
+
+    let message = 'Profile updated successfully';
+    if (hasPasswordChange && !hasProfileChange) {
+        message = 'Password updated successfully';
+    } else if (hasPasswordChange && hasProfileChange) {
+        message = 'Profile and password updated successfully';
+    }
+
+    return NextResponse.json({ message });
 }
