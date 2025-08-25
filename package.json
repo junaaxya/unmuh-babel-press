@@ -3,7 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
@@ -59,11 +58,8 @@
         "react-dom": "^19.0.0",
         "redoc": "^2.5.0",
         "use-debounce": "^10.0.5",
-        "zod": "^3.25.16",
-        "bcrypt": "^5.1.1",
-        "formidable": "^3.5.1"
+        "zod": "^3.25.16"
     },
-
     "devDependencies": {
         "@eslint/eslintrc": "^3",
         "@tailwindcss/postcss": "^4",
