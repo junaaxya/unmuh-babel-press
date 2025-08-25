@@ -6,67 +6,79 @@ import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faChartLine,
-    faBook,
-    faNewspaper,
-    faCalendarAlt,
-    faHome,
-    faUser,
-    faServicestack,
-    faEnvelope,
-    faBars,
-    faSignOutAlt,
-    faCog,
-    faChevronDown,
-    faChevronRight,
-    faTimes,
-    faUsers,
+  faChartLine,
+  faBook,
+  faNewspaper,
+  faCalendarAlt,
+  faHome,
+  faServicestack,
+  faEnvelope,
+  faBars,
+  faSignOutAlt,
+  faCog,
+  faChevronDown,
+  faChevronRight,
+  faTimes,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
 const MENU_ITEMS = [
-    {
-        title: 'Dashboard',
-        icon: faChartLine,
-        path: '/admin/dashboard',
-        single: true,
-    },
-    {
-        title: 'Konten Website',
-        icon: faHome,
-        submenu: [
-            { title: 'Beranda', path: '/admin/dashboard/beranda' },
-            { title: 'Profil', path: '/admin/dashboard/profil' },
-            { title: 'Layanan', path: '/admin/dashboard/layanan' },
-            { title: 'Kontak', path: '/admin/dashboard/kontak' },
-        ],
-    },
-    {
-        title: 'Katalog & Publikasi',
-        icon: faBook,
-        submenu: [{ title: 'Katalog Buku', path: '/admin/dashboard/catalog' }],
-    },
-    {
-        title: 'Berita & Event',
-        icon: faNewspaper,
-        submenu: [
-            { title: 'Berita', path: '/admin/dashboard/berita' },
-            { title: 'Event', path: '/admin/dashboard/event' },
-        ],
-    },
-    {
-        title: 'Pengaturan',
-        icon: faCog,
-        path: '/admin/dashboard/settings',
-        single: true,
-        minRole: 'EDITOR',
-    },
-    {
-        title: 'Users',
-        icon: faUsers,
-        path: '/admin/dashboard/users',
-        single: true,
-        minRole: 'ADMIN',
-    },
+  {
+    title: 'Dashboard',
+    icon: faChartLine,
+    path: '/admin/dashboard',
+    single: true,
+  },
+  {
+    title: 'Konten Website',
+    icon: faHome,
+    submenu: [
+      { title: 'Beranda', path: '/admin/dashboard/beranda' },
+      { title: 'Profil', path: '/admin/dashboard/profil' },
+      { title: 'Layanan', path: '/admin/dashboard/layanan' },
+      { title: 'Kontak', path: '/admin/dashboard/kontak' },
+    ],
+  },
+  {
+    title: 'Katalog & Publikasi',
+    icon: faBook,
+    submenu: [
+      { title: 'Katalog Buku', path: '/admin/dashboard/catalog' },
+      { title: 'Penulis', path: '/admin/dashboard/penulis' },
+      { title: 'Kategori', path: '/admin/dashboard/kategori' },
+    ],
+  },
+  {
+    title: 'Berita & Event',
+    icon: faNewspaper,
+    submenu: [
+      { title: 'Berita', path: '/admin/dashboard/berita' },
+      { title: 'Event', path: '/admin/dashboard/event' },
+    ],
+  },
+  {
+    title: 'Navigasi',
+    icon: faBars,
+    submenu: [
+      { title: 'Menu Navbar', path: '/admin/dashboard/navbar' },
+      { title: 'Submenu', path: '/admin/dashboard/navbar/submenu' },
+    ],
+  },
+  {
+    title: 'Pengaturan',
+    icon: faCog,
+    submenu: [
+      { title: 'Akun Saya', path: '/admin/dashboard/settings/account' },
+      { title: 'Pengaturan Situs', path: '/admin/dashboard/settings', minRole: 'EDITOR' },
+    ],
+  },
+  {
+    title: 'Users',
+    icon: faUsers,
+    path: '/admin/dashboard/users',
+    single: true,
+    minRole: 'ADMIN',
+  },
 ];
 
 export default function AdminLayout({ children }) {
@@ -368,49 +380,47 @@ export default function AdminLayout({ children }) {
                                         )}
                                     </button>
 
-                                    {/* Submenu */}
-                                    {(sidebarOpen || isMobile) && (
-                                        <div
-                                            className={`ml-4 mt-1 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                                                expandedMenus[index]
-                                                    ? 'max-h-96 opacity-100 transform translate-y-0'
-                                                    : 'max-h-0 opacity-0 transform -translate-y-2'
-                                            }`}
-                                        >
-                                            {item.submenu.map((sub, i) => (
-                                                <Link
-                                                    key={i}
-                                                    href={sub.path}
-                                                    onClick={
-                                                        handleSubmenuItemClick
-                                                    }
-                                                    className={`flex items-center px-4 py-2 ml-6 rounded-lg text-sm transition-all duration-200 hover:bg-blue-600/30 group ${
-                                                        pathname.startsWith(
-                                                            sub.path
-                                                        )
-                                                            ? 'bg-blue-600 text-white shadow-md'
-                                                            : 'text-blue-100 hover:text-white'
-                                                    }`}
-                                                >
-                                                    <div
-                                                        className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
-                                                            pathname.startsWith(
-                                                                sub.path
-                                                            )
-                                                                ? 'bg-white'
-                                                                : 'bg-blue-300 group-hover:bg-white'
-                                                        }`}
-                                                    />
-                                                    {sub.title}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    ))}
-                </nav>
+                    {/* Submenu */}
+                    {(sidebarOpen || isMobile) && (
+                      <div
+                        className={`ml-4 mt-1 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${
+                          expandedMenus[index]
+                            ? 'max-h-96 opacity-100 transform translate-y-0'
+                            : 'max-h-0 opacity-0 transform -translate-y-2'
+                        }`}
+                      >
+                        {item.submenu
+                          .filter(
+                            (sub) => !sub.minRole || roleRank[role] >= roleRank[sub.minRole]
+                          )
+                          .map((sub, i) => (
+                            <Link
+                              key={i}
+                              href={sub.path}
+                              onClick={handleSubmenuItemClick}
+                              className={`flex items-center px-4 py-2 ml-6 rounded-lg text-sm transition-all duration-200 hover:bg-blue-600/30 group ${
+                                pathname.startsWith(sub.path)
+                                  ? 'bg-blue-600 text-white shadow-md'
+                                  : 'text-blue-100 hover:text-white'
+                              }`}
+                            >
+                              <div
+                                className={`w-2 h-2 rounded-full mr-3 transition-all duration-200 ${
+                                  pathname.startsWith(sub.path)
+                                    ? 'bg-white'
+                                    : 'bg-blue-300 group-hover:bg-white'
+                                }`}
+                              />
+                              {sub.title}
+                            </Link>
+                          ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+          </nav>
 
                 {/* Logout Button */}
                 <div
@@ -490,20 +500,28 @@ export default function AdminLayout({ children }) {
                         </p>
                     </div>
 
-                    {/* User Info */}
-                    <div className="flex items-center space-x-4">
-                        <span className="text-sm text-gray-600 hidden sm:block">
-                            Selamat datang,{' '}
-                            <span className="font-medium">Admin</span>
-                        </span>
-                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200">
-                            <FontAwesomeIcon
-                                icon={faUser}
-                                className="w-4 h-4 text-white"
-                            />
-                        </div>
-                    </div>
-                </header>
+            {/* User Info */}
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600 hidden sm:block">
+                Selamat datang, <span className="font-medium">{session?.user?.name || 'Pengguna'}</span>
+              </span>
+              <Link href="/admin/dashboard/settings/account">
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || 'avatar'}
+                    className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200">
+                    <span className="text-white text-sm font-medium">
+                      {(session?.user?.name || 'U').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+              </Link>
+            </div>
+          </header>
 
                 {/* Main Content Area */}
                 <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-50">

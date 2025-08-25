@@ -11,8 +11,9 @@ async function main() {
     update: {},
     create: {
       email,
-      password,
-      role: 'ADMIN'
+      hashedPassword: password,
+      role: 'ADMIN',
+      status: 'ACTIVE'
     }
   });
   await prisma.siteSetting.upsert({

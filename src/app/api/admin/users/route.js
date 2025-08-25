@@ -1,19 +1,19 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { hashPassword } from '@/lib/hash';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
 
 export async function GET(request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = parseInt(searchParams.get('limit') || '10', 10);
   const search = (searchParams.get('search') || '').trim().toLowerCase();
-  const where = search ? { email: { contains: search } } : {};
+  const where = {
+    status: 'ACTIVE',
+    ...(search ? { email: { contains: search } } : {}),
+  };
   const [data, total] = await Promise.all([
     prisma.user.findMany({
       where,
@@ -27,19 +27,9 @@ export async function GET(request) {
   return NextResponse.json({ data, meta: { total, page, limit } });
 }
 
-export async function POST(request) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  if (session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
-  const { email, password, role } = await request.json();
-  const hashed = await hashPassword(password);
-  const user = await prisma.user.create({
-    data: { email: email.trim().toLowerCase(), password: hashed, role },
-  });
-  return NextResponse.json({ id: user.id });
-}
+
+// User creation is handled via invitation flow
+
 
 export async function PUT(request) {
   const session = await getServerSession(authOptions);

@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { authorize } from "@/lib/authorize";
 
-export async function PUT(req, { params }) {
+export async function PUT(req, context) {
   const authError = await authorize(req);
   if (authError) return authError;
-  const { id } = await params;
+  const { params: maybeParams } = context;
+  const { id } = await maybeParams;
 
   try {
     const existingNews = await prisma.news.findUnique({

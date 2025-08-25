@@ -38,6 +38,12 @@ model listbuku {
 
 ---
 
+## Changelog
+
+- **BREAKING:** Removed settings fields `logoUrl`, `contactEmail`, `fromName`, `fromEmail`, `defaultTitle`, `defaultDescription`, `ogImageUrl`, `facebook`, `instagram`, `twitter`, `ga4MeasurementId`, and `metaPixelId`.
+- **New:** Added `faviconUrl` with upload API and admin UI.
+- **Security:** `passwordMinLength` enforced on backend via `PASSWORD_MIN_LENGTH` environment variable (default 8).
+
 ## 🔌 API Endpoint
 
 ### 1. `GET /api/books`

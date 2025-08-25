@@ -31,7 +31,13 @@ export const eventSchema = z.object({
   registrationTitle: z.string().optional(),
   registrationDescription: z.string().optional(),
   registrationButtonText: z.string().optional(),
-  registrationLink: z.string().url({ message: "URL registrasi tidak valid" }).nullable().optional(),
+  registrationLink: z.preprocess(
+    (val) => {
+      if (typeof val === 'string' && val.trim() === '') return null;
+      return val;
+    },
+    z.string().url({ message: "URL registrasi tidak valid" }).nullable().optional()
+  ),
   registrationDeadline: z.preprocess(
         (arg) => {
             // Jika input kosong atau tidak ada, anggap sebagai null.

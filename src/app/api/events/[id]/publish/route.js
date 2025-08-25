@@ -4,10 +4,11 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { authorize } from "@/lib/authorize";
 
-export async function PUT(req, { params }) {
+export async function PUT(req, context) {
   const authError = await authorize(req);
   if (authError) return authError;
-  const { id } = params;
+  const { params: maybeParams } = context;
+  const { id } = await maybeParams;
 
   try {
     const existingEvent = await prisma.event.findUnique({
