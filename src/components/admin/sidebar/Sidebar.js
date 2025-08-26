@@ -9,6 +9,7 @@ import {
   faNewspaper,
   faUserEdit,
   faTags,
+  faIdCard,
   faCog,
   faChevronLeft,
   faChevronRight,
@@ -17,6 +18,7 @@ import {
 
 const menuItems = [
   { title: 'Dashboard', icon: faChartLine, path: '/admin/dashboard' },
+  { title: 'Profil', icon: faIdCard, path: '/admin/dashboard/profil' },
   { title: 'Buku', icon: faBook, path: '/admin/books' },
   { title: 'Berita', icon: faNewspaper, path: '/admin/news' },
   { title: 'Penulis', icon: faUserEdit, path: '/admin/authors' },
