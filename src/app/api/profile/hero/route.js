@@ -3,10 +3,18 @@ import { prisma } from '@/lib/db';
 import { authorize } from '@/lib/authorize';
 
 export async function GET() {
-  const hero = await prisma.profileHero.findFirst({
-    include: { stats: { orderBy: { order: 'asc' } } },
-  });
-  return NextResponse.json({ status: 'success', data: hero });
+  try {
+    const hero = await prisma.profileHero.findFirst({
+      include: { stats: { orderBy: { order: 'asc' } } },
+    });
+    return NextResponse.json({ status: 'success', data: hero || {} });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { status: 'error', message: 'Failed to fetch hero' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT(request) {
