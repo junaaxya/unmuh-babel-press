@@ -304,3 +304,39 @@ export const uploadAvatarImage = (file) => {
     form.append('file', file);
     return apiRequest('/api/me/avatar', 'POST', form, true);
 };
+
+// ==============================
+// Profile Page API
+// ==============================
+
+export const getProfileHero = () => {
+    return apiRequest('/api/profile/hero');
+};
+
+export const createProfileHero = (payload) => {
+    return apiRequest('/api/profile/hero', 'POST', payload);
+};
+
+export const updateProfileHero = (payload) => {
+    return apiRequest('/api/profile/hero', 'PUT', payload);
+};
+
+export const deleteProfileHero = () => {
+    return apiRequest('/api/profile/hero', 'DELETE');
+};
+
+export const getProfileHistory = () => {
+    return apiRequest('/api/profile/history');
+};
+
+export const createProfileHistory = (payload) => {
+    return apiRequest('/api/profile/history', 'POST', payload);
+};
+
+export const updateProfileHistory = (id, payload) => {
+    return apiRequest(`/api/profile/history/${id}`, 'PUT', payload);
+};
+
+export const deleteProfileHistory = (id) => {
+    return apiRequest(`/api/profile/history/${id}`, 'DELETE');
+};
