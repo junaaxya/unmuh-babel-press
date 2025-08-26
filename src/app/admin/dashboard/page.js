@@ -121,14 +121,9 @@ export default function DashboardPage() {
   const { data: session } = useSession();
   const role = session?.user?.role || 'VIEWER';
   const canEdit = role === 'ADMIN' || role === 'EDITOR';
-  const [stats, setStats] = useState({
-    books: 0,
-    news: 0,
-    events: 0,
-    visitors: 0,
-  });
-  const [recentActivity, setRecentActivity] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -136,34 +131,14 @@ export default function DashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
-      // Simulate API calls - replace with actual API endpoints
-      const [booksRes, newsRes, eventsRes] = await Promise.all([
-        fetch('/api/books/search'),
-        fetch('/api/berita/search'),
-        // fetch('/api/events/search'), // Uncomment when API is ready
-      ]);
-
-      const booksData = await booksRes.json();
-      const newsData = await newsRes.json();
-
-      setStats({
-        books: booksData.data?.length || 0,
-        news: newsData.data?.length || 0,
-        events: 5, // Placeholder
-        visitors: 1250, // Placeholder
-      });
-
-      // Mock recent activity data
-      setRecentActivity([
-        { type: 'book', title: 'Buku Metodologi Penelitian', time: '2 jam yang lalu', status: 'published' },
-        { type: 'news', title: 'Peluncuran Program Studi Baru', time: '4 jam yang lalu', status: 'draft' },
-        { type: 'event', title: 'Seminar Nasional Pendidikan', time: '1 hari yang lalu', status: 'published' },
-        { type: 'book', title: 'Manajemen Keuangan Modern', time: '2 hari yang lalu', status: 'updated' },
-      ]);
-
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      const res = await fetch('/api/dashboard/stats');
+      if (!res.ok) throw new Error('Failed to fetch dashboard data');
+      const data = await res.json();
+      setDashboardData(data);
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+      setError('Gagal memuat data dashboard');
+    } finally {
       setLoading(false);
     }
   };
@@ -172,6 +147,14 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-red-600">{error}</p>
       </div>
     );
   }
@@ -204,34 +187,34 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
           title="Total Buku"
-          value={stats.books}
+          value={dashboardData.stats.books.total.toLocaleString()}
           icon={faBook}
-          trend="up"
-          trendValue="12"
+          trend={dashboardData.stats.books.trend >= 0 ? 'up' : 'down'}
+          trendValue={Math.abs(dashboardData.stats.books.trend).toFixed(1)}
           color="blue"
         />
         <StatsCard
           title="Berita Aktif"
-          value={stats.news}
+          value={dashboardData.stats.news.total.toLocaleString()}
           icon={faNewspaper}
-          trend="up"
-          trendValue="8"
+          trend={dashboardData.stats.news.trend >= 0 ? 'up' : 'down'}
+          trendValue={Math.abs(dashboardData.stats.news.trend).toFixed(1)}
           color="green"
         />
         <StatsCard
           title="Event Mendatang"
-          value={stats.events}
+          value={dashboardData.stats.events.total.toLocaleString()}
           icon={faCalendarAlt}
-          trend="down"
-          trendValue="3"
+          trend={dashboardData.stats.events.trend >= 0 ? 'up' : 'down'}
+          trendValue={Math.abs(dashboardData.stats.events.trend).toFixed(1)}
           color="yellow"
         />
         <StatsCard
           title="Pengunjung Bulan Ini"
-          value={stats.visitors.toLocaleString()}
+          value={dashboardData.stats.visitors.total.toLocaleString()}
           icon={faEye}
-          trend="up"
-          trendValue="24"
+          trend={dashboardData.stats.visitors.trend >= 0 ? 'up' : 'down'}
+          trendValue={Math.abs(dashboardData.stats.visitors.trend).toFixed(1)}
           color="purple"
         />
       </div>
@@ -286,8 +269,12 @@ export default function DashboardPage() {
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="divide-y divide-gray-200">
-              {recentActivity.map((activity, index) => (
-                <RecentActivityItem key={index} {...activity} />
+              {dashboardData.recentActivity.map((activity, index) => (
+                <RecentActivityItem
+                  key={index}
+                  {...activity}
+                  time={new Date(activity.time).toLocaleString('id-ID')}
+                />
               ))}
             </div>
           </div>
