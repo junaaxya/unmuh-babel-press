@@ -1,6 +1,6 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faUsers, faCalendar, faNewspaper } from '@fortawesome/free-solid-svg-icons'
 import AnimatedCounter from '../ui/AnimatedCounter'
 
 
@@ -8,6 +8,8 @@ import AnimatedCounter from '../ui/AnimatedCounter'
 const iconMap = {
   'fa-book': faBook,
   'fa-users': faUsers,
+  'fa-calendar': faCalendar,
+  'fa-newspaper': faNewspaper,
 }
 
 const ProfileHero = ({ data }) => {
