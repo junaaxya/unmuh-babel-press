@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
 import ProfilClientPage from './ProfilClientPage';
 
+export const revalidate = 0;
+
 const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 async function fetchSection(path) {
-    const res = await fetch(`${base}${path}`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${base}${path}`, { cache: 'no-store' });
     if (!res.ok) return null;
     try {
         const json = await res.json();

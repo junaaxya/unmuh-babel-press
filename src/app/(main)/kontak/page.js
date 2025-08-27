@@ -1,10 +1,12 @@
 import KontakClientPage from './KontakClientPage';
 
+export const revalidate = 0;
+
 const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 export default async function KontakPage() {
   try {
-    const res = await fetch(`${base}/api/profile/contact`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${base}/api/profile/contact`, { cache: 'no-store' });
     const json = res.ok ? await res.json() : { data: null };
     return <KontakClientPage contact={json.data} />;
   } catch (e) {

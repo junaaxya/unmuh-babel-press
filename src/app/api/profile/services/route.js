@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { authorize } from '@/lib/authorize';
 
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const services = await prisma.service.findMany({
