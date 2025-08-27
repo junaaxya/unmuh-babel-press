@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import {
     faHistory,
@@ -13,6 +14,7 @@ import {
     faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
+// Components
 import ProfileHero from '@/components/common/ProfileHero';
 import ProfileSection from '@/components/common/ProfileSection';
 import ProfileCard from '@/components/common/ProfileCard';
@@ -20,9 +22,11 @@ import TabNavigation from '@/components/common/TabNavigation';
 import ContactInfo from '@/components/common/ContactInfo';
 import Timeline from '@/components/ui/Timeline';
 
-export default function ProfilClientPage({ data }) {
+// Data
+import { profileData } from '@/data/profileData';
+
+export default function ProfilClientPage() {
     const [activeTab, setActiveTab] = useState('sejarah');
-    const { hero, visionMission, history, team, services, contact } = data || {};
 
     const tabs = [
         { id: 'sejarah', label: 'Sejarah' },
@@ -48,9 +52,10 @@ export default function ProfilClientPage({ data }) {
                         subtitle="Perjalanan kami dalam mengembangkan dunia penerbitan akademik dan umum"
                         icon={faHistory}
                     >
-                        <Timeline items={history || []} />
+                        <Timeline items={profileData.history} />
                     </ProfileSection>
                 );
+
             case 'visi-misi':
                 return (
                     <ProfileSection
@@ -58,9 +63,12 @@ export default function ProfilClientPage({ data }) {
                         subtitle="Landasan dan arah pengembangan Unmuh Babel Press"
                         icon={faEye}
                     >
-                        <ProfileSection.VisionMission data={visionMission} />
+                        <ProfileSection.VisionMission
+                            data={profileData.visionMission}
+                        />
                     </ProfileSection>
                 );
+
             case 'struktur':
                 return (
                     <ProfileSection
@@ -69,7 +77,7 @@ export default function ProfilClientPage({ data }) {
                         icon={faUsers}
                     >
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {(team || []).map((member, index) => (
+                            {profileData.team.map((member, index) => (
                                 <ProfileCard
                                     key={index}
                                     title={member.name}
@@ -82,6 +90,7 @@ export default function ProfilClientPage({ data }) {
                         </div>
                     </ProfileSection>
                 );
+
             case 'layanan':
                 return (
                     <ProfileSection
@@ -90,19 +99,20 @@ export default function ProfilClientPage({ data }) {
                         icon={faCogs}
                     >
                         <div className="grid md:grid-cols-2 gap-8">
-                            {(services || []).map((service, index) => (
+                            {profileData.services.map((service, index) => (
                                 <ProfileCard
                                     key={index}
                                     title={service.title}
                                     description={service.description}
                                     icon={serviceIconMap[service.title]}
-                                    features={service.features?.map(f => f.text) || []}
+                                    features={service.features}
                                     variant="service"
                                 />
                             ))}
                         </div>
                     </ProfileSection>
                 );
+
             case 'kontak':
                 return (
                     <ProfileSection
@@ -110,9 +120,10 @@ export default function ProfilClientPage({ data }) {
                         subtitle="Dapatkan informasi lebih lanjut atau konsultasikan kebutuhan penerbitan Anda"
                         icon={faPhone}
                     >
-                        <ContactInfo data={contact} />
+                        <ContactInfo data={profileData.contact} />
                     </ProfileSection>
                 );
+
             default:
                 return null;
         }
@@ -120,7 +131,10 @@ export default function ProfilClientPage({ data }) {
 
     return (
         <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <ProfileHero data={hero} />
+            {/* Hero Section */}
+            <ProfileHero data={profileData.hero} />
+
+            {/* Tab Navigation */}
             <div className="bg-white dark:bg-gray-900 sticky top-0 z-40 shadow-sm">
                 <div className="container mx-auto px-4">
                     <TabNavigation
@@ -130,9 +144,13 @@ export default function ProfilClientPage({ data }) {
                     />
                 </div>
             </div>
+
+            {/* Tab Content */}
             <div className="bg-gray-50 dark:bg-gray-900">
                 {renderTabContent()}
             </div>
+
+            {/* Call to Action Section */}
             <section className="bg-gradient-to-r from-blue-600 to-purple-600 py-16">
                 <div className="container mx-auto px-4 text-center">
                     <div className="max-w-3xl mx-auto">
