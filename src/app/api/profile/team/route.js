@@ -9,7 +9,11 @@ export async function GET() {
         const team = await prisma.teamMember.findMany({
             orderBy: { order: 'asc' },
         });
-        return NextResponse.json({ status: 'success', data: team });
+        const normalized = team.map((member) => ({
+            ...member,
+            description: member.description || member.position || '',
+        }));
+        return NextResponse.json({ status: 'success', data: normalized });
     } catch (e) {
         console.error(e);
         return NextResponse.json(
@@ -35,7 +39,8 @@ export async function PUT(request) {
                 await prisma.teamMember.create({
                     data: {
                         name: member.name || '',
-                        position: member.description || '',
+                        position: member.description || member.position || '',
+                        description: member.description || member.position || '',
                         image: member.image || null,
                         order: index,
                     },

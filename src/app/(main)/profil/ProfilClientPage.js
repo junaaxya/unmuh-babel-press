@@ -77,9 +77,9 @@ export default function ProfilClientPage({ data }) {
                             {(data.team || []).map((member, index) => (
                                 <ProfileCard
                                     key={index}
-                                    title={member.name}
-                                    description={member.description}
-                                    image={member.image}
+                                    title={member.name || ''}
+                                    description={member.description || member.position || ''}
+                                    image={member.image || ''}
                                     variant="team"
                                     className="text-center"
                                 />
@@ -102,7 +102,7 @@ export default function ProfilClientPage({ data }) {
                                     title={service.title}
                                     description={service.description}
                                     icon={serviceIconMap[service.title]}
-                                    features={service.features}
+                                    features={(service.features || []).map((f) => f.text)}
                                     variant="service"
                                 />
                             ))}
