@@ -1,185 +1,85 @@
-'use client';
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-import {
-    faHistory,
-    faEye,
-    faUsers,
-    faPhone,
-    faCogs,
-    faGraduationCap,
-    faBookOpen,
-    faTabletAlt,
-    faUserEdit,
-} from '@fortawesome/free-solid-svg-icons';
+import { notFound } from 'next/navigation';
+import ProfilClientPage from './ProfilClientPage';
 
-// Components
-import ProfileHero from '@/components/common/ProfileHero';
-import ProfileSection from '@/components/common/ProfileSection';
-import ProfileCard from '@/components/common/ProfileCard';
-import TabNavigation from '@/components/common/TabNavigation';
-import ContactInfo from '@/components/common/ContactInfo';
-import Timeline from '@/components/ui/Timeline';
+export const revalidate = 0;
 
-// Data
-import { profileData } from '@/data/profileData';
+const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-export default function ProfilPage() {
-    const [activeTab, setActiveTab] = useState('sejarah');
+async function fetchSection(path) {
+    const res = await fetch(`${base}${path}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    try {
+        const json = await res.json();
+        return json.data;
+    } catch {
+        return null;
+    }
+}
 
-    const tabs = [
-        { id: 'sejarah', label: 'Sejarah' },
-        { id: 'visi-misi', label: 'Visi & Misi' },
-        { id: 'struktur', label: 'Tim Kami' },
-        { id: 'layanan', label: 'Layanan' },
-        { id: 'kontak', label: 'Kontak' },
-    ];
+export default async function Page() {
+    try {
+        const [hero, visionMission, history, team, services, contactRaw, statistics] = await Promise.all([
+            fetchSection('/api/profile/hero'),
+            fetchSection('/api/profile/vision-mission'),
+            fetchSection('/api/profile/history'),
+            fetchSection('/api/profile/team'),
+            fetchSection('/api/profile/services'),
+            fetchSection('/api/profile/contact'),
+            fetchSection('/api/statistics'),
+        ]);
 
-    const serviceIconMap = {
-        'Penerbitan Buku Akademik': faGraduationCap,
-        'Penerbitan Umum': faBookOpen,
-        'Digital Publishing': faTabletAlt,
-        'Self Publishing': faUserEdit,
-    };
+        if (!hero) return notFound();
 
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case 'sejarah':
-                return (
-                    <ProfileSection
-                        title="Sejarah Unmuh Babel Press"
-                        subtitle="Perjalanan kami dalam mengembangkan dunia penerbitan akademik dan umum"
-                        icon={faHistory}
-                    >
-                        <Timeline items={profileData.history} />
-                    </ProfileSection>
-                );
+        const heroWithStats = {
+            ...hero,
+            stats: [
+                { number: statistics?.books ?? 0, label: 'Buku Diterbitkan', suffix: '+', icon: 'fa-book' },
+                { number: statistics?.authors ?? 0, label: 'Penulis Tergabung', suffix: '+', icon: 'fa-users' },
+                { number: statistics?.events ?? 0, label: 'Available Events', suffix: '', icon: 'fa-calendar' },
+                { number: statistics?.news ?? 0, label: 'Latest News', suffix: '', icon: 'fa-newspaper' },
+            ],
+        };
 
-            case 'visi-misi':
-                return (
-                    <ProfileSection
-                        title="Visi & Misi"
-                        subtitle="Landasan dan arah pengembangan Unmuh Babel Press"
-                        icon={faEye}
-                    >
-                        <ProfileSection.VisionMission
-                            data={profileData.visionMission}
-                        />
-                    </ProfileSection>
-                );
+        const contact = contactRaw
+            ? {
+                  address: {
+                      street: contactRaw.addressStreet,
+                      city: contactRaw.addressCity,
+                      province: contactRaw.addressProvince,
+                      postal: contactRaw.addressPostal,
+                  },
+                  phone: {
+                      number: contactRaw.phoneNumber,
+                      whatsapp: contactRaw.phoneWhatsapp,
+                  },
+                  email: {
+                      general: contactRaw.emailGeneral,
+                      submission: contactRaw.emailSubmission,
+                  },
+                  social: (contactRaw.socialLinks || []).map((s) => ({
+                      ...s,
+                      icon: s.icon || 'fa-circle-info',
+                  })),
+                  hours: {
+                      weekdays: contactRaw.hoursWeekdays,
+                      weekend: contactRaw.hoursWeekend,
+                      closed: contactRaw.hoursClosed,
+                  },
+              }
+            : null;
 
-            case 'struktur':
-                return (
-                    <ProfileSection
-                        title="Tim Kami"
-                        subtitle="Para profesional yang berdedikasi dalam pengembangan penerbitan berkualitas"
-                        icon={faUsers}
-                    >
-                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {profileData.team.map((member, index) => (
-                                <ProfileCard
-                                    key={index}
-                                    title={member.name}
-                                    description={member.description}
-                                    image={member.image}
-                                    variant="team"
-                                    className="text-center"
-                                />
-                            ))}
-                        </div>
-                    </ProfileSection>
-                );
+        const data = {
+            hero: heroWithStats,
+            visionMission,
+            history,
+            team,
+            services,
+            contact,
+        };
 
-            case 'layanan':
-                return (
-                    <ProfileSection
-                        title="Layanan Kami"
-                        subtitle="Berbagai layanan penerbitan profesional untuk memenuhi kebutuhan Anda"
-                        icon={faCogs}
-                    >
-                        <div className="grid md:grid-cols-2 gap-8">
-                            {profileData.services.map((service, index) => (
-                                <ProfileCard
-                                    key={index}
-                                    title={service.title}
-                                    description={service.description}
-                                    icon={serviceIconMap[service.title]}
-                                    features={service.features}
-                                    variant="service"
-                                />
-                            ))}
-                        </div>
-                    </ProfileSection>
-                );
-
-            case 'kontak':
-                return (
-                    <ProfileSection
-                        title="Hubungi Kami"
-                        subtitle="Dapatkan informasi lebih lanjut atau konsultasikan kebutuhan penerbitan Anda"
-                        icon={faPhone}
-                    >
-                        <ContactInfo data={profileData.contact} />
-                    </ProfileSection>
-                );
-
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {/* Hero Section */}
-            <ProfileHero data={profileData.hero} />
-
-            {/* Tab Navigation */}
-            <div className="bg-white dark:bg-gray-900 sticky top-0 z-40 shadow-sm">
-                <div className="container mx-auto px-4">
-                    <TabNavigation
-                        tabs={tabs}
-                        activeTab={activeTab}
-                        onTabChange={setActiveTab}
-                    />
-                </div>
-            </div>
-
-            {/* Tab Content */}
-            <div className="bg-gray-50 dark:bg-gray-900">
-                {renderTabContent()}
-            </div>
-
-            {/* Call to Action Section */}
-            <section className="bg-gradient-to-r from-blue-600 to-purple-600 py-16">
-                <div className="container mx-auto px-4 text-center">
-                    <div className="max-w-3xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                            Siap Menerbitkan Karya Anda?
-                        </h2>
-                        <p className="text-xl text-blue-100 mb-8">
-                            Bergabunglah dengan ratusan penulis yang telah
-                            mempercayakan karya mereka kepada kami
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a
-                                href="https://wa.me/6282171222017?text=Halo%20saya%20ingin%20konsultasi%20gratis%20terkait%20layanan%20Anda"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 inline-block"
-                            >
-                                Konsultasi Gratis
-                            </a>
-                            <Link
-                                href="/catalog"
-                                className="inline-block border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200"
-                            >
-                                Lihat Katalog
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    );
+        return <ProfilClientPage data={data} />;
+    } catch (e) {
+        console.error(e);
+        return notFound();
+    }
 }

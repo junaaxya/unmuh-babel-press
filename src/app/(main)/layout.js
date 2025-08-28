@@ -1,5 +1,4 @@
 // Lokasi: src/app/(main)/layout.js
-'use client'; 
 
 import Navbar from '@/components/navbar/Navbar';
 import Footer from '@/sections/footer/Footer';

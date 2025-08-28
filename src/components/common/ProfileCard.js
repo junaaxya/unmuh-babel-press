@@ -1,4 +1,6 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -12,6 +14,9 @@ const ProfileCard = ({
     className = '',
     variant = 'default', // default, team, service
 }) => {
+    const [imgError, setImgError] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
+
     const getVariantStyles = () => {
         switch (variant) {
             case 'team':
@@ -35,15 +40,20 @@ const ProfileCard = ({
             {variant === 'team' && (
                 <>
                     {/* Image */}
-                    <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500">
-                        {image ? (
+                    <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
+                        {image && !imgError ? (
                             <Image
                                 src={image}
                                 alt={title}
                                 fill
-                                className="object-cover"
-                                sizes="100vw"
-                                priority
+                                style={{ objectFit: 'cover' }}
+                                className="w-full h-full object-cover"
+                                onLoad={() => setImgLoaded(true)}
+                                onError={(e) => {
+                                    console.error('Failed to load team image', e);
+                                    setImgError(true);
+                                }}
+                                loading="lazy"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">
@@ -53,7 +63,9 @@ const ProfileCard = ({
                                 />
                             </div>
                         )}
-                        <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+                        {image && imgLoaded && (
+                            <div className="absolute inset-0 bg-black/10"></div>
+                        )}
                     </div>
 
                     {/* Content */}

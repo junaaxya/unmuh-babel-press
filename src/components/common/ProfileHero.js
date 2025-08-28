@@ -1,6 +1,6 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faUsers, faCalendar, faHandshake } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faUsers, faCalendar, faNewspaper } from '@fortawesome/free-solid-svg-icons'
 import AnimatedCounter from '../ui/AnimatedCounter'
 
 
@@ -9,7 +9,7 @@ const iconMap = {
   'fa-book': faBook,
   'fa-users': faUsers,
   'fa-calendar': faCalendar,
-  'fa-handshake': faHandshake
+  'fa-newspaper': faNewspaper,
 }
 
 const ProfileHero = ({ data }) => {
@@ -41,7 +41,7 @@ const ProfileHero = ({ data }) => {
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {stats.map((stat, index) => (
             <div 
               key={index}
