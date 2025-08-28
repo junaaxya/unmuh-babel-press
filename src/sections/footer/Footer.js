@@ -6,17 +6,61 @@ import {
     faInstagram,
     faYoutube,
     faLinkedinIn,
+    faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons';
 import {
     faMapMarkerAlt,
     faPhone,
     faEnvelope,
     faClock,
+    faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Footer() {
+const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+const socialIconMap = {
+    'fa-facebook': faFacebookF,
+    'fa-twitter': faTwitter,
+    'fa-instagram': faInstagram,
+    'fa-youtube': faYoutube,
+    'fa-linkedin': faLinkedinIn,
+    'fa-whatsapp': faWhatsapp,
+};
+
+const socialHoverMap = {
+    Facebook: 'hover:bg-blue-600',
+    Twitter: 'hover:bg-blue-400',
+    Instagram: 'hover:bg-pink-600',
+    YouTube: 'hover:bg-red-600',
+    LinkedIn: 'hover:bg-blue-700',
+    WhatsApp: 'hover:bg-green-600',
+};
+
+export default async function Footer() {
+    let contact = null;
+    try {
+        const res = await fetch(`${base}/api/profile/contact`, { cache: 'no-store' });
+        const json = res.ok ? await res.json() : { data: null };
+        contact = json.data;
+    } catch (e) {
+        console.error(e);
+    }
+
+    const socialLinks = (contact?.socialLinks || []).map((s) => ({
+        ...s,
+        icon: s.icon || 'fa-circle-info',
+    }));
+
+    const addressParts = [
+        contact?.addressStreet,
+        contact?.addressCity,
+        contact?.addressProvince,
+        contact?.addressPostal,
+    ].filter(Boolean);
+    const address = addressParts.join(', ');
+
     return (
         <footer className="bg-gray-900 text-gray-300">
             {/* Main Footer Content */}
@@ -45,71 +89,24 @@ export default function Footer() {
                             Muhammadiyah Bangka Belitung
                         </p>
                         <div className="flex space-x-3">
-                            <Link
-                                href="https://facebook.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Facebook"
-                            >
-                                <div className="bg-gray-700 hover:bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                                    <FontAwesomeIcon
-                                        icon={faFacebookF}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                            </Link>
-                            <Link
-                                href="https://twitter.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Twitter"
-                            >
-                                <div className="bg-gray-700 hover:bg-blue-400 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                                    <FontAwesomeIcon
-                                        icon={faTwitter}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                            </Link>
-                            <Link
-                                href="https://instagram.com/unmuhbabelpress"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Instagram"
-                            >
-                                <div className="bg-gray-700 hover:bg-pink-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                                    <FontAwesomeIcon
-                                        icon={faInstagram}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                            </Link>
-                            <Link
-                                href="https://youtube.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="YouTube"
-                            >
-                                <div className="bg-gray-700 hover:bg-red-600 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                                    <FontAwesomeIcon
-                                        icon={faYoutube}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                            </Link>
-                            <Link
-                                href="https://linkedin.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="LinkedIn"
-                            >
-                                <div className="bg-gray-700 hover:bg-blue-700 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300">
-                                    <FontAwesomeIcon
-                                        icon={faLinkedinIn}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                            </Link>
+                            {socialLinks.map((item, index) => (
+                                <Link
+                                    key={index}
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={item.platform}
+                                >
+                                    <div
+                                        className={`bg-gray-700 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${socialHoverMap[item.platform] || 'hover:bg-gray-600'}`}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={socialIconMap[item.icon] || faCircleInfo}
+                                            className="w-4 h-4"
+                                        />
+                                    </div>
+                                </Link>
+                            ))}
                         </div>
                     </div>
 
@@ -212,44 +209,61 @@ export default function Footer() {
                             Kontak Kami
                         </h3>
                         <ul className="space-y-3">
-                            <li className="flex">
-                                <FontAwesomeIcon
-                                    icon={faMapMarkerAlt}
-                                    className="text-blue-400 mr-3 mt-1 w-5"
-                                />
-                                <span>
-                                    Gedung Rektorat Lt.3, Universitas
-                                    Muhammadiyah Bangka Belitung, Jl. KH Ahmad
-                                    Dahlan, Keramat, Rangkui, Pangkal Pinang,
-                                    Bangka Belitung
-                                </span>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faPhone}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <span>(+62) 821-7122-2017</span>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faEnvelope}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <Link
-                                    href="mailto:haki@univ.edu"
-                                    className="hover:text-blue-400 transition-colors duration-300"
-                                >
-                                    ubp@unmuhbabel.ac.id
-                                </Link>
-                            </li>
-                            <li className="flex items-center">
-                                <FontAwesomeIcon
-                                    icon={faClock}
-                                    className="text-blue-400 mr-3 w-5"
-                                />
-                                <span>Senin-Jumat: 08.00-16.00 WIB</span>
-                            </li>
+                            {address && (
+                                <li className="flex">
+                                    <FontAwesomeIcon
+                                        icon={faMapMarkerAlt}
+                                        className="text-blue-400 mr-3 mt-1 w-5"
+                                    />
+                                    <span>{address}</span>
+                                </li>
+                            )}
+                            {contact?.phoneNumber && (
+                                <li className="flex items-center">
+                                    <FontAwesomeIcon
+                                        icon={faPhone}
+                                        className="text-blue-400 mr-3 w-5"
+                                    />
+                                    <span>{contact.phoneNumber}</span>
+                                </li>
+                            )}
+                            {contact?.emailGeneral && (
+                                <li className="flex items-center">
+                                    <FontAwesomeIcon
+                                        icon={faEnvelope}
+                                        className="text-blue-400 mr-3 w-5"
+                                    />
+                                    <Link
+                                        href={`mailto:${contact.emailGeneral}`}
+                                        className="hover:text-blue-400 transition-colors duration-300"
+                                    >
+                                        {contact.emailGeneral}
+                                    </Link>
+                                </li>
+                            )}
+                            {(contact?.hoursWeekdays || contact?.hoursWeekend || contact?.hoursClosed) && (
+                                <li className="flex items-center">
+                                    <FontAwesomeIcon
+                                        icon={faClock}
+                                        className="text-blue-400 mr-3 w-5"
+                                    />
+                                    <span>
+                                        {contact?.hoursWeekdays && (
+                                            <>
+                                                {contact.hoursWeekdays}
+                                                <br />
+                                            </>
+                                        )}
+                                        {contact?.hoursWeekend && (
+                                            <>
+                                                {contact.hoursWeekend}
+                                                <br />
+                                            </>
+                                        )}
+                                        {contact?.hoursClosed}
+                                    </span>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

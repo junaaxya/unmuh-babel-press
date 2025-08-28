@@ -40,6 +40,8 @@ export default function ProfilClientPage({ data }) {
         'Self Publishing': faUserEdit,
     };
 
+    const whatsapp = (data.contact?.phone.whatsapp || data.contact?.phone.number)?.replace(/[^0-9]/g, '');
+
     const renderTabContent = () => {
         switch (activeTab) {
             case 'sejarah':
@@ -159,14 +161,18 @@ export default function ProfilClientPage({ data }) {
                             mempercayakan karya mereka kepada kami
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a
-                                href="https://wa.me/6282171222017?text=Halo%20saya%20ingin%20konsultasi%20gratis%20terkait%20layanan%20Anda"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 inline-block"
-                            >
-                                Konsultasi Gratis
-                            </a>
+                            {whatsapp && (
+                                <a
+                                    href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
+                                        'Halo saya ingin konsultasi gratis terkait layanan Anda'
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 inline-block"
+                                >
+                                    Konsultasi Gratis
+                                </a>
+                            )}
                             <Link
                                 href="/catalog"
                                 className="inline-block border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200"

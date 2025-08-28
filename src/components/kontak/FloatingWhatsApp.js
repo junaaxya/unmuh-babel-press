@@ -9,35 +9,36 @@ export default function FloatingWhatsApp({ phone }) {
 
   // Show button after page loads
   useEffect(() => {
+    if (!phone) return;
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [phone]);
 
   // Auto show tooltip after delay
   useEffect(() => {
-    if (isVisible) {
-      const tooltipTimer = setTimeout(() => {
-        setShowTooltip(true);
-        // Auto hide tooltip after 3 seconds
-        setTimeout(() => setShowTooltip(false), 3000);
-      }, 2000);
+    if (!isVisible) return;
+    const tooltipTimer = setTimeout(() => {
+      setShowTooltip(true);
+      // Auto hide tooltip after 3 seconds
+      setTimeout(() => setShowTooltip(false), 3000);
+    }, 2000);
 
-      return () => clearTimeout(tooltipTimer);
-    }
+    return () => clearTimeout(tooltipTimer);
   }, [isVisible]);
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = (phone || '').replace(/[^0-9]/g, '') || '6282171222017';
+    const phoneNumber = (phone || '').replace(/[^0-9]/g, '');
+    if (!phoneNumber) return;
     const message = encodeURIComponent('Halo! Saya tertarik untuk mengetahui lebih lanjut tentang layanan Anda.');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
-  if (!isVisible) return null;
+  if (!phone || !isVisible) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -78,7 +79,7 @@ export default function FloatingWhatsApp({ phone }) {
       <div className="absolute bottom-full right-0 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
         <div className="bg-white rounded-lg shadow-lg p-3 min-w-48 border border-gray-200">
           <div className="text-sm text-gray-600 mb-1">Hubungi kami di:</div>
-          <div className="text-sm font-semibold text-gray-900">{phone || '+62 821-7122-2017'}</div>
+          <div className="text-sm font-semibold text-gray-900">{phone}</div>
           <div className="text-xs text-gray-500 mt-1">Online sekarang</div>
         </div>
       </div>
