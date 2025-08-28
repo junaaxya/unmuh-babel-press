@@ -6,13 +6,16 @@ import {
   faEnvelope,
   faClock,
   faWhatsapp,
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFacebook as faFacebookBrand,
   faInstagram as faInstagramBrand,
   faTwitter as faTwitterBrand,
   faLinkedin as faLinkedinBrand,
-  faWhatsapp as faWhatsappBrand
+  faWhatsapp as faWhatsappBrand,
+  faYoutube as faYoutubeBrand,
+  faTelegram as faTelegramBrand
 } from '@fortawesome/free-brands-svg-icons';
 
 const ContactInfo = ({ data }) => {
@@ -38,6 +41,8 @@ const ContactInfo = ({ data }) => {
     'fa-twitter': faTwitterBrand,
     'fa-linkedin': faLinkedinBrand,
     'fa-whatsapp': faWhatsappBrand,
+    'fa-youtube': faYoutubeBrand,
+    'fa-telegram': faTelegramBrand,
   };
 
   const getSocialColorClass = (platform) => {
@@ -47,6 +52,8 @@ const ContactInfo = ({ data }) => {
       Twitter: 'text-blue-400 hover:text-blue-500',
       LinkedIn: 'text-blue-700 hover:text-blue-800',
       WhatsApp: 'text-green-600 hover:text-green-700',
+      YouTube: 'text-red-600 hover:text-red-700',
+      Telegram: 'text-blue-500 hover:text-blue-600',
     };
     return colors[platform] || 'text-gray-600 hover:text-gray-700';
   };
@@ -191,8 +198,8 @@ const ContactInfo = ({ data }) => {
                   rel="noopener noreferrer"
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ${getSocialColorClass(item.platform)}`}
                 >
-                  <FontAwesomeIcon 
-                    icon={socialIconMap[item.icon]} 
+                  <FontAwesomeIcon
+                    icon={socialIconMap[item.icon] || faCircleInfo}
                     className="text-lg"
                   />
                   <span className="font-medium">{item.platform}</span>

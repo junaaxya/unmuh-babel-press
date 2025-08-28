@@ -1,8 +1,44 @@
 // src/components/Kontak/ContactInfoCard.js
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFacebook as faFacebookBrand,
+  faInstagram as faInstagramBrand,
+  faTwitter as faTwitterBrand,
+  faLinkedin as faLinkedinBrand,
+  faWhatsapp as faWhatsappBrand,
+  faYoutube as faYoutubeBrand,
+  faTelegram as faTelegramBrand,
+} from '@fortawesome/free-brands-svg-icons';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+
 export default function ContactInfoCard({ data }) {
   if (!data) return null;
 
   const address = `${data.addressStreet}, ${data.addressCity}, ${data.addressProvince}, ${data.addressPostal}`;
+
+  const socialIconMap = {
+    'fa-facebook': faFacebookBrand,
+    'fa-instagram': faInstagramBrand,
+    'fa-twitter': faTwitterBrand,
+    'fa-linkedin': faLinkedinBrand,
+    'fa-whatsapp': faWhatsappBrand,
+    'fa-youtube': faYoutubeBrand,
+    'fa-telegram': faTelegramBrand,
+  };
+
+  const getSocialColorClass = (platform) => {
+    const colors = {
+      Facebook: 'text-blue-600 hover:text-blue-700',
+      Instagram: 'text-pink-600 hover:text-pink-700',
+      Twitter: 'text-blue-400 hover:text-blue-500',
+      LinkedIn: 'text-blue-700 hover:text-blue-800',
+      WhatsApp: 'text-green-600 hover:text-green-700',
+      YouTube: 'text-red-600 hover:text-red-700',
+      Telegram: 'text-blue-500 hover:text-blue-600',
+    };
+    return colors[platform] || 'text-gray-600 hover:text-gray-700';
+  };
+
   const contactInfo = [
     {
       icon: (
@@ -89,9 +125,13 @@ export default function ContactInfoCard({ data }) {
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors ${getSocialColorClass(s.platform)}`}
             >
-              {s.platform}
+              <FontAwesomeIcon
+                icon={socialIconMap[s.icon] || faCircleInfo}
+                className="text-lg"
+              />
+              <span className="font-medium">{s.platform}</span>
             </a>
           ))}
         </div>

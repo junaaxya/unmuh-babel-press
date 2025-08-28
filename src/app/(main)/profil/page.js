@@ -56,7 +56,10 @@ export default async function Page() {
                       general: contactRaw.emailGeneral,
                       submission: contactRaw.emailSubmission,
                   },
-                  social: contactRaw.socialLinks || [],
+                  social: (contactRaw.socialLinks || []).map((s) => ({
+                      ...s,
+                      icon: s.icon || 'fa-circle-info',
+                  })),
                   hours: {
                       weekdays: contactRaw.hoursWeekdays,
                       weekend: contactRaw.hoursWeekend,

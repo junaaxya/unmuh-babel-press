@@ -3,6 +3,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Notification from '@/components/ui/Notification/Notification';
 import {
     faMapMarkerAlt,
     faPhone,
@@ -52,7 +53,11 @@ async function apiRequest(url, method = 'GET', body = null) {
 
 export default function AdminKontakPage() {
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [notification, setNotification] = useState({
+        id: null,
+        type: '',
+        message: '',
+    });
 
     const [contactData, setContactData] = useState({
         address: {
@@ -89,6 +94,7 @@ export default function AdminKontakPage() {
 
     useEffect(() => {
         loadContactData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadContactData = async () => {
@@ -96,48 +102,56 @@ export default function AdminKontakPage() {
             setLoading(true);
             const response = await apiRequest('/api/profile/contact');
             if (response.data) {
+                const d = response.data;
                 setContactData({
-                    address: response.data.address || {
-                        street: '',
-                        city: '',
-                        province: '',
-                        postal: '',
+                    address: {
+                        street: d.addressStreet || '',
+                        city: d.addressCity || '',
+                        province: d.addressProvince || '',
+                        postal: d.addressPostal || '',
                     },
-                    phone: response.data.phone || {
-                        number: '',
-                        whatsapp: '',
+                    phone: {
+                        number: d.phoneNumber || '',
+                        whatsapp: d.phoneWhatsapp || '',
                     },
-                    email: response.data.email || {
-                        general: '',
-                        submission: '',
+                    email: {
+                        general: d.emailGeneral || '',
+                        submission: d.emailSubmission || '',
                     },
-                    hours: response.data.hours || {
-                        weekdays: '',
-                        weekend: '',
-                        closed: '',
+                    hours: {
+                        weekdays: d.hoursWeekdays || '',
+                        weekend: d.hoursWeekend || '',
+                        closed: d.hoursClosed || '',
                     },
-                    socialLinks: response.data.socialLinks || [],
+                    socialLinks: (d.socialLinks || []).map((s, idx) => ({
+                        platform: s.platform || '',
+                        url: s.url || '',
+                        icon: s.icon || socialPlatforms.find(p => p.name === s.platform)?.iconClass || 'fa-circle-info',
+                        order: s.order ?? idx,
+                    })),
                 });
             }
         } catch (error) {
-            showMessage('error', 'Gagal memuat data kontak');
+            showNotification('error', 'Gagal memuat data kontak');
         } finally {
             setLoading(false);
         }
     };
 
-    const showMessage = (type, text) => {
-        setMessage({ type, text });
-        setTimeout(() => setMessage({ type: '', text: '' }), 5000);
+    const showNotification = (type, message) => {
+        setNotification({ id: Date.now(), type, message });
     };
 
     const handleSave = async () => {
         try {
             setLoading(true);
             await apiRequest('/api/profile/contact', 'PUT', contactData);
-            showMessage('success', 'Data kontak berhasil diperbarui');
+            showNotification('success', 'Data kontak berhasil diperbarui');
         } catch (error) {
-            showMessage('error', error.message || 'Gagal memperbarui data kontak');
+            showNotification(
+                'error',
+                error.message || 'Gagal memperbarui data kontak'
+            );
         } finally {
             setLoading(false);
         }
@@ -200,15 +214,15 @@ export default function AdminKontakPage() {
                 </div>
             </div>
 
-            {/* Message */}
-            {message.text && (
-                <div className={`p-4 rounded-md ${
-                    message.type === 'error' 
-                        ? 'bg-red-50 border border-red-200 text-red-700' 
-                        : 'bg-green-50 border border-green-200 text-green-700'
-                }`}>
-                    {message.text}
-                </div>
+            {notification.id && (
+                <Notification
+                    id={notification.id}
+                    type={notification.type}
+                    message={notification.message}
+                    onClose={() =>
+                        setNotification({ id: null, type: '', message: '' })
+                    }
+                />
             )}
 
             {loading && (

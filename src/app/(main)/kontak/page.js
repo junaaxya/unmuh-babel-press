@@ -8,7 +8,16 @@ export default async function KontakPage() {
   try {
     const res = await fetch(`${base}/api/profile/contact`, { cache: 'no-store' });
     const json = res.ok ? await res.json() : { data: null };
-    return <KontakClientPage contact={json.data} />;
+    const contact = json.data
+      ? {
+          ...json.data,
+          socialLinks: (json.data.socialLinks || []).map((s) => ({
+            ...s,
+            icon: s.icon || 'fa-circle-info',
+          })),
+        }
+      : null;
+    return <KontakClientPage contact={contact} />;
   } catch (e) {
     console.error(e);
     return <div className="p-8 text-center">Terjadi kesalahan saat memuat kontak.</div>;
