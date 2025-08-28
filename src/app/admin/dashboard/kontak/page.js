@@ -3,6 +3,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Notification from '@/components/ui/Notification/Notification';
 import {
     faMapMarkerAlt,
     faPhone,
@@ -52,7 +53,11 @@ async function apiRequest(url, method = 'GET', body = null) {
 
 export default function AdminKontakPage() {
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [notification, setNotification] = useState({
+        id: null,
+        type: '',
+        message: '',
+    });
 
     const [contactData, setContactData] = useState({
         address: {
@@ -120,24 +125,26 @@ export default function AdminKontakPage() {
                 });
             }
         } catch (error) {
-            showMessage('error', 'Gagal memuat data kontak');
+            showNotification('error', 'Gagal memuat data kontak');
         } finally {
             setLoading(false);
         }
     };
 
-    const showMessage = (type, text) => {
-        setMessage({ type, text });
-        setTimeout(() => setMessage({ type: '', text: '' }), 5000);
+    const showNotification = (type, message) => {
+        setNotification({ id: Date.now(), type, message });
     };
 
     const handleSave = async () => {
         try {
             setLoading(true);
             await apiRequest('/api/profile/contact', 'PUT', contactData);
-            showMessage('success', 'Data kontak berhasil diperbarui');
+            showNotification('success', 'Data kontak berhasil diperbarui');
         } catch (error) {
-            showMessage('error', error.message || 'Gagal memperbarui data kontak');
+            showNotification(
+                'error',
+                error.message || 'Gagal memperbarui data kontak'
+            );
         } finally {
             setLoading(false);
         }
@@ -200,15 +207,15 @@ export default function AdminKontakPage() {
                 </div>
             </div>
 
-            {/* Message */}
-            {message.text && (
-                <div className={`p-4 rounded-md ${
-                    message.type === 'error' 
-                        ? 'bg-red-50 border border-red-200 text-red-700' 
-                        : 'bg-green-50 border border-green-200 text-green-700'
-                }`}>
-                    {message.text}
-                </div>
+            {notification.id && (
+                <Notification
+                    id={notification.id}
+                    type={notification.type}
+                    message={notification.message}
+                    onClose={() =>
+                        setNotification({ id: null, type: '', message: '' })
+                    }
+                />
             )}
 
             {loading && (

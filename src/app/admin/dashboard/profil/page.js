@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ImageUploader from '@/components/admin/berita-event/ImageUploader';
+import Notification from '@/components/ui/Notification/Notification';
 import {
     faUser,
     faEye,
@@ -46,7 +47,11 @@ async function apiRequest(url, method = 'GET', body = null) {
 export default function AdminProfilPage() {
     const [activeTab, setActiveTab] = useState('hero');
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [notification, setNotification] = useState({
+        id: null,
+        type: '',
+        message: '',
+    });
 
     // Hero Section State
     const [heroData, setHeroData] = useState({
@@ -124,15 +129,18 @@ export default function AdminProfilPage() {
                     break;
             }
         } catch (error) {
-            setMessage({ type: 'error', text: error.message });
+            setNotification({
+                id: Date.now(),
+                type: 'error',
+                message: error.message,
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    const showMessage = (type, text) => {
-        setMessage({ type, text });
-        setTimeout(() => setMessage({ type: '', text: '' }), 5000);
+    const showNotification = (type, message) => {
+        setNotification({ id: Date.now(), type, message });
     };
 
     // Hero Section Handlers
@@ -140,9 +148,9 @@ export default function AdminProfilPage() {
         try {
             setLoading(true);
             await apiRequest('/api/profile/hero', 'PUT', heroData);
-            showMessage('success', 'Hero section berhasil diperbarui');
+            showNotification('success', 'Hero section berhasil diperbarui');
         } catch (error) {
-            showMessage('error', error.message);
+            showNotification('error', error.message);
         } finally {
             setLoading(false);
         }
@@ -157,9 +165,9 @@ export default function AdminProfilPage() {
                 'PUT',
                 visionMissionData
             );
-            showMessage('success', 'Visi & Misi berhasil diperbarui');
+            showNotification('success', 'Visi & Misi berhasil diperbarui');
         } catch (error) {
-            showMessage('error', error.message);
+            showNotification('error', error.message);
         } finally {
             setLoading(false);
         }
@@ -981,9 +989,9 @@ export default function AdminProfilPage() {
             }
 
             await apiRequest(endpoint, 'PUT', data);
-            showMessage('success', `${section} berhasil diperbarui`);
+            showNotification('success', `${section} berhasil diperbarui`);
         } catch (error) {
-            showMessage('error', error.message);
+            showNotification('error', error.message);
         } finally {
             setLoading(false);
         }
@@ -1004,17 +1012,15 @@ export default function AdminProfilPage() {
                 </div>
             </div>
 
-            {/* Message */}
-            {message.text && (
-                <div
-                    className={`p-4 rounded-md ${
-                        message.type === 'error'
-                            ? 'bg-red-50 border border-red-200 text-red-700'
-                            : 'bg-green-50 border border-green-200 text-green-700'
-                    }`}
-                >
-                    {message.text}
-                </div>
+            {notification.id && (
+                <Notification
+                    id={notification.id}
+                    type={notification.type}
+                    message={notification.message}
+                    onClose={() =>
+                        setNotification({ id: null, type: '', message: '' })
+                    }
+                />
             )}
 
             {/* Tab Navigation */}
