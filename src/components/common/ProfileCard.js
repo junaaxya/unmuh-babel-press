@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 const ProfileCard = ({
     title,
@@ -41,9 +42,11 @@ const ProfileCard = ({
                     {/* Image */}
                     <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
                         {image && !imgError ? (
-                            <img
+                            <Image
                                 src={image}
                                 alt={title}
+                                fill
+                                style={{ objectFit: 'cover' }}
                                 className="w-full h-full object-cover"
                                 onLoad={() => setImgLoaded(true)}
                                 onError={(e) => {
