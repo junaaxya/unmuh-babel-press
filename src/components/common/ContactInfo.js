@@ -6,6 +6,7 @@ import {
   faEnvelope,
   faClock,
   faWhatsapp,
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFacebook as faFacebookBrand,
@@ -191,8 +192,8 @@ const ContactInfo = ({ data }) => {
                   rel="noopener noreferrer"
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ${getSocialColorClass(item.platform)}`}
                 >
-                  <FontAwesomeIcon 
-                    icon={socialIconMap[item.icon]} 
+                  <FontAwesomeIcon
+                    icon={socialIconMap[item.icon] || faCircleInfo}
                     className="text-lg"
                   />
                   <span className="font-medium">{item.platform}</span>

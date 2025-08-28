@@ -94,6 +94,7 @@ export default function AdminKontakPage() {
 
     useEffect(() => {
         loadContactData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadContactData = async () => {
@@ -101,27 +102,33 @@ export default function AdminKontakPage() {
             setLoading(true);
             const response = await apiRequest('/api/profile/contact');
             if (response.data) {
+                const d = response.data;
                 setContactData({
-                    address: response.data.address || {
-                        street: '',
-                        city: '',
-                        province: '',
-                        postal: '',
+                    address: {
+                        street: d.addressStreet || '',
+                        city: d.addressCity || '',
+                        province: d.addressProvince || '',
+                        postal: d.addressPostal || '',
                     },
-                    phone: response.data.phone || {
-                        number: '',
-                        whatsapp: '',
+                    phone: {
+                        number: d.phoneNumber || '',
+                        whatsapp: d.phoneWhatsapp || '',
                     },
-                    email: response.data.email || {
-                        general: '',
-                        submission: '',
+                    email: {
+                        general: d.emailGeneral || '',
+                        submission: d.emailSubmission || '',
                     },
-                    hours: response.data.hours || {
-                        weekdays: '',
-                        weekend: '',
-                        closed: '',
+                    hours: {
+                        weekdays: d.hoursWeekdays || '',
+                        weekend: d.hoursWeekend || '',
+                        closed: d.hoursClosed || '',
                     },
-                    socialLinks: response.data.socialLinks || [],
+                    socialLinks: (d.socialLinks || []).map((s, idx) => ({
+                        platform: s.platform || '',
+                        url: s.url || '',
+                        icon: s.icon || socialPlatforms.find(p => p.name === s.platform)?.iconClass || 'fa-circle-info',
+                        order: s.order ?? idx,
+                    })),
                 });
             }
         } catch (error) {

@@ -9,6 +9,7 @@ import {
   faYoutube as faYoutubeBrand,
   faTelegram as faTelegramBrand,
 } from '@fortawesome/free-brands-svg-icons';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 export default function ContactInfoCard({ data }) {
   if (!data) return null;
@@ -126,7 +127,10 @@ export default function ContactInfoCard({ data }) {
               rel="noopener noreferrer"
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors ${getSocialColorClass(s.platform)}`}
             >
-              <FontAwesomeIcon icon={socialIconMap[s.icon]} className="text-lg" />
+              <FontAwesomeIcon
+                icon={socialIconMap[s.icon] || faCircleInfo}
+                className="text-lg"
+              />
               <span className="font-medium">{s.platform}</span>
             </a>
           ))}
