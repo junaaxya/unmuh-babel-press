@@ -13,7 +13,9 @@ import {
   faInstagram as faInstagramBrand,
   faTwitter as faTwitterBrand,
   faLinkedin as faLinkedinBrand,
-  faWhatsapp as faWhatsappBrand
+  faWhatsapp as faWhatsappBrand,
+  faYoutube as faYoutubeBrand,
+  faTelegram as faTelegramBrand
 } from '@fortawesome/free-brands-svg-icons';
 
 const ContactInfo = ({ data }) => {
@@ -39,6 +41,8 @@ const ContactInfo = ({ data }) => {
     'fa-twitter': faTwitterBrand,
     'fa-linkedin': faLinkedinBrand,
     'fa-whatsapp': faWhatsappBrand,
+    'fa-youtube': faYoutubeBrand,
+    'fa-telegram': faTelegramBrand,
   };
 
   const getSocialColorClass = (platform) => {
@@ -48,6 +52,8 @@ const ContactInfo = ({ data }) => {
       Twitter: 'text-blue-400 hover:text-blue-500',
       LinkedIn: 'text-blue-700 hover:text-blue-800',
       WhatsApp: 'text-green-600 hover:text-green-700',
+      YouTube: 'text-red-600 hover:text-red-700',
+      Telegram: 'text-blue-500 hover:text-blue-600',
     };
     return colors[platform] || 'text-gray-600 hover:text-gray-700';
   };

@@ -7,6 +7,7 @@ import {
     faYoutube,
     faLinkedinIn,
     faWhatsapp,
+    faTelegram,
 } from '@fortawesome/free-brands-svg-icons';
 import {
     faMapMarkerAlt,
@@ -27,6 +28,7 @@ const socialIconMap = {
     'fa-youtube': faYoutube,
     'fa-linkedin': faLinkedinIn,
     'fa-whatsapp': faWhatsapp,
+    'fa-telegram': faTelegram,
 };
 
 const socialHoverMap = {
@@ -36,6 +38,7 @@ const socialHoverMap = {
     YouTube: 'hover:bg-red-600',
     LinkedIn: 'hover:bg-blue-700',
     WhatsApp: 'hover:bg-green-600',
+    Telegram: 'hover:bg-blue-500',
 };
 
 export default async function Footer() {
