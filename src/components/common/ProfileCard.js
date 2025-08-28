@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -12,6 +13,8 @@ const ProfileCard = ({
     className = '',
     variant = 'default', // default, team, service
 }) => {
+    const [imgError, setImgError] = useState(false);
+
     const getVariantStyles = () => {
         switch (variant) {
             case 'team':
@@ -36,7 +39,7 @@ const ProfileCard = ({
                 <>
                     {/* Image */}
                     <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500">
-                        {image ? (
+                        {image && !imgError ? (
                             <Image
                                 src={image}
                                 alt={title}
@@ -44,6 +47,11 @@ const ProfileCard = ({
                                 className="object-cover"
                                 sizes="100vw"
                                 priority
+                                unoptimized
+                                onError={(e) => {
+                                    console.error('Failed to load team image', e);
+                                    setImgError(true);
+                                }}
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">

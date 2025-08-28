@@ -10,8 +10,12 @@ export async function GET() {
             orderBy: { order: 'asc' },
         });
         const normalized = team.map((member) => ({
-            ...member,
+            id: member.id,
+            name: member.name,
+            position: member.position,
+            image: member.image || '',
             description: member.description || member.position || '',
+            order: member.order,
         }));
         return NextResponse.json({ status: 'success', data: normalized });
     } catch (e) {
@@ -52,8 +56,16 @@ export async function PUT(request) {
         const updated = await prisma.teamMember.findMany({
             orderBy: { order: 'asc' },
         });
+        const normalized = updated.map((member) => ({
+            id: member.id,
+            name: member.name,
+            position: member.position,
+            image: member.image || '',
+            description: member.description || member.position || '',
+            order: member.order,
+        }));
 
-        return NextResponse.json({ status: 'success', data: updated });
+        return NextResponse.json({ status: 'success', data: normalized });
     } catch (e) {
         console.error(e);
         return NextResponse.json(
