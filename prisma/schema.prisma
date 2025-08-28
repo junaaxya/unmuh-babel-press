@@ -169,6 +169,16 @@ model ServiceFeature {
   order     Int     @default(0)
 }
 
+model ServicePackage {
+  id        String   @id @default(cuid())
+  title     String
+  price     Int
+  features  Json
+  isPopular Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Contact {
   id              Int          @id @default(1)
   addressStreet   String
