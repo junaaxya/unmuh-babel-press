@@ -1,10 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ImageUploader from '@/components/admin/berita-event/ImageUploader';
 import {
     faUser,
     faEye,
-    faBullseye,
     faHistory,
     faUsers,
     faCogs,
@@ -53,7 +53,6 @@ export default function AdminProfilPage() {
         title: '',
         subtitle: '',
         description: '',
-        stats: [],
     });
 
     // Vision Mission State
@@ -95,7 +94,6 @@ export default function AdminProfilPage() {
                         title: '',
                         subtitle: '',
                         description: '',
-                        stats: [],
                     };
                     setHeroData({ ...defaultHeroData, ...(data.data || {}) });
                     break;
@@ -111,7 +109,14 @@ export default function AdminProfilPage() {
                     break;
                 case 'team':
                     data = await apiRequest('/api/profile/team');
-                    setTeamData(data.data || []);
+                    setTeamData(
+                        (data.data || []).map((member) => ({
+                            name: member.name || '',
+                            description: member.position || '',
+                            image: member.image || '',
+                            order: member.order ?? 0,
+                        }))
+                    );
                     break;
                 case 'services':
                     data = await apiRequest('/api/profile/services');
@@ -141,27 +146,6 @@ export default function AdminProfilPage() {
         } finally {
             setLoading(false);
         }
-    };
-
-    const addHeroStat = () => {
-        setHeroData({
-            ...heroData,
-            stats: [
-                ...heroData.stats,
-                { number: 0, label: '', suffix: '', icon: 'fa-star' },
-            ],
-        });
-    };
-
-    const removeHeroStat = (index) => {
-        const newStats = heroData.stats.filter((_, i) => i !== index);
-        setHeroData({ ...heroData, stats: newStats });
-    };
-
-    const updateHeroStat = (index, field, value) => {
-        const newStats = [...heroData.stats];
-        newStats[index] = { ...newStats[index], [field]: value };
-        setHeroData({ ...heroData, stats: newStats });
     };
 
     // Vision Mission Handlers
@@ -272,101 +256,6 @@ export default function AdminProfilPage() {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Masukkan deskripsi"
                                 />
-                            </div>
-
-                            {/* Statistics */}
-                            <div className="mt-6">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h4 className="text-md font-medium">
-                                        Statistik
-                                    </h4>
-                                    <button
-                                        onClick={addHeroStat}
-                                        className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faPlus}
-                                            className="mr-1"
-                                        />
-                                        Tambah
-                                    </button>
-                                </div>
-
-                                {heroData.stats.map((stat, index) => (
-                                    <div
-                                        key={index}
-                                        className="border border-gray-200 rounded-md p-4 mb-4"
-                                    >
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                    Angka
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    value={stat.number}
-                                                    onChange={(e) =>
-                                                        updateHeroStat(
-                                                            index,
-                                                            'number',
-                                                            parseInt(
-                                                                e.target.value
-                                                            ) || 0
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                    Label
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={stat.label}
-                                                    onChange={(e) =>
-                                                        updateHeroStat(
-                                                            index,
-                                                            'label',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                    Suffix
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={stat.suffix}
-                                                    onChange={(e) =>
-                                                        updateHeroStat(
-                                                            index,
-                                                            'suffix',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    placeholder="+"
-                                                />
-                                            </div>
-                                            <div className="flex items-end">
-                                                <button
-                                                    onClick={() =>
-                                                        removeHeroStat(index)
-                                                    }
-                                                    className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                                                >
-                                                    <FontAwesomeIcon
-                                                        icon={faTrash}
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
 
                             <div className="flex justify-end mt-6">
@@ -672,16 +561,16 @@ export default function AdminProfilPage() {
                                     {teamData.map((member, index) => (
                                         <div
                                             key={index}
-                                            className="border border-gray-200 rounded-md p-4"
+                                            className="border border-gray-200 rounded-md p-4 space-y-4"
                                         >
-                                            <div className="grid md:grid-cols-3 gap-4 mb-4">
-                                                <div>
+                                            <div className="flex justify-between gap-4">
+                                                <div className="flex-1">
                                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                                         Nama
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        value={member.name}
+                                                        value={member.name || ''}
                                                         onChange={(e) =>
                                                             updateTeamMember(
                                                                 index,
@@ -693,47 +582,35 @@ export default function AdminProfilPage() {
                                                         placeholder="Nama lengkap"
                                                     />
                                                 </div>
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                        URL Foto
-                                                    </label>
-                                                    <input
-                                                        type="url"
-                                                        value={
-                                                            member.image || ''
-                                                        }
-                                                        onChange={(e) =>
-                                                            updateTeamMember(
-                                                                index,
-                                                                'image',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        placeholder="https://..."
-                                                    />
-                                                </div>
                                                 <div className="flex items-end">
                                                     <button
                                                         onClick={() =>
-                                                            removeTeamMember(
-                                                                index
-                                                            )
+                                                            removeTeamMember(index)
                                                         }
-                                                        className="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                                        className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                                                     >
-                                                        <FontAwesomeIcon
-                                                            icon={faTrash}
-                                                        />
+                                                        <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Foto
+                                                </label>
+                                                <ImageUploader
+                                                    currentImage={member.image || ''}
+                                                    onUpload={(url) =>
+                                                        updateTeamMember(index, 'image', url)
+                                                    }
+                                                    folder="unmuh-babel/team"
+                                                />
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                                     Deskripsi/Jabatan
                                                 </label>
                                                 <textarea
-                                                    value={member.description}
+                                                    value={member.description || ''}
                                                     onChange={(e) =>
                                                         updateTeamMember(
                                                             index,

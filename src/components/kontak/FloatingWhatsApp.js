@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 
-export default function FloatingWhatsApp() {
+export default function FloatingWhatsApp({ phone }) {
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -30,8 +30,8 @@ export default function FloatingWhatsApp() {
   }, [isVisible]);
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "6282171222017"; // Ganti dengan nomor WhatsApp Anda
-    const message = encodeURIComponent("Halo! Saya tertarik untuk mengetahui lebih lanjut tentang layanan Anda.");
+    const phoneNumber = (phone || '').replace(/[^0-9]/g, '') || '6282171222017';
+    const message = encodeURIComponent('Halo! Saya tertarik untuk mengetahui lebih lanjut tentang layanan Anda.');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
@@ -78,7 +78,7 @@ export default function FloatingWhatsApp() {
       <div className="absolute bottom-full right-0 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
         <div className="bg-white rounded-lg shadow-lg p-3 min-w-48 border border-gray-200">
           <div className="text-sm text-gray-600 mb-1">Hubungi kami di:</div>
-          <div className="text-sm font-semibold text-gray-900">+62 821-7122-2017</div>
+          <div className="text-sm font-semibold text-gray-900">{phone || '+62 821-7122-2017'}</div>
           <div className="text-xs text-gray-500 mt-1">Online sekarang</div>
         </div>
       </div>

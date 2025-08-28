@@ -2,12 +2,22 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { authorize } from '@/lib/authorize';
 
+export const revalidate = 0;
+
 export async function GET() {
     try {
         const team = await prisma.teamMember.findMany({
             orderBy: { order: 'asc' },
         });
-        return NextResponse.json({ status: 'success', data: team });
+        const normalized = team.map((member) => ({
+            id: member.id,
+            name: member.name,
+            position: member.position,
+            image: member.image || '',
+            description: member.description || member.position || '',
+            order: member.order,
+        }));
+        return NextResponse.json({ status: 'success', data: normalized });
     } catch (e) {
         console.error(e);
         return NextResponse.json(
@@ -33,7 +43,8 @@ export async function PUT(request) {
                 await prisma.teamMember.create({
                     data: {
                         name: member.name || '',
-                        position: member.description || '',
+                        position: member.description || member.position || '',
+                        description: member.description || member.position || '',
                         image: member.image || null,
                         order: index,
                     },
@@ -45,8 +56,16 @@ export async function PUT(request) {
         const updated = await prisma.teamMember.findMany({
             orderBy: { order: 'asc' },
         });
+        const normalized = updated.map((member) => ({
+            id: member.id,
+            name: member.name,
+            position: member.position,
+            image: member.image || '',
+            description: member.description || member.position || '',
+            order: member.order,
+        }));
 
-        return NextResponse.json({ status: 'success', data: updated });
+        return NextResponse.json({ status: 'success', data: normalized });
     } catch (e) {
         console.error(e);
         return NextResponse.json(

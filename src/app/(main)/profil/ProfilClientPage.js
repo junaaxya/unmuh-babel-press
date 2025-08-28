@@ -22,10 +22,7 @@ import TabNavigation from '@/components/common/TabNavigation';
 import ContactInfo from '@/components/common/ContactInfo';
 import Timeline from '@/components/ui/Timeline';
 
-// Data
-import { profileData } from '@/data/profileData';
-
-export default function ProfilClientPage() {
+export default function ProfilClientPage({ data }) {
     const [activeTab, setActiveTab] = useState('sejarah');
 
     const tabs = [
@@ -52,7 +49,7 @@ export default function ProfilClientPage() {
                         subtitle="Perjalanan kami dalam mengembangkan dunia penerbitan akademik dan umum"
                         icon={faHistory}
                     >
-                        <Timeline items={profileData.history} />
+                        <Timeline items={data.history || []} />
                     </ProfileSection>
                 );
 
@@ -64,7 +61,7 @@ export default function ProfilClientPage() {
                         icon={faEye}
                     >
                         <ProfileSection.VisionMission
-                            data={profileData.visionMission}
+                            data={data.visionMission}
                         />
                     </ProfileSection>
                 );
@@ -77,12 +74,12 @@ export default function ProfilClientPage() {
                         icon={faUsers}
                     >
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {profileData.team.map((member, index) => (
+                            {(data.team || []).map((member, index) => (
                                 <ProfileCard
                                     key={index}
-                                    title={member.name}
-                                    description={member.description}
-                                    image={member.image}
+                                    title={member.name || ''}
+                                    description={member.description || member.position || ''}
+                                    image={member.image || ''}
                                     variant="team"
                                     className="text-center"
                                 />
@@ -99,13 +96,13 @@ export default function ProfilClientPage() {
                         icon={faCogs}
                     >
                         <div className="grid md:grid-cols-2 gap-8">
-                            {profileData.services.map((service, index) => (
+                            {(data.services || []).map((service, index) => (
                                 <ProfileCard
                                     key={index}
                                     title={service.title}
                                     description={service.description}
                                     icon={serviceIconMap[service.title]}
-                                    features={service.features}
+                                    features={(service.features || []).map((f) => f.text)}
                                     variant="service"
                                 />
                             ))}
@@ -120,7 +117,7 @@ export default function ProfilClientPage() {
                         subtitle="Dapatkan informasi lebih lanjut atau konsultasikan kebutuhan penerbitan Anda"
                         icon={faPhone}
                     >
-                        <ContactInfo data={profileData.contact} />
+                        <ContactInfo data={data.contact} />
                     </ProfileSection>
                 );
 
@@ -132,7 +129,7 @@ export default function ProfilClientPage() {
     return (
         <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Hero Section */}
-            <ProfileHero data={profileData.hero} />
+            <ProfileHero data={data.hero} />
 
             {/* Tab Navigation */}
             <div className="bg-white dark:bg-gray-900 sticky top-0 z-40 shadow-sm">

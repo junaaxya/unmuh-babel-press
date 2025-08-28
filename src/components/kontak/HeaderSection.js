@@ -1,5 +1,7 @@
 // src/components/Kontak/HeaderSection.js
-export default function HeaderSection() {
+export default function HeaderSection({ address }) {
+  const mapQuery = encodeURIComponent(address || 'Universitas Muhammadiyah Bangka Belitung');
+  const mapSrc = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
   return (
     <section className="bg-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
@@ -12,7 +14,7 @@ export default function HeaderSection() {
         <div className="w-full max-w-4xl mx-auto">
           <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.0204295911553!2d106.09073587473985!3d-2.1458621978350356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e22c6c8aa06c211%3A0x5ea711e1b7859e8c!2sUniversitas%20Muhammadiyah%20Bangka%20Belitung!5e0!3m2!1sid!2sid!4v1749827155756!5m2!1sid!2sid"
+              src={mapSrc}
               width="100%"
               height="100%"
               style={{ border: 0 }}
