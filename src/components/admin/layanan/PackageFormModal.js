@@ -462,9 +462,9 @@ export default function PackageFormModal({ isOpen, onClose, onSave, mode, packag
             ))}
           </div>
 
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            <p>💡 Tips: Fitur yang mengandung kata "diskon" akan otomatis disorot dengan warna merah.</p>
-          </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              <p>💡 Tips: Fitur yang mengandung kata &quot;diskon&quot; akan otomatis disorot dengan warna merah.</p>
+            </div>
         </div>
 
         {/* Action Buttons */}

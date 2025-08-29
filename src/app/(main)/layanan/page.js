@@ -1,85 +1,64 @@
 "use client";
+import { useEffect, useState } from "react";
 import Header from "@/components/Layanan/header";
 import PackageCard from "@/components/Layanan/PackageCard";
 import CTASection from "@/components/Layanan/CTASection";
-import Footer from "@/components/Layanan/Footer";
 import FloatingWhatsApp from "@/components/Layanan/FloatingWhatsApp";
 
 export default function LayananPage() {
-  const packages = [
-    {
-      title: "BASIC",
-      price: "250K",
-      bgColor: "bg-gray-800",
-      features: ["ISBN", "Desain Cover", "Template Buku", "Surat LOA", "Surat Bukti Terbit", "Sertifikat Penulis", "Indeks Google Scholar"],
-    },
-    {
-      title: "SILVER",
-      price: "575K",
-      bgColor: "bg-gradient-to-r from-gray-400 to-gray-600",
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku",
-        "Surat LOA",
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (150 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "1 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas",
-      ],
-    },
-    {
-      title: "GOLD",
-      price: "850K",
-      bgColor: "bg-gradient-to-r from-yellow-400 to-yellow-600",
-      badge: { text: "POPULER", color: "bg-red-500" },
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku",
-        "Surat LOA",
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (200 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "2 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas",
-        "Wrapping Buku",
-        { text: "Diskon HKI 25 Ribu", highlight: true },
-      ],
-    },
-    {
-      title: "PLATINUM",
-      price: "1150K",
-      bgColor: "bg-gradient-to-r from-purple-500 to-purple-700",
-      badge: { text: "PREMIUM", color: "bg-purple-500" },
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku",
-        "Surat LOA",
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (250 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "3 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas",
-        "Wrapping Buku",
-        { text: "Diskon HKI 50 Ribu", highlight: true },
-      ],
-    },
-  ];
+  const [packages, setPackages] = useState([]);
+  const [whatsapp, setWhatsapp] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [pkgRes, contactRes] = await Promise.all([
+          fetch("/api/layanan"),
+          fetch("/api/profile/contact"),
+        ]);
+        if (!pkgRes.ok) throw new Error("Failed to fetch packages");
+        const pkgData = await pkgRes.json();
+        setPackages(pkgData.data || []);
+
+        if (contactRes.ok) {
+          const contactJson = await contactRes.json();
+          const number =
+            (contactJson.data?.phoneWhatsapp || contactJson.data?.phoneNumber || "")
+              .replace(/[^0-9]/g, "");
+          setWhatsapp(number);
+        }
+      } catch (e) {
+        setError("Failed to load services, please try again");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const formatPrice = (price) => `Rp ${price.toLocaleString('id-ID')}`;
+
+  const handleSelectPackage = (title) => {
+    if (!whatsapp) return;
+    const message = encodeURIComponent(
+      `Halo, saya tertarik dengan paket ${title}. Bisa memberikan detail?`
+    );
+    window.open(`https://wa.me/${whatsapp}?text=${message}`, "_blank");
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-center text-red-600 py-20">{error}</div>;
+  }
 
   return (
     <>
@@ -93,16 +72,25 @@ export default function LayananPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {packages.map((pkg, i) => (
-              <PackageCard key={i} {...pkg} />
+            {packages.map((pkg) => (
+              <PackageCard
+                key={pkg.id}
+                title={pkg.title}
+                price={formatPrice(pkg.price)}
+                features={pkg.features || []}
+                bgColor={pkg.bgColor || "bg-gray-800"}
+                textColor={pkg.textColor || "text-white"}
+                badge={pkg.isPopular ? { text: "POPULER", color: "bg-red-500" } : null}
+                onSelect={handleSelectPackage}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      <CTASection />
+      <CTASection phone={whatsapp} />
       {/* <Footer /> */}
-      <FloatingWhatsApp />
+      <FloatingWhatsApp phone={whatsapp} />
     </>
   );
 }

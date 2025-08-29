@@ -41,122 +41,36 @@ export default function AdminLayananPage() {
   
   const { showNotification } = useNotification();
 
-  // Sample initial data (in real app, this would come from API)
-  const initialPackages = [
-    {
-      id: 1,
-      title: "BASIC",
-      price: "250K",
-      priceNumber: 250000,
-      bgColor: "bg-gray-800",
-      textColor: "text-white",
-      features: [
-        "ISBN",
-        "Desain Cover", 
-        "Template Buku",
-        "Surat LOA",
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar"
-      ],
-      isActive: true,
-      createdAt: new Date('2024-01-15'),
-      updatedAt: new Date('2024-01-15')
-    },
-    {
-      id: 2,
-      title: "SILVER",
-      price: "575K",
-      priceNumber: 575000,
-      bgColor: "bg-gradient-to-r from-gray-400 to-gray-600",
-      textColor: "text-white",
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku", 
-        "Surat LOA",
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (150 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "1 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas"
-      ],
-      isActive: true,
-      createdAt: new Date('2024-01-16'),
-      updatedAt: new Date('2024-01-16')
-    },
-    {
-      id: 3,
-      title: "GOLD",
-      price: "850K",
-      priceNumber: 850000,
-      bgColor: "bg-gradient-to-r from-yellow-400 to-yellow-600",
-      textColor: "text-white",
-      badge: { text: "POPULER", color: "bg-red-500" },
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku",
-        "Surat LOA", 
-        "Surat Bukti Terbit",
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (200 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "2 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas",
-        "Wrapping Buku",
-        { text: "Diskon HKI 25 Ribu", highlight: true }
-      ],
-      isActive: true,
-      createdAt: new Date('2024-01-17'),
-      updatedAt: new Date('2024-01-17')
-    },
-    {
-      id: 4,
-      title: "PLATINUM",
-      price: "1150K",
-      priceNumber: 1150000,
-      bgColor: "bg-gradient-to-r from-purple-500 to-purple-700",
-      textColor: "text-white",
-      badge: { text: "PREMIUM", color: "bg-purple-500" },
-      features: [
-        "ISBN",
-        "Desain Cover",
-        "Template Buku",
-        "Surat LOA",
-        "Surat Bukti Terbit", 
-        "Sertifikat Penulis",
-        "Indeks Google Scholar",
-        "Buku Ukuran A5 (250 halaman)",
-        "Desain Layout",
-        "Full E-Book",
-        "3 Buku Arsip Penulis",
-        "1 Buku Arsip Penerbit",
-        "2 Buku Arsip Perpusnas",
-        "Wrapping Buku",
-        { text: "Diskon HKI 50 Ribu", highlight: true }
-      ],
-      isActive: true,
-      createdAt: new Date('2024-01-18'),
-      updatedAt: new Date('2024-01-18')
-    }
-  ];
-
-  // Initialize data
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setPackages(initialPackages);
-      setFilteredPackages(initialPackages);
+  const fetchPackages = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/layanan');
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      const mapped = (data.data || []).map(pkg => ({
+        ...pkg,
+        price: `Rp ${pkg.price.toLocaleString('id-ID')}`,
+        priceNumber: pkg.price,
+        bgColor: pkg.bgColor || 'bg-gray-800',
+        textColor: pkg.textColor || 'text-white',
+        badge: pkg.isPopular ? { text: 'POPULER', color: 'bg-red-500' } : null,
+        isActive: pkg.isActive !== false,
+        createdAt: new Date(pkg.createdAt),
+        updatedAt: new Date(pkg.updatedAt),
+      }));
+      setPackages(mapped);
+      setFilteredPackages(mapped);
+    } catch (error) {
+      console.error(error);
+      showNotification('error', 'Gagal memuat paket');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    fetchPackages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Filter and Search Effect
@@ -244,35 +158,76 @@ export default function AdminLayananPage() {
     setShowDeleteModal(true);
   };
 
-  const handleSave = (packageData) => {
-    if (formMode === 'create') {
-      const newPackage = {
-        ...packageData,
-        id: Math.max(...packages.map(p => p.id)) + 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+  const handleSave = async (packageData) => {
+    try {
+      const payload = {
+        title: packageData.title,
+        price: packageData.priceNumber,
+        features: packageData.features,
+        isPopular: !!packageData.badge,
+        bgColor: packageData.bgColor,
+        textColor: packageData.textColor,
+        isActive: packageData.isActive,
       };
-      setPackages([...packages, newPackage]);
-      showNotification('success', 'Paket berhasil ditambahkan!');
-    } else {
-      const updatedPackages = packages.map(pkg => 
-        pkg.id === selectedPackage.id 
-          ? { ...packageData, id: selectedPackage.id, createdAt: selectedPackage.createdAt, updatedAt: new Date() }
-          : pkg
-      );
-      setPackages(updatedPackages);
-      showNotification('success', 'Paket berhasil diperbarui!');
+      const url = formMode === 'create'
+        ? '/api/admin/layanan'
+        : `/api/admin/layanan/${selectedPackage.id}`;
+      const method = formMode === 'create' ? 'POST' : 'PUT';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to save');
+      showNotification('success', formMode === 'create' ? 'Paket berhasil ditambahkan!' : 'Paket berhasil diperbarui!');
+      await fetchPackages();
+    } catch (error) {
+      console.error(error);
+      showNotification('error', formMode === 'create' ? 'Gagal menambahkan paket' : 'Gagal memperbarui paket');
+    } finally {
+      setShowFormModal(false);
+      setSelectedPackage(null);
     }
-    setShowFormModal(false);
-    setSelectedPackage(null);
   };
 
-  const handleDelete = () => {
-    const updatedPackages = packages.filter(pkg => pkg.id !== selectedPackage.id);
-    setPackages(updatedPackages);
-    setShowDeleteModal(false);
-    setSelectedPackage(null);
-    showNotification('success', 'Paket berhasil dihapus!');
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/admin/layanan/${selectedPackage.id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
+      showNotification('success', 'Paket berhasil dihapus!');
+      await fetchPackages();
+    } catch (error) {
+      console.error(error);
+      showNotification('error', 'Gagal menghapus paket');
+    } finally {
+      setShowDeleteModal(false);
+      setSelectedPackage(null);
+    }
+  };
+
+  const handleToggleStatus = async (pkg) => {
+    try {
+      const payload = {
+        title: pkg.title,
+        price: pkg.priceNumber,
+        features: pkg.features,
+        isPopular: !!pkg.badge,
+        bgColor: pkg.bgColor,
+        textColor: pkg.textColor,
+        isActive: !pkg.isActive,
+      };
+      const res = await fetch(`/api/admin/layanan/${pkg.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to toggle');
+      showNotification('success', pkg.isActive ? 'Paket dinonaktifkan' : 'Paket diaktifkan');
+      await fetchPackages();
+    } catch (error) {
+      console.error(error);
+      showNotification('error', 'Gagal mengubah status paket');
+    }
   };
 
   if (loading) {
@@ -405,7 +360,7 @@ export default function AdminLayananPage() {
         <div className="mt-4 flex items-center gap-2">
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-1 text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             <FontAwesomeIcon icon={faFilter} />
             {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
@@ -426,6 +381,7 @@ export default function AdminLayananPage() {
             onEdit={() => handleEdit(pkg)}
             onView={() => handleView(pkg)}
             onDelete={() => handleDeleteConfirm(pkg)}
+            onToggleStatus={handleToggleStatus}
           />
         ))}
       </div>
@@ -509,7 +465,7 @@ export default function AdminLayananPage() {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-400">Harga Numerik:</span>
-                <p className="text-gray-900 dark:text-white">
+                <p className="text-gray-900">
                   Rp {selectedPackage.priceNumber?.toLocaleString('id-ID')}
                 </p>
               </div>
@@ -521,13 +477,13 @@ export default function AdminLayananPage() {
               </div>
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-400">Dibuat:</span>
-                <p className="text-gray-900 dark:text-white">
+                <p className="text-gray-900 ">
                   {new Date(selectedPackage.createdAt).toLocaleDateString('id-ID')}
                 </p>
               </div>
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-400">Terakhir Diupdate:</span>
-                <p className="text-gray-900 dark:text-white">
+                <p className="text-gray-900 ">
                   {new Date(selectedPackage.updatedAt).toLocaleDateString('id-ID')}
                 </p>
               </div>
