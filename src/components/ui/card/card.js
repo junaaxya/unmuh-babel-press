@@ -46,7 +46,7 @@ const Card = ({
     `,
         neon: `
       bg-gray-900 rounded-2xl shadow-2xl
-      border-2 border-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-border
+      border-2 border-transparent bg-clip-border
       ${
           hover
               ? 'hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:-translate-y-2'
