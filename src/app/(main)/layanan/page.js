@@ -88,7 +88,7 @@ export default function LayananPage() {
         </div>
       </section>
 
-      <CTASection />
+      <CTASection phone={whatsapp} />
       {/* <Footer /> */}
       <FloatingWhatsApp phone={whatsapp} />
     </>

@@ -464,7 +464,7 @@ export default function AdminLayananPage() {
             {/* Package Details */}
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-600 dark:text-gray-400">Harga:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Harga:</span>
                 <p className="text-gray-900 dark:text-white">
                   {new Intl.NumberFormat('id-ID', {
                     style: 'currency',
@@ -474,13 +474,13 @@ export default function AdminLayananPage() {
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-600 dark:text-gray-400">Status:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
                 <p className={`${selectedPackage.isActive ? 'text-green-600' : 'text-red-600'} font-medium`}>
                   {selectedPackage.isActive ? 'Aktif' : 'Tidak Aktif'}
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-600 dark:text-gray-400">Dibuat:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Dibuat:</span>
                 <p className="text-gray-900 dark:text-white">
                   {selectedPackage.createdAt ? new Date(selectedPackage.createdAt).toLocaleString('id-ID', {
                     day: '2-digit',
@@ -492,7 +492,7 @@ export default function AdminLayananPage() {
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-600 dark:text-gray-400">Terakhir Diupdate:</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Terakhir Diupdate:</span>
                 <p className="text-gray-900 dark:text-white">
                   {selectedPackage.updatedAt ? new Date(selectedPackage.updatedAt).toLocaleString('id-ID', {
                     day: '2-digit',
