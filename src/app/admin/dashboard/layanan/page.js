@@ -360,7 +360,7 @@ export default function AdminLayananPage() {
         <div className="mt-4 flex items-center gap-2">
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-1 text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             <FontAwesomeIcon icon={faFilter} />
             {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
@@ -464,43 +464,27 @@ export default function AdminLayananPage() {
             {/* Package Details */}
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Harga:</span>
-                <p className="text-gray-900 dark:text-white">
-                  {new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0,
-                  }).format(selectedPackage.priceNumber || 0)}
+                <span className="font-medium text-gray-600 dark:text-gray-400">Harga Numerik:</span>
+                <p className="text-gray-900">
+                  Rp {selectedPackage.priceNumber?.toLocaleString('id-ID')}
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
+                <span className="font-medium text-gray-600 dark:text-gray-400">Status:</span>
                 <p className={`${selectedPackage.isActive ? 'text-green-600' : 'text-red-600'} font-medium`}>
                   {selectedPackage.isActive ? 'Aktif' : 'Tidak Aktif'}
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Dibuat:</span>
-                <p className="text-gray-900 dark:text-white">
-                  {selectedPackage.createdAt ? new Date(selectedPackage.createdAt).toLocaleString('id-ID', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }) : '-'}
+                <span className="font-medium text-gray-600 dark:text-gray-400">Dibuat:</span>
+                <p className="text-gray-900 ">
+                  {new Date(selectedPackage.createdAt).toLocaleDateString('id-ID')}
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Terakhir Diupdate:</span>
-                <p className="text-gray-900 dark:text-white">
-                  {selectedPackage.updatedAt ? new Date(selectedPackage.updatedAt).toLocaleString('id-ID', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }) : '-'}
+                <span className="font-medium text-gray-600 dark:text-gray-400">Terakhir Diupdate:</span>
+                <p className="text-gray-900 ">
+                  {new Date(selectedPackage.updatedAt).toLocaleDateString('id-ID')}
                 </p>
               </div>
             </div>
