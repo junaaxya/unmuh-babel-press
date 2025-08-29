@@ -59,8 +59,8 @@ export default function LayananPage() {
                 title={pkg.title}
                 price={formatPrice(pkg.price)}
                 features={pkg.features || []}
-                bgColor="bg-gray-800"
-                textColor="text-white"
+                bgColor={pkg.bgColor || "bg-gray-800"}
+                textColor={pkg.textColor || "text-white"}
                 badge={pkg.isPopular ? { text: "POPULER", color: "bg-red-500" } : null}
               />
             ))}

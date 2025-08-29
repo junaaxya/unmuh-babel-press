@@ -6,8 +6,14 @@ import { z } from 'zod';
 const schema = z.object({
   title: z.string().min(1),
   price: z.number().int().positive(),
-  features: z.array(z.string()),
+  features: z.array(z.union([
+    z.string(),
+    z.object({ text: z.string(), highlight: z.boolean().optional() })
+  ])),
   isPopular: z.boolean().optional().default(false),
+  bgColor: z.string().min(1).optional().default('bg-gray-800'),
+  textColor: z.string().min(1).optional().default('text-white'),
+  isActive: z.boolean().optional().default(true),
 });
 
 export async function PUT(request, { params }) {

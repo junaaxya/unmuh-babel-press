@@ -51,10 +51,10 @@ export default function AdminLayananPage() {
         ...pkg,
         price: `Rp ${pkg.price.toLocaleString('id-ID')}`,
         priceNumber: pkg.price,
-        bgColor: 'bg-gray-800',
-        textColor: 'text-white',
+        bgColor: pkg.bgColor || 'bg-gray-800',
+        textColor: pkg.textColor || 'text-white',
         badge: pkg.isPopular ? { text: 'POPULER', color: 'bg-red-500' } : null,
-        isActive: true,
+        isActive: pkg.isActive !== false,
         createdAt: new Date(pkg.createdAt),
         updatedAt: new Date(pkg.updatedAt),
       }));
@@ -163,8 +163,11 @@ export default function AdminLayananPage() {
       const payload = {
         title: packageData.title,
         price: packageData.priceNumber,
-        features: packageData.features.map(f => (typeof f === 'string' ? f : f.text)),
+        features: packageData.features,
         isPopular: !!packageData.badge,
+        bgColor: packageData.bgColor,
+        textColor: packageData.textColor,
+        isActive: packageData.isActive,
       };
       const url = formMode === 'create'
         ? '/api/admin/layanan'
@@ -199,6 +202,31 @@ export default function AdminLayananPage() {
     } finally {
       setShowDeleteModal(false);
       setSelectedPackage(null);
+    }
+  };
+
+  const handleToggleStatus = async (pkg) => {
+    try {
+      const payload = {
+        title: pkg.title,
+        price: pkg.priceNumber,
+        features: pkg.features,
+        isPopular: !!pkg.badge,
+        bgColor: pkg.bgColor,
+        textColor: pkg.textColor,
+        isActive: !pkg.isActive,
+      };
+      const res = await fetch(`/api/admin/layanan/${pkg.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to toggle');
+      showNotification('success', pkg.isActive ? 'Paket dinonaktifkan' : 'Paket diaktifkan');
+      await fetchPackages();
+    } catch (error) {
+      console.error(error);
+      showNotification('error', 'Gagal mengubah status paket');
     }
   };
 
@@ -353,6 +381,7 @@ export default function AdminLayananPage() {
             onEdit={() => handleEdit(pkg)}
             onView={() => handleView(pkg)}
             onDelete={() => handleDeleteConfirm(pkg)}
+            onToggleStatus={handleToggleStatus}
           />
         ))}
       </div>

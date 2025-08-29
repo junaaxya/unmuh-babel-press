@@ -6,6 +6,7 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const packages = await prisma.servicePackage.findMany({
+      where: { isActive: true },
       orderBy: { createdAt: 'desc' },
     });
     return NextResponse.json({ data: packages });
