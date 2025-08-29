@@ -464,9 +464,13 @@ export default function AdminLayananPage() {
             {/* Package Details */}
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-600 dark:text-gray-400">Harga Numerik:</span>
+                <span className="font-medium text-gray-600 dark:text-gray-400">Harga:</span>
                 <p className="text-gray-900 dark:text-white">
-                  Rp {selectedPackage.priceNumber?.toLocaleString('id-ID')}
+                  {new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0,
+                  }).format(selectedPackage.priceNumber || 0)}
                 </p>
               </div>
               <div>
@@ -478,13 +482,25 @@ export default function AdminLayananPage() {
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-400">Dibuat:</span>
                 <p className="text-gray-900 dark:text-white">
-                  {new Date(selectedPackage.createdAt).toLocaleDateString('id-ID')}
+                  {selectedPackage.createdAt ? new Date(selectedPackage.createdAt).toLocaleString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }) : '-'}
                 </p>
               </div>
               <div>
                 <span className="font-medium text-gray-600 dark:text-gray-400">Terakhir Diupdate:</span>
                 <p className="text-gray-900 dark:text-white">
-                  {new Date(selectedPackage.updatedAt).toLocaleDateString('id-ID')}
+                  {selectedPackage.updatedAt ? new Date(selectedPackage.updatedAt).toLocaleString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }) : '-'}
                 </p>
               </div>
             </div>
