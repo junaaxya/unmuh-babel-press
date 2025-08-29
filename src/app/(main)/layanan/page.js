@@ -3,31 +3,50 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Layanan/header";
 import PackageCard from "@/components/Layanan/PackageCard";
 import CTASection from "@/components/Layanan/CTASection";
-import Footer from "@/components/Layanan/Footer";
 import FloatingWhatsApp from "@/components/Layanan/FloatingWhatsApp";
 
 export default function LayananPage() {
   const [packages, setPackages] = useState([]);
+  const [whatsapp, setWhatsapp] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchPackages() {
+    async function fetchData() {
       try {
-        const res = await fetch("/api/layanan");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setPackages(data.data || []);
+        const [pkgRes, contactRes] = await Promise.all([
+          fetch("/api/layanan"),
+          fetch("/api/profile/contact"),
+        ]);
+        if (!pkgRes.ok) throw new Error("Failed to fetch packages");
+        const pkgData = await pkgRes.json();
+        setPackages(pkgData.data || []);
+
+        if (contactRes.ok) {
+          const contactJson = await contactRes.json();
+          const number =
+            (contactJson.data?.phoneWhatsapp || contactJson.data?.phoneNumber || "")
+              .replace(/[^0-9]/g, "");
+          setWhatsapp(number);
+        }
       } catch (e) {
         setError("Failed to load services, please try again");
       } finally {
         setLoading(false);
       }
     }
-    fetchPackages();
+    fetchData();
   }, []);
 
   const formatPrice = (price) => `Rp ${price.toLocaleString('id-ID')}`;
+
+  const handleSelectPackage = (title) => {
+    if (!whatsapp) return;
+    const message = encodeURIComponent(
+      `Halo, saya tertarik dengan paket ${title}. Bisa memberikan detail?`
+    );
+    window.open(`https://wa.me/${whatsapp}?text=${message}`, "_blank");
+  };
 
   if (loading) {
     return (
@@ -62,6 +81,7 @@ export default function LayananPage() {
                 bgColor={pkg.bgColor || "bg-gray-800"}
                 textColor={pkg.textColor || "text-white"}
                 badge={pkg.isPopular ? { text: "POPULER", color: "bg-red-500" } : null}
+                onSelect={handleSelectPackage}
               />
             ))}
           </div>
@@ -70,7 +90,7 @@ export default function LayananPage() {
 
       <CTASection />
       {/* <Footer /> */}
-      <FloatingWhatsApp />
+      <FloatingWhatsApp phone={whatsapp} />
     </>
   );
 }
