@@ -15,6 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { updateProfile, uploadAvatarImage } from '@/app/services/api';
 import Notification from '@/components/ui/Notification/Notification';
+import Image from 'next/image';
 
 export default function MyAccountPage() {
     const { data: session, update } = useSession();
@@ -170,9 +171,11 @@ export default function MyAccountPage() {
                             <div className="text-center">
                                 <div className="relative inline-block mb-4">
                                     {avatarPreview ? (
-                                        <img
+                                        <Image
                                             src={avatarPreview}
                                             alt="Avatar"
+                                            width={128}
+                                            height={128}
                                             className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
                                         />
                                     ) : (

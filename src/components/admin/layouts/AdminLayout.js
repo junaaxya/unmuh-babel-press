@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import {
     faChartLine,
     faBook,
@@ -513,9 +514,11 @@ export default function AdminLayout({ children }) {
                         </span>
                         <Link href="/admin/dashboard/settings/account">
                             {session?.user?.image ? (
-                                <img
+                                <Image
                                     src={session.user.image}
                                     alt={session.user.name || 'avatar'}
+                                    width={32}
+                                    height={32}
                                     className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200"
                                 />
                             ) : (

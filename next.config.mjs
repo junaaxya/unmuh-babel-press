@@ -17,6 +17,16 @@ const nextConfig = {
                 hostname: 'i.ytimg.com',
                 pathname: '/vi/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'lh3.googleusercontent.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'avatars.githubusercontent.com',
+                pathname: '/**',
+            },
         ],
     },
     reactStrictMode: true,
