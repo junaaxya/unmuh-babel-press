@@ -233,7 +233,7 @@ export default function SearchPage() {
             </h1>
           </div>
           <p className="text-gray-600">
-            Menampilkan hasil untuk <span className="font-semibold text-gray-800">"{query}"</span>
+            Menampilkan hasil untuk <span className="font-semibold text-gray-800">&quot;{query}&quot;</span>
           </p>
         </div>
 

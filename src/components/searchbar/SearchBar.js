@@ -290,7 +290,7 @@ export default function SearchBar({
                                     onClick={handleSubmit}
                                     className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                                 >
-                                    Tekan Enter untuk mencari "{query}"
+                                    Tekan Enter untuk mencari &quot;{query}&quot;
                                 </button>
                             </div>
                         </div>
