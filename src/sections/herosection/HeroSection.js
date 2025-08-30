@@ -35,7 +35,7 @@ export default function HeroSection() {
             <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
                 {/* Left: Text */}
                 <div className="flex-1 text-center md:text-left">
-                    <h1 className="text-lg md:text-5xl font-bold text-blue-900 dark:text-white leading-tight">
+                    <h1 className="text-lg md:text-5xl font-bold text-white leading-tight">
                         {headline ? (
                             headline.split('\n').map((line, i) => (
                                 <span key={i}>
@@ -53,7 +53,7 @@ export default function HeroSection() {
                             </>
                         )}
                     </h1>
-                    <p className="mt-2 md:mt-4 text-gray-600 dark:text-gray-300 text-[8px] md:text-base">
+                    <p className="mt-2 md:mt-4 text-gray-300 text-[8px] md:text-base">
                         {subheadline ||
                             'Menyediakan layanan publikasi, penerbitan buku, dan penyebarluasan ilmu pengetahuan untuk dosen dan mahasiswa.'}
                     </p>

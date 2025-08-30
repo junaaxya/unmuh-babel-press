@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { uploadFavicon } from '@/app/services/api';
+import Image from 'next/image';
 
 export default function FaviconUploader({ value, onChange }) {
   const [uploading, setUploading] = useState(false);
@@ -24,7 +25,13 @@ export default function FaviconUploader({ value, onChange }) {
   return (
     <div className="space-y-2">
       {value && (
-        <img src={value} alt="favicon" className="w-8 h-8" />
+        <Image
+          src={value}
+          alt="favicon"
+          width={32}
+          height={32}
+          className="w-8 h-8"
+        />
       )}
       <input
         type="file"
