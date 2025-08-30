@@ -24,8 +24,12 @@ export async function GET(request) {
       },
       orderBy: { published_at: 'desc' },
     });
+    const serializedBooks = books.map((book) => ({
+      ...book,
+      id: book.id.toString(),
+    }));
 
-    return NextResponse.json(books);
+    return NextResponse.json(serializedBooks);
   } catch (error) {
     console.error('Books search error', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
