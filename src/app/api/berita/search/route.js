@@ -8,7 +8,7 @@ export async function GET(request) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const q = searchParams.get("q")?.trim();
+    const q = searchParams.get("q")?.trim().toLowerCase();
     if (!q) {
       return NextResponse.json([]);
     }
@@ -17,9 +17,9 @@ export async function GET(request) {
       where: {
         status: "published",
         OR: [
-          { title: { contains: q, mode: "insensitive" } },
-          { content: { contains: q, mode: "insensitive" } },
-          { excerpt: { contains: q, mode: "insensitive" } },
+          { title: { contains: q } },
+          { content: { contains: q } },
+          { excerpt: { contains: q } },
         ],
       },
       orderBy: { date: "desc" },
