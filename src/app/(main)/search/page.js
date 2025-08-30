@@ -99,7 +99,7 @@ export default function SearchPage() {
             Tidak ada hasil ditemukan
           </h3>
           <p className="text-gray-500 mb-4">
-            Tidak ada hasil untuk pencarian <span className="font-medium">"{query}"</span>
+            Tidak ada hasil untuk pencarian <span className="font-medium">&quot;{query}&quot;</span>
           </p>
           <div className="text-sm text-gray-400">
             <p>Coba gunakan kata kunci yang berbeda</p>

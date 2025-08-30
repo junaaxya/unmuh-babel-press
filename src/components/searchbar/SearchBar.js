@@ -265,7 +265,7 @@ export default function SearchBar({
                                     icon={faMagnifyingGlass}
                                     className="text-xs"
                                 />
-                                Lihat semua hasil untuk "{query}"
+                                Lihat semua hasil untuk &quot;{query}&quot;
                             </button>
                         </div>
                     </div>
