@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 
-const API_KEY = process.env.YOUTUBE_API_KEY;
-const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID;
-const CACHE_TTL = parseInt(process.env.YOUTUBE_CACHE_TTL_SECONDS || '3600', 10);
 
-export const revalidate = CACHE_TTL;
+// Atur revalidate dengan angka statis (literal) agar Next.js bisa membacanya saat build.
+// Nilai ini (dalam detik) akan berlaku untuk semua data yang di-fetch di dalam route ini.
+export const revalidate = 3600; // Cache selama 1 jam
 
 export async function GET() {
+  const API_KEY = process.env.YOUTUBE_API_KEY;
+  const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID;
+
   if (!API_KEY || !CHANNEL_ID) {
     return NextResponse.json(
       { error: 'Missing YOUTUBE_API_KEY or YOUTUBE_CHANNEL_ID' },
@@ -23,33 +25,33 @@ export async function GET() {
     });
 
     const channelRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?${channelParams.toString()}`,
-      { cache: 'no-store' }
+      `https://www.googleapis.com/youtube/v3/channels?${channelParams.toString()}`
+      // Hapus { cache: 'no-store' } agar revalidate berfungsi
     );
 
     if (!channelRes.ok) {
-      const err = await channelRes.json().catch(() => ({}));
-      return NextResponse.json(
-        { error: err.error?.message || 'Failed to fetch channel data' },
-        { status: channelRes.status }
-      );
+        const err = await channelRes.json().catch(() => ({}));
+        return NextResponse.json(
+          { error: err.error?.message || 'Failed to fetch channel data' },
+          { status: channelRes.status }
+        );
     }
 
     const channelJson = await channelRes.json();
     const channelItem = channelJson.items?.[0];
     if (!channelItem) {
-      return NextResponse.json({ error: 'Channel not found' }, { status: 404 });
+        return NextResponse.json({ error: 'Channel not found' }, { status: 404 });
     }
 
     const channelInfo = {
-      title: channelItem.snippet?.title || '',
-      subscriberCount: Number(channelItem.statistics?.subscriberCount || 0),
-      videoCount: Number(channelItem.statistics?.videoCount || 0),
-      url: `https://www.youtube.com/channel/${CHANNEL_ID}`,
-      isLive: false,
+        title: channelItem.snippet?.title || '',
+        subscriberCount: Number(channelItem.statistics?.subscriberCount || 0),
+        videoCount: Number(channelItem.statistics?.videoCount || 0),
+        url: `https://www.youtube.com/channel/${CHANNEL_ID}`,
+        isLive: false,
     };
 
-    // Check live status
+    // Check live status (ini bisa tetap no-store jika Anda ingin datanya selalu real-time)
     try {
       const liveParams = new URLSearchParams({
         part: 'id',
@@ -61,7 +63,7 @@ export async function GET() {
       });
       const liveRes = await fetch(
         `https://www.googleapis.com/youtube/v3/search?${liveParams.toString()}`,
-        { cache: 'no-store' }
+        { cache: 'no-store' } // Dibiarkan karena status live harus selalu terbaru
       );
       if (liveRes.ok) {
         const liveJson = await liveRes.json();
@@ -82,8 +84,8 @@ export async function GET() {
         key: API_KEY,
       });
       const playlistRes = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?${playlistParams.toString()}`,
-        { cache: 'no-store' }
+        `https://www.googleapis.com/youtube/v3/playlistItems?${playlistParams.toString()}`
+        // Hapus { cache: 'no-store' }
       );
       if (playlistRes.ok) {
         const playlistJson = await playlistRes.json();
@@ -97,8 +99,8 @@ export async function GET() {
             key: API_KEY,
           });
           const videosRes = await fetch(
-            `https://www.googleapis.com/youtube/v3/videos?${videosParams.toString()}`,
-            { cache: 'no-store' }
+            `https://www.googleapis.com/youtube/v3/videos?${videosParams.toString()}`
+            // Hapus { cache: 'no-store' }
           );
           if (videosRes.ok) {
             const videosJson = await videosRes.json();
@@ -145,4 +147,3 @@ function formatDuration(iso) {
   parts.push(String(seconds).padStart(2, '0'));
   return parts.join(':');
 }
-

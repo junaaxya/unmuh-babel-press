@@ -11,8 +11,12 @@ RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 # --- Menerima variabel dari docker-compose saat build ---
 ARG NEXTAUTH_SECRET
 ARG NEXTAUTH_URL
+ARG MAIL_FROM_NAME   
+ARG MAIL_FROM_EMAIL
 ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
 ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV MAIL_FROM_NAME=${MAIL_FROM_NAME} 
+ENV MAIL_FROM_EMAIL=${MAIL_FROM_EMAIL}
 
 # Install dependencies dengan cache
 COPY package*.json ./
