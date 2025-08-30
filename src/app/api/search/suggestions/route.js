@@ -13,22 +13,44 @@ export async function GET(request) {
       return NextResponse.json([]);
     }
 
-    const books = await prisma.book.findMany({
-      where: {
-        status: 'published',
-        title: { contains: q },
-      },
-      select: { id: true, title: true },
-      orderBy: { published_at: 'desc' },
-      take: 5,
-    });
+    const [books, news, events] = await Promise.all([
+      prisma.book.findMany({
+        where: {
+          status: 'published',
+          title: { contains: q },
+        },
+        select: { id: true, title: true },
+        orderBy: { published_at: 'desc' },
+        take: 5,
+      }),
+      prisma.news.findMany({
+        where: {
+          status: 'published',
+          title: { contains: q },
+        },
+        select: { slug: true, title: true },
+        orderBy: { date: 'desc' },
+        take: 5,
+      }),
+      prisma.event.findMany({
+        where: {
+          publishStatus: 'published',
+          status: { in: ['Upcoming', 'Ongoing'] },
+          title: { contains: q },
+        },
+        select: { slug: true, title: true },
+        orderBy: { date: 'desc' },
+        take: 5,
+      }),
+    ]);
 
-    const serialized = books.map((book) => ({
-      ...book,
-      id: book.id.toString(),
-    }));
+    const suggestions = [
+      ...books.map((b) => ({ type: 'book', id: b.id.toString(), title: b.title })),
+      ...news.map((n) => ({ type: 'news', slug: n.slug, title: n.title })),
+      ...events.map((e) => ({ type: 'event', slug: e.slug, title: e.title })),
+    ];
 
-    return NextResponse.json(serialized);
+    return NextResponse.json(suggestions);
   } catch (error) {
     console.error('Search suggestions error', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

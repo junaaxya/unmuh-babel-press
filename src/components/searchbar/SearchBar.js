@@ -4,7 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMagnifyingGlass,
+  faBook,
+  faNewspaper,
+  faCalendar,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
@@ -27,7 +32,7 @@ export default function SearchBar() {
         if (res.ok) {
           const data = await res.json();
           setSuggestions(Array.isArray(data) ? data : []);
-          setShowDropdown(data.length > 0);
+          setShowDropdown(true);
         }
       } catch (err) {
         console.error('Suggestion fetch error', err);
@@ -56,6 +61,21 @@ export default function SearchBar() {
     router.push(`/search?q=${encoded}`);
   };
 
+  const iconMap = { book: faBook, news: faNewspaper, event: faCalendar };
+
+  const getHref = (item) => {
+    switch (item.type) {
+      case 'book':
+        return `/buku/${item.id}`;
+      case 'news':
+        return `/berita/${item.slug}`;
+      case 'event':
+        return `/event/${item.slug}`;
+      default:
+        return '#';
+    }
+  };
+
   return (
     <div className="relative" ref={containerRef}>
       <form onSubmit={handleSubmit}>
@@ -64,22 +84,37 @@ export default function SearchBar() {
         </span>
         <input
           type="text"
-          placeholder="Cari Buku..."
+          placeholder="Cari..."
           className="w-full max-w-md rounded-lg pl-8 py-2 bg-blue-200 text-black text-sm placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-800 shadow-sm transition duration-150 ease-in-out"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setShowDropdown(suggestions.length > 0)}
+          onFocus={() => query.trim().length >= 3 && setShowDropdown(true)}
         />
       </form>
-      {showDropdown && suggestions.length > 0 && (
-        <ul className="absolute z-10 mt-1 w-full max-w-md rounded-md bg-white shadow-lg border">
-          {suggestions.map((item) => (
-            <li key={item.id} className="px-3 py-2 hover:bg-gray-100">
-              <Link href={`/buku/${item.id}`} onClick={() => setShowDropdown(false)}>
-                {item.title}
-              </Link>
-            </li>
-          ))}
+      {showDropdown && (
+        <ul className="absolute z-10 mt-1 w-full max-w-md rounded-md bg-white text-gray-900 shadow-lg border">
+          {suggestions.length > 0 ? (
+            suggestions.map((item) => (
+              <li
+                key={`${item.type}-${item.id ?? item.slug}`}
+                className="px-3 py-2 hover:bg-gray-100"
+              >
+                <Link
+                  href={getHref(item)}
+                  onClick={() => setShowDropdown(false)}
+                  className="flex items-center gap-2"
+                >
+                  <FontAwesomeIcon
+                    icon={iconMap[item.type]}
+                    className="w-4 h-4 text-gray-600"
+                  />
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            ))
+          ) : (
+            <li className="px-3 py-2 text-sm text-gray-500">No suggestions found</li>
+          )}
         </ul>
       )}
     </div>
