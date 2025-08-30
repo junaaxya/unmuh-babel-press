@@ -1,13 +1,24 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 export default function SearchBar() {
     const [query, setQuery] = useState('');
+    const router = useRouter();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const trimmed = query.trim();
+        if (!trimmed) return;
+        const encoded = encodeURIComponent(trimmed);
+        router.push(`/search?q=${encoded}`);
+        setQuery('');
+    };
 
     return (
-        <div>
+        <form onSubmit={handleSubmit} className="relative">
             <span
                 className={`
                  absolute
@@ -28,6 +39,6 @@ export default function SearchBar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
-        </div>
+        </form>
     );
 }

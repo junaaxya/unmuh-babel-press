@@ -1,26 +1,33 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { applyRateLimit } from "@/lib/rateLimit";
 
 export async function GET(request) {
+  const rateLimitResponse = await applyRateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(request.url);
-    const judul = searchParams.get("judul")?.toLowerCase() || "";
-
-    const hasil = await prisma.berita.findMany({
-      where: {
-        judul: {
-          contains: judul,
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    if (hasil.length === 0) {
-      return NextResponse.json({ message: "Berita tidak ditemukan" }, { status: 404 });
+    const q = searchParams.get("q")?.trim();
+    if (!q) {
+      return NextResponse.json([]);
     }
+
+    const hasil = await prisma.news.findMany({
+      where: {
+        status: "published",
+        OR: [
+          { title: { contains: q, mode: "insensitive" } },
+          { content: { contains: q, mode: "insensitive" } },
+          { excerpt: { contains: q, mode: "insensitive" } },
+        ],
+      },
+      orderBy: { date: "desc" },
+    });
 
     return NextResponse.json(hasil);
   } catch (error) {
-    return NextResponse.json({ error: "Error saat mencari berita" }, { status: 500 });
+    console.error("News search error", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
