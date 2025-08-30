@@ -7,10 +7,8 @@ import Link from 'next/link';
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
-  const [newsResults, setNewsResults] = useState([]);
-  const [eventResults, setEventResults] = useState([]);
-  const [bookResults, setBookResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [results, setResults] = useState({ books: [], news: [], events: [] });
+  const [loading, setLoading] = useState(false);
 
   // Highlight matched keywords within a text
   const highlight = (text) => {
@@ -33,34 +31,28 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setResults({ books: [], news: [], events: [] });
+      return;
+    }
+    setLoading(true);
     async function fetchResults() {
-      const trimmed = query.trim();
-      if (!trimmed) {
-        setNewsResults([]);
-        setEventResults([]);
-        setBookResults([]);
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
       try {
-        const encoded = encodeURIComponent(trimmed);
-        const [newsRes, eventsRes, booksRes] = await Promise.all([
-          fetch(`/api/berita/search?q=${encoded}`),
-          fetch(`/api/events/search?q=${encoded}`),
-          fetch(`/api/books/search?q=${encoded}`),
-        ]);
-        const news = newsRes.ok ? await newsRes.json() : [];
-        const events = eventsRes.ok ? await eventsRes.json() : [];
-        const books = booksRes.ok ? await booksRes.json() : [];
-        setNewsResults(Array.isArray(news) ? news : []);
-        setEventResults(Array.isArray(events) ? events : []);
-        setBookResults(Array.isArray(books) ? books : []);
+        const res = await fetch(`/api/search?q=${encodeURIComponent(trimmed)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setResults({
+            books: Array.isArray(data.books) ? data.books : [],
+            news: Array.isArray(data.news) ? data.news : [],
+            events: Array.isArray(data.events) ? data.events : [],
+          });
+        } else {
+          setResults({ books: [], news: [], events: [] });
+        }
       } catch (err) {
         console.error('Error during search', err);
-        setNewsResults([]);
-        setEventResults([]);
-        setBookResults([]);
+        setResults({ books: [], news: [], events: [] });
       } finally {
         setLoading(false);
       }
@@ -77,7 +69,7 @@ export default function SearchPage() {
   }
 
   const noResults =
-    !newsResults.length && !eventResults.length && !bookResults.length;
+    !results.news.length && !results.events.length && !results.books.length;
 
   if (noResults) {
     return (
@@ -89,11 +81,11 @@ export default function SearchPage() {
 
   return (
     <div className="container mx-auto p-4 space-y-8">
-      {newsResults.length > 0 && (
+      {results.news.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mb-2">News Search Results</h2>
           <ul className="space-y-1">
-            {newsResults.map((item) => (
+            {results.news.map((item) => (
               <li key={item.id} className="border-b pb-1">
                 {item.slug ? (
                   <Link
@@ -111,11 +103,11 @@ export default function SearchPage() {
         </section>
       )}
 
-      {eventResults.length > 0 && (
+      {results.events.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mb-2">Event Search Results</h2>
           <ul className="space-y-1">
-            {eventResults.map((item) => (
+            {results.events.map((item) => (
               <li key={item.id} className="border-b pb-1">
                 {item.slug ? (
                   <Link
@@ -138,15 +130,18 @@ export default function SearchPage() {
         </section>
       )}
 
-      {bookResults.length > 0 && (
+      {results.books.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mb-2">Book Search Results</h2>
           <ul className="space-y-1">
-            {bookResults.map((item) => (
+            {results.books.map((item) => (
               <li key={item.id} className="border-b pb-1">
-                <span className="text-blue-700">
+                <Link
+                  href={`/buku/${item.id}`}
+                  className="text-blue-700 hover:underline"
+                >
                   {highlight(item.title)}
-                </span>
+                </Link>
                 {item.penulis && (
                   <span className="block text-xs text-gray-500">
                     {highlight(item.penulis)}
@@ -160,5 +155,3 @@ export default function SearchPage() {
     </div>
   );
 }
-
-
