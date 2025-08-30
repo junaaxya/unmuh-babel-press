@@ -61,7 +61,7 @@ export default function Navbar() {
     }, [menuOpen]);
 
     return (
-        <nav className="bg-gray-900 text-white shadow">
+        <nav className="bg-cyan-50 text-white shadow">
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo + Title */}
                 <Link href="/" className="flex items-center space-x-4">
