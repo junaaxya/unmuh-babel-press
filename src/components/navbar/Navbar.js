@@ -13,7 +13,6 @@ import {
     faBars,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import DarkModeToggle from '../ui/DarkModeToggle/DarkModeToggle';
 import SearchBar from '../searchbar/SearchBar';
 
 export default function Navbar() {
@@ -62,7 +61,7 @@ export default function Navbar() {
     }, [menuOpen]);
 
     return (
-        <nav className="bg-gray-900 dark:bg-cyan-50 text-white shadow dark:shadow-gray-700">
+        <nav className="bg-gray-900 text-white shadow">
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo + Title */}
                 <Link href="/" className="flex items-center space-x-4">
@@ -83,12 +82,11 @@ export default function Navbar() {
                         </p>
                     </div>
                 </Link>
-                {/* Search + DarkMode + Toggle */}
+                {/* Search + Menu Toggle */}
                 <div className="flex items-center gap-3">
                     <div className="hidden md:block">
                         <SearchBar />
                     </div>
-                    <DarkModeToggle />
                     <button
                         ref={buttonRef}
                         onClick={() => setMenuOpen(!menuOpen)}
