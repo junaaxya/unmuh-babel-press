@@ -14,6 +14,7 @@ export async function GET(request) {
     }
 
     const [books, news, events] = await Promise.all([
+      // Query untuk Books (setelah diperbaiki)
       prisma.book.findMany({
         where: {
           status: 'published',
@@ -23,9 +24,12 @@ export async function GET(request) {
             { sinopsis: { contains: q } },
           ],
         },
-        select: { id: true, title: true, penulis: true },
+        // 'slug' dihapus dari select karena tidak ada di model Book Anda
+        select: { id: true, title: true, penulis: true, image: true }, 
         orderBy: { published_at: 'desc' },
       }),
+
+      // Query untuk News
       prisma.news.findMany({
         where: {
           status: 'published',
@@ -35,9 +39,11 @@ export async function GET(request) {
             { excerpt: { contains: q } },
           ],
         },
-        select: { id: true, slug: true, title: true, judul: true },
+        select: { id: true, slug: true, title: true, image: true, date: true },
         orderBy: { date: 'desc' },
       }),
+
+      // Query untuk Events
       prisma.event.findMany({
         where: {
           publishStatus: 'published',
@@ -48,7 +54,7 @@ export async function GET(request) {
             { location: { contains: q } },
           ],
         },
-        select: { id: true, slug: true, title: true, location: true },
+        select: { id: true, slug: true, title: true, location: true, image: true, date: true },
         orderBy: { date: 'desc' },
       }),
     ]);
