@@ -1,4 +1,0 @@
-ALTER TABLE `ServicePackage`
-  ADD COLUMN `bgColor` VARCHAR(191) NOT NULL DEFAULT 'bg-gray-800',
-  ADD COLUMN `textColor` VARCHAR(191) NOT NULL DEFAULT 'text-white',
-  ADD COLUMN `isActive` BOOLEAN NOT NULL DEFAULT true;
