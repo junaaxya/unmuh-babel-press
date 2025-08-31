@@ -1,6 +1,6 @@
 // src/components/emails/InvitationEmail.jsx
 import React from 'react';
-import Image from 'next/image';
+
 
 // --- Gaya CSS Inline untuk Kompatibilitas Maksimal ---
 const main = {
@@ -302,7 +302,7 @@ export const InvitationEmail = ({
                     name="viewport"
                     content="width=device-width, initial-scale=1.0"
                 />
-                <title>Undangan Bergabung - {companyName}</title>
+                <title>{`Undangan Bergabung - ${companyName}`}</title>
             </head>
             <body style={main}>
                 <div style={container}>
@@ -314,7 +314,7 @@ export const InvitationEmail = ({
                         }}
                     >
                         <div style={logoContainer}>
-                            <Image
+                            <img
                                 style={logo}
                                 src={logoUrl}
                                 alt={`${companyName} Logo`}
@@ -336,7 +336,7 @@ export const InvitationEmail = ({
                     <div style={contentSection}>
                         {/* Inviter Section */}
                         <div style={inviterSection}>
-                            <Image
+                            <img
                                 style={avatar}
                                 src={invitedByImage}
                                 alt={invitedBy}
