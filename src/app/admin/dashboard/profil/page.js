@@ -76,11 +76,11 @@ export default function AdminProfilPage() {
     const [servicesData, setServicesData] = useState([]);
 
     const tabs = [
-        { id: 'hero', label: 'Hero Section', icon: faUser },
-        { id: 'vision-mission', label: 'Visi & Misi', icon: faEye },
-        { id: 'history', label: 'Sejarah', icon: faHistory },
-        { id: 'team', label: 'Tim', icon: faUsers },
-        { id: 'services', label: 'Layanan', icon: faCogs },
+        { id: 'hero', label: 'Hero Section', icon: faUser, shortLabel: 'Hero' },
+        { id: 'vision-mission', label: 'Visi & Misi', icon: faEye, shortLabel: 'Visi' },
+        { id: 'history', label: 'Sejarah', icon: faHistory, shortLabel: 'Sejarah' },
+        { id: 'team', label: 'Tim', icon: faUsers, shortLabel: 'Tim' },
+        { id: 'services', label: 'Layanan', icon: faCogs, shortLabel: 'Layanan' },
     ];
 
     useEffect(() => {
@@ -200,8 +200,8 @@ export default function AdminProfilPage() {
         switch (activeTab) {
             case 'hero':
                 return (
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
                             <h3 className="text-lg font-semibold mb-4 flex items-center">
                                 <FontAwesomeIcon
                                     icon={faUser}
@@ -210,67 +210,69 @@ export default function AdminProfilPage() {
                                 Hero Section
                             </h3>
 
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Judul
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={heroData.title}
+                                            onChange={(e) =>
+                                                setHeroData({
+                                                    ...heroData,
+                                                    title: e.target.value,
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                            placeholder="Masukkan judul hero"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Subtitle
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={heroData.subtitle}
+                                            onChange={(e) =>
+                                                setHeroData({
+                                                    ...heroData,
+                                                    subtitle: e.target.value,
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                            placeholder="Masukkan subtitle"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="lg:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Judul
+                                        Deskripsi
                                     </label>
-                                    <input
-                                        type="text"
-                                        value={heroData.title}
+                                    <textarea
+                                        value={heroData.description}
                                         onChange={(e) =>
                                             setHeroData({
                                                 ...heroData,
-                                                title: e.target.value,
+                                                description: e.target.value,
                                             })
                                         }
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Masukkan judul hero"
+                                        rows={4}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                        placeholder="Masukkan deskripsi"
                                     />
                                 </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Subtitle
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={heroData.subtitle}
-                                        onChange={(e) =>
-                                            setHeroData({
-                                                ...heroData,
-                                                subtitle: e.target.value,
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Masukkan subtitle"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="mt-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Deskripsi
-                                </label>
-                                <textarea
-                                    value={heroData.description}
-                                    onChange={(e) =>
-                                        setHeroData({
-                                            ...heroData,
-                                            description: e.target.value,
-                                        })
-                                    }
-                                    rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Masukkan deskripsi"
-                                />
                             </div>
 
                             <div className="flex justify-end mt-6">
                                 <button
                                     onClick={handleHeroSave}
                                     disabled={loading}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                                 >
                                     {loading ? (
                                         <FontAwesomeIcon
@@ -293,8 +295,8 @@ export default function AdminProfilPage() {
 
             case 'vision-mission':
                 return (
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
                             <h3 className="text-lg font-semibold mb-4 flex items-center">
                                 <FontAwesomeIcon
                                     icon={faEye}
@@ -316,19 +318,19 @@ export default function AdminProfilPage() {
                                         })
                                     }
                                     rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                     placeholder="Masukkan visi organisasi"
                                 />
                             </div>
 
                             <div>
-                                <div className="flex justify-between items-center mb-4">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
                                     <h4 className="text-md font-medium">
                                         Misi
                                     </h4>
                                     <button
                                         onClick={addMission}
-                                        className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                                        className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                                     >
                                         <FontAwesomeIcon
                                             icon={faPlus}
@@ -338,49 +340,52 @@ export default function AdminProfilPage() {
                                     </button>
                                 </div>
 
-                                {visionMissionData.missions.map(
-                                    (mission, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex items-center space-x-4 mb-4"
-                                        >
-                                            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                                <span className="text-blue-600 font-medium">
-                                                    {index + 1}
-                                                </span>
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={mission.text}
-                                                onChange={(e) =>
-                                                    updateMission(
-                                                        index,
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="Masukkan misi"
-                                            />
-                                            <button
-                                                onClick={() =>
-                                                    removeMission(index)
-                                                }
-                                                className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                <div className="space-y-4">
+                                    {visionMissionData.missions.map(
+                                        (mission, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-3 border border-gray-200 rounded-md"
                                             >
-                                                <FontAwesomeIcon
-                                                    icon={faTrash}
+                                                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <span className="text-blue-600 font-medium text-sm">
+                                                        {index + 1}
+                                                    </span>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={mission.text}
+                                                    onChange={(e) =>
+                                                        updateMission(
+                                                            index,
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                                    placeholder="Masukkan misi"
                                                 />
-                                            </button>
-                                        </div>
-                                    )
-                                )}
+                                                <button
+                                                    onClick={() =>
+                                                        removeMission(index)
+                                                    }
+                                                    className="w-full sm:w-auto px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center justify-center"
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faTrash}
+                                                    />
+                                                    <span className="ml-2 sm:hidden">Hapus</span>
+                                                </button>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
                             </div>
 
                             <div className="flex justify-end mt-6">
                                 <button
                                     onClick={handleVisionMissionSave}
                                     disabled={loading}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                                 >
                                     {loading ? (
                                         <FontAwesomeIcon
@@ -403,9 +408,9 @@ export default function AdminProfilPage() {
 
             case 'history':
                 return (
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                            <div className="flex justify-between items-center mb-4">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
                                 <h3 className="text-lg font-semibold flex items-center">
                                     <FontAwesomeIcon
                                         icon={faHistory}
@@ -415,7 +420,7 @@ export default function AdminProfilPage() {
                                 </h3>
                                 <button
                                     onClick={() => addHistoryItem()}
-                                    className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                                    className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                                 >
                                     <FontAwesomeIcon
                                         icon={faPlus}
@@ -426,7 +431,7 @@ export default function AdminProfilPage() {
                             </div>
 
                             {historyData.length === 0 ? (
-                                <p className="text-gray-500 text-center py-8">
+                                <p className="text-gray-500 text-center py-8 text-sm sm:text-base">
                                     Belum ada item sejarah yang ditambahkan
                                 </p>
                             ) : (
@@ -436,7 +441,7 @@ export default function AdminProfilPage() {
                                             key={index}
                                             className="border border-gray-200 rounded-md p-4"
                                         >
-                                            <div className="grid md:grid-cols-3 gap-4 mb-4">
+                                            <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4 mb-4">
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                                         Tahun
@@ -451,7 +456,7 @@ export default function AdminProfilPage() {
                                                                 e.target.value
                                                             )
                                                         }
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                         placeholder="2024"
                                                     />
                                                 </div>
@@ -469,7 +474,7 @@ export default function AdminProfilPage() {
                                                                 e.target.value
                                                             )
                                                         }
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                         placeholder="Judul peristiwa"
                                                     />
                                                 </div>
@@ -480,11 +485,12 @@ export default function AdminProfilPage() {
                                                                 index
                                                             )
                                                         }
-                                                        className="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                                        className="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center justify-center"
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faTrash}
                                                         />
+                                                        <span className="ml-2 lg:hidden">Hapus</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -502,7 +508,7 @@ export default function AdminProfilPage() {
                                                         )
                                                     }
                                                     rows={3}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                     placeholder="Deskripsi peristiwa"
                                                 />
                                             </div>
@@ -515,7 +521,7 @@ export default function AdminProfilPage() {
                                 <button
                                     onClick={() => handleSaveSection('history')}
                                     disabled={loading}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                                 >
                                     {loading ? (
                                         <FontAwesomeIcon
@@ -538,9 +544,9 @@ export default function AdminProfilPage() {
 
             case 'team':
                 return (
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                            <div className="flex justify-between items-center mb-4">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
                                 <h3 className="text-lg font-semibold flex items-center">
                                     <FontAwesomeIcon
                                         icon={faUsers}
@@ -550,7 +556,7 @@ export default function AdminProfilPage() {
                                 </h3>
                                 <button
                                     onClick={() => addTeamMember()}
-                                    className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                                    className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                                 >
                                     <FontAwesomeIcon
                                         icon={faPlus}
@@ -561,17 +567,17 @@ export default function AdminProfilPage() {
                             </div>
 
                             {teamData.length === 0 ? (
-                                <p className="text-gray-500 text-center py-8">
+                                <p className="text-gray-500 text-center py-8 text-sm sm:text-base">
                                     Belum ada anggota tim yang ditambahkan
                                 </p>
                             ) : (
-                                <div className="space-y-4">
+                                <div className="space-y-6">
                                     {teamData.map((member, index) => (
                                         <div
                                             key={index}
                                             className="border border-gray-200 rounded-md p-4 space-y-4"
                                         >
-                                            <div className="flex justify-between gap-4">
+                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                                                 <div className="flex-1">
                                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                                         Nama
@@ -586,18 +592,19 @@ export default function AdminProfilPage() {
                                                                 e.target.value
                                                             )
                                                         }
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                         placeholder="Nama lengkap"
                                                     />
                                                 </div>
-                                                <div className="flex items-end">
+                                                <div className="flex sm:items-end">
                                                     <button
                                                         onClick={() =>
                                                             removeTeamMember(index)
                                                         }
-                                                        className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                                        className="w-full sm:w-auto px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center justify-center"
                                                     >
                                                         <FontAwesomeIcon icon={faTrash} />
+                                                        <span className="ml-2 sm:hidden">Hapus Anggota</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -627,7 +634,7 @@ export default function AdminProfilPage() {
                                                         )
                                                     }
                                                     rows={3}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                     placeholder="Jabatan atau deskripsi singkat"
                                                 />
                                             </div>
@@ -640,7 +647,7 @@ export default function AdminProfilPage() {
                                 <button
                                     onClick={() => handleSaveSection('team')}
                                     disabled={loading}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                                 >
                                     {loading ? (
                                         <FontAwesomeIcon
@@ -663,9 +670,9 @@ export default function AdminProfilPage() {
 
             case 'services':
                 return (
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                            <div className="flex justify-between items-center mb-4">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
                                 <h3 className="text-lg font-semibold flex items-center">
                                     <FontAwesomeIcon
                                         icon={faCogs}
@@ -675,7 +682,7 @@ export default function AdminProfilPage() {
                                 </h3>
                                 <button
                                     onClick={() => addService()}
-                                    className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                                    className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                                 >
                                     <FontAwesomeIcon
                                         icon={faPlus}
@@ -686,7 +693,7 @@ export default function AdminProfilPage() {
                             </div>
 
                             {servicesData.length === 0 ? (
-                                <p className="text-gray-500 text-center py-8">
+                                <p className="text-gray-500 text-center py-8 text-sm sm:text-base">
                                     Belum ada layanan yang ditambahkan
                                 </p>
                             ) : (
@@ -696,7 +703,7 @@ export default function AdminProfilPage() {
                                             key={index}
                                             className="border border-gray-200 rounded-md p-4"
                                         >
-                                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                                         Nama Layanan
@@ -711,20 +718,21 @@ export default function AdminProfilPage() {
                                                                 e.target.value
                                                             )
                                                         }
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                         placeholder="Nama layanan"
                                                     />
                                                 </div>
-                                                <div className="flex items-end">
+                                                <div className="flex lg:items-end">
                                                     <button
                                                         onClick={() =>
                                                             removeService(index)
                                                         }
-                                                        className="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                                        className="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center justify-center"
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faTrash}
                                                         />
+                                                        <span className="ml-2 lg:hidden">Hapus Layanan</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -742,14 +750,14 @@ export default function AdminProfilPage() {
                                                         )
                                                     }
                                                     rows={3}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                     placeholder="Deskripsi layanan"
                                                 />
                                             </div>
 
                                             {/* Features */}
                                             <div>
-                                                <div className="flex justify-between items-center mb-2">
+                                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 space-y-2 sm:space-y-0">
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         Fitur Layanan
                                                     </label>
@@ -759,14 +767,17 @@ export default function AdminProfilPage() {
                                                                 index
                                                             )
                                                         }
-                                                        className="px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
+                                                        className="w-full sm:w-auto px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faPlus}
+                                                            className="mr-1"
                                                         />
+                                                        <span className="sm:hidden">Tambah Fitur</span>
+                                                        <span className="hidden sm:inline">Tambah</span>
                                                     </button>
                                                 </div>
-                                                <div className="space-y-2">
+                                                <div className="space-y-3">
                                                     {(
                                                         service.features || []
                                                     ).map(
@@ -778,7 +789,7 @@ export default function AdminProfilPage() {
                                                                 key={
                                                                     featureIndex
                                                                 }
-                                                                className="flex items-center space-x-2"
+                                                                className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 p-2 border border-gray-100 rounded"
                                                             >
                                                                 <input
                                                                     type="text"
@@ -796,7 +807,7 @@ export default function AdminProfilPage() {
                                                                                 .value
                                                                         )
                                                                     }
-                                                                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                    className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                                                     placeholder="Fitur layanan"
                                                                 />
                                                                 <button
@@ -806,7 +817,7 @@ export default function AdminProfilPage() {
                                                                             featureIndex
                                                                         )
                                                                     }
-                                                                    className="px-2 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                                                                    className="w-full sm:w-auto px-2 py-2 bg-red-600 text-white rounded hover:bg-red-700 flex items-center justify-center"
                                                                 >
                                                                     <FontAwesomeIcon
                                                                         icon={
@@ -814,6 +825,7 @@ export default function AdminProfilPage() {
                                                                         }
                                                                         className="text-xs"
                                                                     />
+                                                                    <span className="ml-1 sm:hidden text-xs">Hapus</span>
                                                                 </button>
                                                             </div>
                                                         )
@@ -831,7 +843,7 @@ export default function AdminProfilPage() {
                                         handleSaveSection('services')
                                     }
                                     disabled={loading}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
                                 >
                                     {loading ? (
                                         <FontAwesomeIcon
@@ -854,8 +866,8 @@ export default function AdminProfilPage() {
 
             default:
                 return (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <p className="text-gray-500">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                        <p className="text-gray-500 text-sm sm:text-base">
                             Fitur {activeTab} akan segera tersedia.
                         </p>
                     </div>
@@ -998,67 +1010,81 @@ export default function AdminProfilPage() {
     };
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex justify-between items-center">
+        <div className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto py-4 sm:py-6 space-y-4 sm:space-y-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-2 sm:space-y-0">
+                    <div>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                            Kelola Profil
+                        </h1>
+                        <p className="text-gray-600 mt-1 text-sm sm:text-base">
+                            Kelola informasi profil, visi misi, sejarah, tim, dan
+                            layanan
+                        </p>
+                    </div>
+                </div>
+
+                {notification.id && (
+                    <Notification
+                        id={notification.id}
+                        type={notification.type}
+                        message={notification.message}
+                        onClose={() =>
+                            setNotification({ id: null, type: '', message: '' })
+                        }
+                    />
+                )}
+
+                {/* Tab Navigation - Mobile Scrollable */}
+                <div className="border-b border-gray-200 bg-white rounded-lg shadow-sm overflow-hidden">
+                    <nav className="flex overflow-x-auto scrollbar-hide">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`flex-shrink-0 py-3 px-4 sm:px-6 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap transition-colors duration-200 ${
+                                    activeTab === tab.id
+                                        ? 'border-blue-500 text-blue-600 bg-blue-50'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                                }`}
+                            >
+                                <FontAwesomeIcon icon={tab.icon} className="mr-1 sm:mr-2" />
+                                <span className="hidden sm:inline">{tab.label}</span>
+                                <span className="sm:hidden">{tab.shortLabel}</span>
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+
+                {/* Tab Content */}
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        Kelola Profil
-                    </h1>
-                    <p className="text-gray-600 mt-1">
-                        Kelola informasi profil, visi misi, sejarah, tim, dan
-                        layanan
-                    </p>
+                    {loading &&
+                    activeTab !== 'hero' &&
+                    activeTab !== 'vision-mission' ? (
+                        <div className="flex justify-center items-center py-12">
+                            <FontAwesomeIcon
+                                icon={faSpinner}
+                                spin
+                                className="text-2xl text-blue-600"
+                            />
+                        </div>
+                    ) : (
+                        renderTabContent()
+                    )}
                 </div>
             </div>
 
-            {notification.id && (
-                <Notification
-                    id={notification.id}
-                    type={notification.type}
-                    message={notification.message}
-                    onClose={() =>
-                        setNotification({ id: null, type: '', message: '' })
-                    }
-                />
-            )}
-
-            {/* Tab Navigation */}
-            <div className="border-b border-gray-200">
-                <nav className="flex space-x-8">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                                activeTab === tab.id
-                                    ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                            }`}
-                        >
-                            <FontAwesomeIcon icon={tab.icon} className="mr-2" />
-                            {tab.label}
-                        </button>
-                    ))}
-                </nav>
-            </div>
-
-            {/* Tab Content */}
-            <div>
-                {loading &&
-                activeTab !== 'hero' &&
-                activeTab !== 'vision-mission' ? (
-                    <div className="flex justify-center items-center py-12">
-                        <FontAwesomeIcon
-                            icon={faSpinner}
-                            spin
-                            className="text-2xl text-blue-600"
-                        />
-                    </div>
-                ) : (
-                    renderTabContent()
-                )}
-            </div>
+            {/* Custom scrollbar styles */}
+            <style jsx>{`
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </div>
     );
 }
