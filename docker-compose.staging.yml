@@ -64,6 +64,7 @@ services:
                 NEXTAUTH_URL: http://localhost:4000
                 MAIL_FROM_NAME: ${MAIL_FROM_NAME}
                 MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+                RESEND_API_KEY: ${RESEND_API_KEY}
         env_file:
             - .env.staging
         environment:
@@ -71,8 +72,7 @@ services:
             PORT: 4000
             HOST: 0.0.0.0
             # Pastikan ini sesuai dengan env staging Anda
-            NEXTAUTH_URL: http://localhost:4000
-
+            NEXTAUTH_URL: https://stagging.unmuhbabelpress.com
         depends_on:
             mysql:
                 condition: service_healthy
