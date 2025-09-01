@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'; // PERBAIKAN 1: Menambahkan useCallback dan useRef
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Button from '@/components/ui/button/Button';
 import { updateHeroText } from '@/app/services/api';
 
@@ -16,20 +16,23 @@ export default function HeroTextEditor({
     const [head, setHead] = useState(headline || '');
     const [sub, setSub] = useState(subheadline || '');
     const [isSaving, setIsSaving] = useState(false);
-    const [hasChanges, setHasChanges] = useState(false);
     const [focusedField, setFocusedField] = useState(null);
     const autoSaveTimeoutRef = useRef(null);
+    const initialValuesRef = useRef({ head: headline || '', sub: subheadline || '' });
 
-    // PERBAIKAN 2: Stabilkan fungsi ini dengan useCallback.
-    // Fungsi ini sekarang hanya akan dibuat ulang jika props `headline` atau `subheadline` berubah.
-    const computeHasChanges = useCallback((h, s) => {
-        return h !== (headline || '') || s !== (subheadline || '');
+    useEffect(() => {
+        setHead(headline || '');
+        setSub(subheadline || '');
+        initialValuesRef.current = { head: headline || '', sub: subheadline || '' };
     }, [headline, subheadline]);
+
+    const hasChanges = head !== initialValuesRef.current.head || sub !== initialValuesRef.current.sub;
+
+    const sanitize = (text) => text.replace(/<[^>]*>?/gm, '').trim();
 
     const handleSave = useCallback(
         async (silent = false) => {
-            const currentHasChanges = computeHasChanges(head, sub);
-            if (!currentHasChanges && !silent) {
+            if (!hasChanges && !silent) {
                 setNotification({
                     type: 'info',
                     message: 'Tidak ada perubahan untuk disimpan.',
@@ -37,9 +40,31 @@ export default function HeroTextEditor({
                 return;
             }
 
+            const sanitizedHead = sanitize(head);
+            const sanitizedSub = sanitize(sub);
+
+            if (!sanitizedHead || !sanitizedSub) {
+                setNotification({
+                    type: 'error',
+                    message: 'Headline dan subheadline tidak boleh kosong.',
+                });
+                return;
+            }
+
+            if (
+                sanitizedHead.length > maxHeadlineLength ||
+                sanitizedSub.length > maxSubheadlineLength
+            ) {
+                setNotification({
+                    type: 'error',
+                    message: 'Input melebihi batas panjang yang diizinkan.',
+                });
+                return;
+            }
+
             setIsSaving(true);
             try {
-                await updateHeroText({ title: head, subtitle: sub });
+                await updateHeroText({ title: sanitizedHead, subtitle: sanitizedSub });
 
                 if (!silent) {
                     setNotification({
@@ -48,50 +73,48 @@ export default function HeroTextEditor({
                     });
                 }
 
+                initialValuesRef.current = {
+                    head: sanitizedHead,
+                    sub: sanitizedSub,
+                };
+
                 onSuccess();
-                setHasChanges(false);
             } catch (error) {
                 setNotification({
                     type: 'error',
-                    message: 'Gagal menyimpan teks hero. Silakan coba lagi.',
+                    message:
+                        error?.message || 'Gagal menyimpan teks hero. Silakan coba lagi.',
                 });
             } finally {
                 setIsSaving(false);
             }
         },
-        // PERBAIKAN 3: Tambahkan `computeHasChanges` ke dalam dependency array.
-        [head, sub, onSuccess, setNotification, computeHasChanges]
+        [head, sub, hasChanges, maxHeadlineLength, maxSubheadlineLength, onSuccess, setNotification]
     );
 
     useEffect(() => {
-        const changed = computeHasChanges(head, sub);
-        setHasChanges(changed);
+        if (!autoSave || !hasChanges) return;
 
-        if (autoSave && changed) {
-            if (autoSaveTimeoutRef.current) {
-                clearTimeout(autoSaveTimeoutRef.current);
-            }
-
-            autoSaveTimeoutRef.current = setTimeout(() => {
-                handleSave(true); // silent auto-save
-            }, autoSaveDelay);
+        if (autoSaveTimeoutRef.current) {
+            clearTimeout(autoSaveTimeoutRef.current);
         }
+
+        autoSaveTimeoutRef.current = setTimeout(() => {
+            handleSave(true);
+        }, autoSaveDelay);
 
         return () => {
             if (autoSaveTimeoutRef.current) {
                 clearTimeout(autoSaveTimeoutRef.current);
             }
         };
-        // PERBAIKAN 4: Tambahkan `computeHasChanges` dan hapus props yang sudah terwakili.
-    }, [head, sub, autoSave, autoSaveDelay, handleSave, computeHasChanges]);
+    }, [head, sub, autoSave, autoSaveDelay, handleSave, hasChanges]);
 
     const handleReset = async () => {
-        const resetHeadline = headline || '';
-        const resetSubheadline = subheadline || '';
+        const { head: resetHeadline, sub: resetSubheadline } = initialValuesRef.current;
 
         setHead(resetHeadline);
         setSub(resetSubheadline);
-        setHasChanges(false);
         setIsSaving(true);
 
         try {
@@ -111,7 +134,7 @@ export default function HeroTextEditor({
             setNotification({
                 id: Date.now(),
                 type: 'error',
-                message: 'Gagal mengirim data reset ke server.',
+                message: error?.message || 'Gagal mengirim data reset ke server.',
             });
         } finally {
             setIsSaving(false);
@@ -279,7 +302,7 @@ export default function HeroTextEditor({
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Button
                         onClick={() => handleSave()}
-                        disabled={isSaving || (!hasChanges && !autoSave)}
+                        disabled={isSaving || !hasChanges}
                         className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-300 disabled:to-gray-400"
                     >
                         {isSaving ? 'Menyimpan...' : hasChanges ? 'Simpan Perubahan' : 'Tersimpan'}
