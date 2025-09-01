@@ -4,7 +4,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 // Fungsi request umum dengan penanganan error yang disempurnakan
-async function apiRequest(url, method = 'GET', body = null, isFormData = false) {
+async function apiRequest(url, method = 'GET', body = null, isFormData = false, options = {}) {
   const headers = {};
   if (body && !isFormData) {
     headers['Content-Type'] = 'application/json';
@@ -20,6 +20,7 @@ async function apiRequest(url, method = 'GET', body = null, isFormData = false) 
       headers,
       credentials: 'include',
       body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+      ...options,
     });
   } catch (err) {
     throw { message: err.message };
@@ -50,7 +51,7 @@ async function apiRequest(url, method = 'GET', body = null, isFormData = false) 
 
 // GET: Ambil semua data beranda
 export const getHomeContent = async () => {
-    const data = await apiRequest('/api/beranda');
+    const data = await apiRequest('/api/beranda', 'GET', null, false, { cache: 'no-store' });
     const timestamp = Date.now();
     return {
         logoUrl: data.logo,
