@@ -64,7 +64,11 @@ export default function HeroTextEditor({
 
             setIsSaving(true);
             try {
-                await updateHeroText({ title: sanitizedHead, subtitle: sanitizedSub });
+                const res = await updateHeroText({ title: sanitizedHead, subtitle: sanitizedSub });
+
+                const saved = res?.herotext || { title: sanitizedHead, subtitle: sanitizedSub };
+                setHead(saved.title);
+                setSub(saved.subtitle);
 
                 if (!silent) {
                     setNotification({
@@ -74,8 +78,8 @@ export default function HeroTextEditor({
                 }
 
                 initialValuesRef.current = {
-                    head: sanitizedHead,
-                    sub: sanitizedSub,
+                    head: saved.title,
+                    sub: saved.subtitle,
                 };
 
                 onSuccess();
@@ -167,6 +171,11 @@ export default function HeroTextEditor({
     const headlineStats = getCharacterCount(head, maxHeadlineLength);
     const subheadlineStats = getCharacterCount(sub, maxSubheadlineLength);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleSave();
+    };
+
     return (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100">
@@ -197,7 +206,7 @@ export default function HeroTextEditor({
                 </div>
             </div>
 
-            <div className="p-6">
+            <form onSubmit={handleSubmit} className="p-6">
                 <div className="space-y-4 mb-6">
                     <label className="flex items-center justify-between text-sm font-medium text-gray-700">
                         <span>Headline Utama</span>
@@ -301,7 +310,7 @@ export default function HeroTextEditor({
 
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Button
-                        onClick={() => handleSave()}
+                        type="submit"
                         disabled={isSaving || !hasChanges}
                         className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-300 disabled:to-gray-400"
                     >
@@ -310,6 +319,7 @@ export default function HeroTextEditor({
 
                     {hasChanges && (
                         <Button
+                            type="button"
                             variant="outline"
                             onClick={handleReset}
                             disabled={isSaving}
@@ -325,7 +335,7 @@ export default function HeroTextEditor({
                         💡 <strong>Shortcut:</strong> Ctrl/Cmd + S untuk simpan, Escape untuk reset
                     </p>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
