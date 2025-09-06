@@ -44,6 +44,14 @@ const ProfileSection = ({
 
 // Vision Mission Component
 const VisionMissionContent = ({ data }) => {
+    if (!data || (!data.vision && !data.missions?.length)) {
+        return (
+            <p className="text-center text-gray-600 dark:text-gray-300">
+                Data visi dan misi belum tersedia.
+            </p>
+        );
+    }
+
     return (
         <div className="grid md:grid-cols-2 gap-12">
             {/* Vision */}
@@ -62,14 +70,14 @@ const VisionMissionContent = ({ data }) => {
                     Misi
                 </h3>
                 <ul className="space-y-4">
-                    {data.missions.map((mission, index) => (
+                    {(data.missions || []).map((mission, index) => (
                         <li key={index} className="flex items-start space-x-3">
                             <FontAwesomeIcon
                                 icon={faCheckCircle}
                                 className="text-purple-600 dark:text-purple-400 text-sm mt-1 flex-shrink-0"
                             />
                             <span className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {mission}
+                                {typeof mission === 'string' ? mission : mission.text}
                             </span>
                         </li>
                     ))}

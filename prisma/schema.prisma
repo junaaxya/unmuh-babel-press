@@ -1,0 +1,301 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Content models (unchanged) ---
+model News {
+  id           Int          @id @default(autoincrement())
+  title        String       @db.VarChar(200)
+  slug         String       @unique @db.VarChar(255)
+  excerpt      String       @db.Text
+  content      String       @db.LongText
+  image        String?      @db.VarChar(500)
+  date         DateTime     @db.Date
+  category     NewsCategory @default(Berita)
+  status       Status       @default(draft)
+  author       String       @db.VarChar(100)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  published_at DateTime?    @db.Timestamp(6)
+}
+
+enum NewsCategory {
+  Berita
+  Pengumuman
+  Artikel
+  Press_Release
+}
+
+model Event {
+  id                      Int           @id @default(autoincrement())
+  title                   String        @db.VarChar(200)
+  slug                    String        @unique @db.VarChar(255)
+  excerpt                 String        @db.Text
+  content                 String        @db.LongText
+  image                   String?       @db.VarChar(500)
+  date                    DateTime      @db.Date
+  time                    String        @db.VarChar(50)
+  location                String        @db.VarChar(200)
+  category                EventCategory @default(Event)
+  status                  EventStatus   @default(Upcoming)
+  organizer               String        @db.VarChar(100)
+  registrationEnabled     Boolean       @default(false)
+  registrationTitle       String?       @db.VarChar(100)
+  registrationDescription String?       @db.Text
+  registrationButtonText  String?       @db.VarChar(50)
+  registrationLink        String?       @db.VarChar(500)
+  registrationDeadline    DateTime?
+  published_at            DateTime?     @db.Timestamp(6)
+  publishStatus           Status        @default(draft) @map("publish_status")
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+}
+
+enum EventCategory {
+  Event
+  Seminar
+  Workshop
+  Konferensi
+  Pelatihan
+}
+
+enum EventStatus {
+  Upcoming
+  Ongoing
+  Completed
+  Cancelled
+}
+
+model Book {
+  id           BigInt    @id @default(autoincrement())
+  kode_buku    String?   @db.VarChar(50)
+  title        String    @db.VarChar(255)
+  isbn         String?   @db.VarChar(50)
+  penerbit     String?   @db.VarChar(255)
+  penulis      String?   @db.Text
+  editor       String?   @db.VarChar(255)
+  ukuran       String?   @db.VarChar(50)
+  halaman      Int?
+  image        String?   @db.VarChar(500)
+  kategori     String?   @db.VarChar(100)
+  sinopsis     String?   @db.Text
+  status       Status    @default(draft)
+  published_at DateTime? @db.Timestamp(6)
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  updated_at   DateTime  @updatedAt
+}
+
+enum Status {
+  draft
+  published
+}
+
+// --- Profile Page Models ---
+
+model ProfileHero {
+  id          Int        @id @default(1)
+  title       String
+  subtitle    String
+  description String
+  stats       HeroStat[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model HeroStat {
+  id     Int         @id @default(autoincrement())
+  hero   ProfileHero @relation(fields: [heroId], references: [id], onDelete: Cascade)
+  heroId Int
+  number Int
+  label  String
+  suffix String?
+  icon   String?
+  order  Int         @default(0)
+}
+
+model VisionMission {
+  id        Int       @id @default(1)
+  vision    String
+  missions  Mission[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Mission {
+  id              Int           @id @default(autoincrement())
+  visionMission   VisionMission @relation(fields: [visionMissionId], references: [id], onDelete: Cascade)
+  visionMissionId Int
+  text            String
+  order           Int           @default(0)
+}
+
+model HistoryItem {
+  id          Int    @id @default(autoincrement())
+  year        String
+  title       String
+  description String
+  order       Int    @default(0)
+}
+
+model TeamMember {
+  id          Int     @id @default(autoincrement())
+  name        String
+  position    String
+  image       String?
+  description String?
+  order       Int     @default(0)
+}
+
+model Service {
+  id          Int              @id @default(autoincrement())
+  title       String
+  description String
+  icon        String?
+  features    ServiceFeature[]
+  order       Int              @default(0)
+}
+
+model ServiceFeature {
+  id        Int     @id @default(autoincrement())
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId Int
+  text      String
+  order     Int     @default(0)
+}
+
+model ServicePackage {
+  id        String   @id @default(cuid())
+  title     String
+  price     Int
+  features  Json
+  isPopular Boolean  @default(false)
+  bgColor   String   @default("bg-gray-800")
+  textColor String   @default("text-white")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id              Int          @id @default(1)
+  addressStreet   String
+  addressCity     String
+  addressProvince String
+  addressPostal   String
+  addressIcon     String?
+  phoneNumber     String
+  phoneWhatsapp   String?
+  phoneIcon       String?
+  emailGeneral    String
+  emailSubmission String?
+  emailIcon       String?
+  hoursWeekdays   String?
+  hoursWeekend    String?
+  hoursClosed     String?
+  hoursIcon       String?
+  socialLinks     SocialLink[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model SocialLink {
+  id        Int     @id @default(autoincrement())
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contactId Int
+  platform  String
+  url       String
+  icon      String?
+  order     Int     @default(0)
+}
+
+// --- NextAuth models, User Management, and Site Settings ---
+enum UserStatus {
+  INVITED
+  ACTIVE
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id              String     @id @default(cuid())
+  name            String?
+  email           String     @unique
+  emailVerified   DateTime?
+  hashedPassword  String?
+  image           String?
+  role            Role       @default(VIEWER)
+  status          UserStatus @default(INVITED)
+  twoFactorSecret String?
+  accounts        Account[]
+  sessions        Session[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+}
+
+model Invitation {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id                 Int      @id @default(1)
+  siteName           String   @default("")
+  faviconUrl         String?
+  sessionMaxAgeHours Int      @default(24)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}

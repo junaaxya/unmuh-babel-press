@@ -1,34 +1,49 @@
-'use client'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-  faMapMarkerAlt, 
-  faPhone, 
-  faEnvelope, 
+'use client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMapMarkerAlt,
+  faPhone,
+  faEnvelope,
   faClock,
-  faFacebook,
-  faInstagram,
-  faTwitter,
-  faLinkedin,
-  faWhatsapp
-} from '@fortawesome/free-solid-svg-icons'
-import { 
+  faWhatsapp,
+  faCircleInfo,
+} from '@fortawesome/free-solid-svg-icons';
+import {
   faFacebook as faFacebookBrand,
   faInstagram as faInstagramBrand,
   faTwitter as faTwitterBrand,
   faLinkedin as faLinkedinBrand,
-  faWhatsapp as faWhatsappBrand
-} from '@fortawesome/free-brands-svg-icons'
+  faWhatsapp as faWhatsappBrand,
+  faYoutube as faYoutubeBrand,
+  faTelegram as faTelegramBrand
+} from '@fortawesome/free-brands-svg-icons';
 
 const ContactInfo = ({ data }) => {
-  const { address, phone, email, social, hours } = data
+  if (!data) {
+    return (
+      <p className="text-center text-gray-600 dark:text-gray-300">
+        Informasi kontak belum tersedia.
+      </p>
+    );
+  }
+
+  const {
+    address = {},
+    phone = {},
+    email = {},
+    social = [],
+    hours = {},
+  } = data;
 
   const socialIconMap = {
     'fa-facebook': faFacebookBrand,
     'fa-instagram': faInstagramBrand,
     'fa-twitter': faTwitterBrand,
     'fa-linkedin': faLinkedinBrand,
-    'fa-whatsapp': faWhatsappBrand
-  }
+    'fa-whatsapp': faWhatsappBrand,
+    'fa-youtube': faYoutubeBrand,
+    'fa-telegram': faTelegramBrand,
+  };
 
   const getSocialColorClass = (platform) => {
     const colors = {
@@ -36,10 +51,12 @@ const ContactInfo = ({ data }) => {
       Instagram: 'text-pink-600 hover:text-pink-700',
       Twitter: 'text-blue-400 hover:text-blue-500',
       LinkedIn: 'text-blue-700 hover:text-blue-800',
-      WhatsApp: 'text-green-600 hover:text-green-700'
-    }
-    return colors[platform] || 'text-gray-600 hover:text-gray-700'
-  }
+      WhatsApp: 'text-green-600 hover:text-green-700',
+      YouTube: 'text-red-600 hover:text-red-700',
+      Telegram: 'text-blue-500 hover:text-blue-600',
+    };
+    return colors[platform] || 'text-gray-600 hover:text-gray-700';
+  };
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -80,14 +97,18 @@ const ContactInfo = ({ data }) => {
               Telepon
             </h3>
             <div className="space-y-2">
-              <a 
-                href={`tel:${phone.number}`}
+              <a
+                href={phone.number ? `tel:${phone.number}` : undefined}
                 className="block text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
               >
                 {phone.number}
               </a>
               <a 
-                href={`https://wa.me/${phone.whatsapp.replace(/[^0-9]/g, '')}`}
+                href={
+                  phone.whatsapp
+                    ? `https://wa.me/${phone.whatsapp.replace(/[^0-9]/g, '')}`
+                    : undefined
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors"
@@ -114,14 +135,16 @@ const ContactInfo = ({ data }) => {
               Email
             </h3>
             <div className="space-y-2">
-              <a 
-                href={`mailto:${email.general}`}
+              <a
+                href={email.general ? `mailto:${email.general}` : undefined}
                 className="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
               >
                 {email.general}
               </a>
-              <a 
-                href={`mailto:${email.submission}`}
+              <a
+                href={
+                  email.submission ? `mailto:${email.submission}` : undefined
+                }
                 className="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all text-sm"
               >
                 {email.submission}
@@ -175,8 +198,8 @@ const ContactInfo = ({ data }) => {
                   rel="noopener noreferrer"
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ${getSocialColorClass(item.platform)}`}
                 >
-                  <FontAwesomeIcon 
-                    icon={socialIconMap[item.icon]} 
+                  <FontAwesomeIcon
+                    icon={socialIconMap[item.icon] || faCircleInfo}
                     className="text-lg"
                   />
                   <span className="font-medium">{item.platform}</span>
@@ -186,8 +209,8 @@ const ContactInfo = ({ data }) => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
+      </div>
+    );
+  }
 
-export default ContactInfo
+  export default ContactInfo;

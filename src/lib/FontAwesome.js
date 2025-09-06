@@ -15,6 +15,9 @@ import {
     faMapMarkerAlt,
     faPhone,
     faClock,
+    faPlay,
+   faThLarge
+    
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -23,6 +26,7 @@ import {
     faInstagram,
     faYoutube,
     faLinkedinIn,
+    
 } from '@fortawesome/free-brands-svg-icons';
 
 config.autoAddCss = false;
@@ -40,10 +44,12 @@ library.add(
     faCalendarDays,
     faFacebookF,
     faTwitter,
+    faThLarge,
     faInstagram,
     faYoutube,
     faLinkedinIn,
     faMapMarkerAlt,
     faPhone,
-    faClock
+    faClock,
+    faPlay
 );

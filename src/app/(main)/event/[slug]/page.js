@@ -1,0 +1,345 @@
+// src/app/(main)/event/[slug]/page.js
+import { notFound } from 'next/navigation';
+import ClientImage from '@/components/admin/berita-event/ClientImage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faCalendarAlt, 
+  faMapMarkerAlt, 
+  faClock,
+  faUser,
+  faTag, 
+  faShare, 
+  faArrowLeft,
+  faTicketAlt,
+  faExclamationTriangle
+} from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
+import ShareButtons from '@/components/ShareButtons/ShareButtons';
+import { getEventBySlug, getEvents } from '@/app/services/api';
+
+
+async function fetchEventData(slug) {
+    try {
+        const response = await getEventBySlug(slug);
+        const event = response.data;
+
+        // Jika event tidak ada ATAU statusnya bukan 'published', kembalikan null
+        if (!event || event.publishStatus !== 'published') {
+            return null;
+        }
+        return event;
+    } catch (error) {
+        // Jika slug tidak ditemukan, API akan error, kita tangkap di sini
+        if (error.message && error.message.toLowerCase().includes('tidak ditemukan')) {
+            return null;
+        }
+        console.error("Gagal mengambil data event:", error);
+        throw new Error("Gagal memuat data event.");
+    }
+}
+
+// Mengambil event terkait yang juga sudah 'published' ---
+async function fetchRelatedEvents(currentEvent) {
+    try {
+        const params = {
+            category: currentEvent.category,
+            limit: 3,
+            publishStatus: 'published', // Filter hanya event yang sudah terbit
+        };
+        const response = await getEvents(params);
+        return response.data.items.filter(item => item.id !== currentEvent.id);
+    } catch (error) {
+        console.error("Gagal mengambil event terkait:", error);
+        return [];
+    }
+}
+
+//Membuat halaman statis hanya untuk event yang 'published' ---
+export async function generateStaticParams() {
+    try {
+        const response = await getEvents({ limit: 1000, publishStatus: 'published' });
+        if (!response.data || !response.data.items) {
+            return [];
+        }
+        return response.data.items.map((event) => ({
+            slug: event.slug,
+        }));
+    } catch (error) {
+        console.error("Gagal membuat parameter statis untuk event:", error);
+        return [];
+    }
+}
+
+export default async function EventDetailPage({ params }) {
+const { slug } = await params;
+    const event = await fetchEventData(slug);
+    if (!event) {
+        notFound();
+    }
+    const relatedEvents = await fetchRelatedEvents(event);
+
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+  };
+
+  const formatDateTime = (dateTimeString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    return new Date(dateTimeString).toLocaleDateString('id-ID', options);
+  };
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      'Upcoming': { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Akan Datang' },
+      'Ongoing': { bg: 'bg-green-100', text: 'text-green-800', label: 'Berlangsung' },
+      'Completed': { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Selesai' },
+      'Cancelled': { bg: 'bg-red-100', text: 'text-red-800', label: 'Dibatalkan' }
+    };
+
+    const config = statusConfig[status] || statusConfig['Completed'];
+    
+    return (
+      <span className={`px-3 py-1 text-sm font-medium rounded-full ${config.bg} ${config.text}`}>
+        {config.label}
+      </span>
+    );
+  };
+
+  // Check if registration is still open
+  const isRegistrationOpen = () => {
+    if (!event.registrationEnabled || event.status !== 'Upcoming') {
+      return false;
+    }
+    
+    if (event.registrationDeadline) {
+      return new Date() < new Date(event.registrationDeadline);
+    }
+    
+    return true;
+  };
+
+  // Check if registration deadline is approaching (within 24 hours)
+  const isDeadlineApproaching = () => {
+    if (!event.registrationDeadline) return false;
+    
+    const now = new Date();
+    const deadline = new Date(event.registrationDeadline);
+    const timeDiff = deadline.getTime() - now.getTime();
+    const hoursDiff = timeDiff / (1000 * 3600);
+    
+    return hoursDiff > 0 && hoursDiff <= 24;
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <Link 
+            href="/berita-event"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
+          >
+            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+            Kembali ke Berita & Event
+          </Link>
+          
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
+                {event.category}
+              </span>
+              {getStatusBadge(event.status)}
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              {event.title}
+            </h1>
+            <p className="text-xl text-gray-600">
+              {event.excerpt}
+            </p>
+          </div>
+
+          {/* Event Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-200">
+            <div className="flex items-center text-gray-600">
+              <FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-blue-500" />
+              <div>
+                <div className="text-sm text-gray-500">Tanggal</div>
+                <div className="font-medium">{formatDate(event.date)}</div>
+              </div>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <FontAwesomeIcon icon={faClock} className="mr-2 text-green-500" />
+              <div>
+                <div className="text-sm text-gray-500">Waktu</div>
+                <div className="font-medium">{event.time}</div>
+              </div>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2 text-red-500" />
+              <div>
+                <div className="text-sm text-gray-500">Lokasi</div>
+                <div className="font-medium">{event.location}</div>
+              </div>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <FontAwesomeIcon icon={faUser} className="mr-2 text-purple-500" />
+              <div>
+                <div className="text-sm text-gray-500">Penyelenggara</div>
+                <div className="font-medium">{event.organizer}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          {/* Featured Image */}
+          <div className="aspect-video bg-gray-200">
+             <ClientImage
+                src={event.image}
+                alt={event.title}
+                className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Event Content */}
+          <div className="p-8">
+            <div 
+              className="ProseMirror"
+              dangerouslySetInnerHTML={{ __html: event.content }}
+            />
+          </div>
+
+          {/* Dynamic Registration Section */}
+          {event.registrationEnabled && event.status === 'Upcoming' && (
+            <div className={`px-8 py-6 border-t border-gray-200 ${
+              isRegistrationOpen() ? 'bg-blue-50' : 'bg-red-50'
+            }`}>
+              {/* Registration Deadline Warning */}
+              {isDeadlineApproaching() && isRegistrationOpen() && (
+                <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
+                  <div className="flex items-center text-yellow-800">
+                    <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />
+                    <span className="font-medium">Perhatian!</span>
+                  </div>
+                  <p className="text-yellow-700 mt-1">
+                    Batas waktu pendaftaran: {formatDateTime(event.registrationDeadline)}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold text-gray-900">
+                    {event.registrationTitle || 'Tertarik mengikuti event ini?'}
+                  </h3>
+                  <p className="text-gray-600">
+                    {event.registrationDescription || 'Daftarkan diri Anda sekarang juga!'}
+                  </p>
+                  
+                  {/* Show registration deadline if set */}
+                  {event.registrationDeadline && isRegistrationOpen() && !isDeadlineApproaching() && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Batas pendaftaran: {formatDateTime(event.registrationDeadline)}
+                    </p>
+                  )}
+                </div>
+
+                {/* Registration Button */}
+                {isRegistrationOpen() ? (
+                  <a 
+                    href={event.registrationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
+                    {event.registrationButtonText || 'Daftar Sekarang'}
+                  </a>
+                ) : (
+                  <div className="text-center">
+                    <div className="px-6 py-3 bg-gray-400 text-white rounded-lg font-medium flex items-center cursor-not-allowed">
+                      <FontAwesomeIcon icon={faTicketAlt} className="mr-2" />
+                      Pendaftaran Ditutup
+                    </div>
+                    {event.registrationDeadline && new Date() > new Date(event.registrationDeadline) && (
+                      <p className="text-sm text-red-600 mt-2">
+                        Batas waktu pendaftaran telah berakhir
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Share Section - Ganti bagian ini */}
+        <ShareButtons title={Event.title} type="event" />
+        </div>
+
+        {/* Related Events */}
+        {relatedEvents.length > 0 && (
+                    <div className="mt-12">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Terkait</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {relatedEvents.map(relatedEvent => (
+                                <Link
+                                    key={relatedEvent.id}
+                                    href={`/event/${relatedEvent.slug}`}
+                                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                                >
+                                    <div className="aspect-video bg-gray-200">
+                                        <ClientImage
+                                            src={relatedEvent.image}
+                                            alt={relatedEvent.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="p-4">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded">
+                                                {relatedEvent.category}
+                                            </span>
+                                            {getStatusBadge(relatedEvent.status)}
+                                        </div>
+                                        <h3 className="font-semibold text-gray-900 mb-2">
+                                            {relatedEvent.title}
+                                        </h3>
+                                        {/* --- START OF FIX --- */}
+                                        {/* Menambahkan elemen p untuk menampilkan excerpt */}
+                                        <p className="text-gray-600 text-sm mb-3">
+                                            {relatedEvent.excerpt}
+                                        </p>
+                                        {/* --- END OF FIX --- */}
+                                        <div className="space-y-1 text-xs text-gray-500">
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
+                                                {formatDate(relatedEvent.date)}
+                                            </div>
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
+                                                {relatedEvent.location}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+      </div>
+    </div>
+  );
+}
