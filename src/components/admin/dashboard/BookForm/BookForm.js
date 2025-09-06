@@ -165,8 +165,6 @@ const BookForm = ({
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.kode_buku.trim())
-            newErrors.kode_buku = 'Kode buku wajib diisi';
         if (!formData.title.trim()) newErrors.title = 'Judul buku wajib diisi';
         if (!formData.penerbit.trim())
             newErrors.penerbit = 'Penerbit wajib diisi';
@@ -178,12 +176,10 @@ const BookForm = ({
         if (!formData.sinopsis.trim())
             newErrors.sinopsis = 'Sinopsis wajib diisi';
 
-       
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-  const handleSubmit = (e, status) => {
+    const handleSubmit = (e, status) => {
         e.preventDefault();
         if (!validateForm()) {
             return;
@@ -192,7 +188,10 @@ const BookForm = ({
         const submissionData = new FormData();
         for (const key in formData) {
             if (key === 'published_at' && formData[key]) {
-                submissionData.append(key, new Date(formData[key]).toISOString());
+                submissionData.append(
+                    key,
+                    new Date(formData[key]).toISOString()
+                );
             } else if (formData[key] !== null && formData[key] !== undefined) {
                 // Jangan kirim status dari state, karena kita pakai dari parameter
                 if (key !== 'status') {
@@ -200,16 +199,18 @@ const BookForm = ({
                 }
             }
         }
-        
+
         // Gunakan 'status' dari parameter tombol yang diklik
         submissionData.append('status', status);
 
         onSubmit(submissionData);
     };
 
-
     return (
-          <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
+        <form
+            onSubmit={(e) => handleSubmit(e, 'published')}
+            className="space-y-6"
+        >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left Column */}
                 <div className="space-y-4">

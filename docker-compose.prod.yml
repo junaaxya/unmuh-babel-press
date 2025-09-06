@@ -1,0 +1,83 @@
+name: unmuhbabelpress-staging
+
+networks:
+    staging: {}
+
+volumes:
+    mysql_data_staging: {}
+
+services:
+    mysql:
+        image: mysql:8.4
+        container_name: ubp-staging-mysql
+        command: ['--skip-log-bin']
+        env_file:
+            - .env.production
+        ports:
+            
+        volumes:
+            - mysql_data_prod:/var/lib/mysql
+        healthcheck:
+            test:
+                [
+                    'CMD',
+                    'mysqladmin',
+                    'ping',
+                    '-h',
+                    '127.0.0.1',
+                    '-u',
+                    'root',
+                    '-p${MYSQL_ROOT_PASSWORD}',
+                ]
+            interval: 5s
+            timeout: 3s
+            retries: 30
+        networks: [prod]
+        restart: always
+
+    # phpmyadmin:
+    #     image: phpmyadmin:5
+    #     container_name: ubp-staging-pma
+    #     env_file:
+    #         - .env.staging
+    #     environment:
+    #         PMA_HOST: mysql
+    #         PMA_USER: ${PMA_USER:-root}
+    #         PMA_PASSWORD: ${PMA_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
+    #         PMA_ARBITRARY: 0
+    #     ports:
+    #         # PERUBAHAN: Dihapus '127.0.0.1:' agar bisa diakses dari luar localhost
+    #         - '8081:80'
+    #     depends_on:
+    #         mysql:
+    #             condition: service_healthy
+    #     networks: [staging]
+    #     restart: unless-stopped
+
+    app:
+        container_name: ubp-staging-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+                NEXTAUTH_URL: https://unmuhbabelpress.com
+                MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+                MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+                RESEND_API_KEY: ${RESEND_API_KEY}
+        env_file:
+            - .env.production
+        environment:
+            NODE_ENV: production
+            PORT: 4000
+            HOST: 0.0.0.0
+            # Pastikan ini sesuai dengan env staging Anda
+            NEXTAUTH_URL: https://unmuhbabelpress.com
+        depends_on:
+            mysql:
+                condition: service_healthy
+        ports:
+            - '5000:4000'
+        networks: [prod]
+        restart: always
+        # DIHAPUS: 'command' yang lama dihapus. Proses start diatur oleh Dockerfile & entrypoint.sh
