@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { bookSchema } from "@/lib/validation";
-import { serializeBigInt } from "@/lib/utils";
+import { serializeBigInt } from "@/lib/serialize";
 import { authorize } from "@/lib/authorize";
 
 // GET /api/books

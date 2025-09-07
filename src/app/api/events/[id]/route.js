@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/db';
 import { eventSchema } from '@/lib/validation';
 import { authorize } from '@/lib/authorize';
+import { serializeBigInt } from '@/lib/serialize';
 
 const buildSlug = (title) => {
     return (
@@ -38,7 +39,7 @@ export async function GET(request, context) {
         const event = await prisma.event.findUnique({ where: { id } });
         if (!event) return notFound('Event tidak ditemukan');
 
-        return Response.json({ status: 'success', data: event });
+        return Response.json(serializeBigInt({ status: 'success', data: event }));
     } catch (err) {
         console.error('GET /api/events/[id] error:', err);
         return internalError('Gagal mengambil event');
@@ -110,7 +111,7 @@ export async function PUT(request, context) {
             },
         });
 
-        return Response.json({ status: 'success', data: updatedEvent });
+        return Response.json(serializeBigInt({ status: 'success', data: updatedEvent }));
     } catch (err) {
         console.error('PUT /api/events/[id] error:', err);
         return Response.json(

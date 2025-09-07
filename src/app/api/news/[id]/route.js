@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { authorize } from "@/lib/authorize";
+import { serializeBigInt } from "@/lib/serialize";
 
 async function getParams(context) {
   const { params: maybeParams } = await context;
@@ -25,7 +26,7 @@ export async function GET(request, context) {
     );
   }
 
-  return NextResponse.json({ status: "success", data: news });
+  return NextResponse.json(serializeBigInt({ status: "success", data: news }));
 }
 
 export async function PUT(request, context) {
@@ -61,7 +62,7 @@ export async function PUT(request, context) {
       },
     });
 
-    return NextResponse.json({ status: "success", data: updatedNews });
+    return NextResponse.json(serializeBigInt({ status: "success", data: updatedNews }));
   } catch (error) {
     console.error("PUT /api/news/[id] error:", error);
     return NextResponse.json(

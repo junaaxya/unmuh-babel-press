@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { newsSchema } from "@/lib/validation";
 import { authorize } from "@/lib/authorize";
+import { serializeBigInt } from "@/lib/serialize";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -45,18 +46,20 @@ export async function GET(request) {
 
   const totalPages = Math.ceil(totalItems / limit);
 
-  return Response.json({
-    status: "success",
-    data: {
-      items,
-      pagination: {
-        current_page: page,
-        total_pages: totalPages,
-        total_items: totalItems,
-        items_per_page: limit,
+  return Response.json(
+    serializeBigInt({
+      status: "success",
+      data: {
+        items,
+        pagination: {
+          current_page: page,
+          total_pages: totalPages,
+          total_items: totalItems,
+          items_per_page: limit,
+        },
       },
-    },
-  });
+    })
+  );
 }
 
 function getDateRange(filter) {
@@ -112,10 +115,10 @@ export async function POST(request) {
       },
     });
 
-    return Response.json({
+    return Response.json(serializeBigInt({
       status: "success",
       data: news,
-    });
+    }));
   } catch (error) {
     console.error("POST /api/news error:", error);
     return Response.json({ status: "error", message: "Terjadi kesalahan pada server" }, { status: 500 });

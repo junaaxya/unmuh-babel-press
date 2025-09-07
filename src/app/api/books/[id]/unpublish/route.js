@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { serializeBigInt } from "@/lib/utils";
+import { serializeBigInt } from "@/lib/serialize";
 import { authorize } from "@/lib/authorize";
 
 export async function PUT(req, context) {
