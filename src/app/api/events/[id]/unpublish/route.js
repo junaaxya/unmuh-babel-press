@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { authorize } from "@/lib/authorize";
+import { serializeBigInt } from "@/lib/serialize";
 
 export async function PUT(req, context) {
   const authError = await authorize(req);
@@ -32,15 +33,17 @@ export async function PUT(req, context) {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "Event berhasil di-unpublish",
-      data: {
-        id: event.id,
-        publishStatus: event.publishStatus,
-        published_at: event.published_at,
-      },
-    });
+    return NextResponse.json(
+      serializeBigInt({
+        success: true,
+        message: "Event berhasil di-unpublish",
+        data: {
+          id: event.id,
+          publishStatus: event.publishStatus,
+          published_at: event.published_at,
+        },
+      })
+    );
   } catch (error) {
     return NextResponse.json(
       { success: false, message: "Gagal meng-unpublish event" },

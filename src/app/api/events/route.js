@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db';
 import { eventSchema } from '@/lib/validation';
 import { authorize } from '@/lib/authorize';
+import { serializeBigInt } from '@/lib/serialize';
 
 function getDateRange(filter) {
     const now = new Date();
@@ -63,18 +64,20 @@ export async function GET(request) {
 
     const totalPages = Math.ceil(totalItems / limit);
 
-    return Response.json({
-        status: "success",
-        data: {
-            items,
-            pagination: {
-                current_page: page,
-                total_pages: totalPages,
-                total_items: totalItems,
-                items_per_page: limit,
+    return Response.json(
+        serializeBigInt({
+            status: "success",
+            data: {
+                items,
+                pagination: {
+                    current_page: page,
+                    total_pages: totalPages,
+                    total_items: totalItems,
+                    items_per_page: limit,
+                },
             },
-        },
-    });
+        })
+    );
 }
 
 // ============ POST =========
@@ -126,7 +129,7 @@ export async function POST(request) {
         });
 
         return Response.json(
-            { status: 'success', data: event },
+            serializeBigInt({ status: 'success', data: event }),
             { status: 201 }
         );
     } catch (err) {

@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/db";
 import { bookSchema } from "@/lib/validation";
 import { NextResponse } from "next/server";
-import { serializeBigInt } from "@/lib/utils";
+import { serializeBigInt } from "@/lib/serialize";
 import { authorize } from "@/lib/authorize";
 
 // POLA ALTERNATIF: Menggunakan 'context' dan 'await' secara eksplisit

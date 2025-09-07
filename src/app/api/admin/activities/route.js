@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
+import { serializeBigInt } from '@/lib/serialize';
 
 export async function GET(request) {
   const session = await getServerSession(authOptions);
@@ -68,7 +69,7 @@ export async function GET(request) {
     }));
 
     return NextResponse.json(
-      {
+      serializeBigInt({
         activities,
         pagination: {
           page,
@@ -76,7 +77,7 @@ export async function GET(request) {
           totalItems: total,
           pageSize: limit,
         },
-      },
+      }),
       { headers: { 'Cache-Control': 'no-store' } }
     );
   } catch (err) {
