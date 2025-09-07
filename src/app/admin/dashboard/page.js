@@ -263,7 +263,7 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Aktivitas Terbaru</h2>
-            <Link href="/admin/dashboard/activity" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+            <Link href="/admin/dashboard/activities" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
               Lihat Semua
             </Link>
           </div>
