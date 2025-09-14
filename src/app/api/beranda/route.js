@@ -7,24 +7,39 @@ const filePath = path.join(process.cwd(), "src", "data", "heroText.json");
 
 export async function GET() {
   try {
-    const [file, siteSetting, homeContent] = await Promise.all([
+    const [fileResult, siteSettingResult, homeContentResult] = await Promise.allSettled([
       fs.readFile(filePath, "utf-8"),
       prisma.siteSetting.findUnique({ where: { id: 1 } }),
       prisma.homeContent.findUnique({ where: { id: 1 } }),
     ]);
-    const heroText = JSON.parse(file);
+
+    let heroText = { title: "", subtitle: "" };
+    if (fileResult.status === "fulfilled") {
+      try {
+        heroText = JSON.parse(fileResult.value);
+      } catch (e) {
+        console.error("Failed to parse heroText.json:", e);
+      }
+    }
 
     return NextResponse.json(
       {
-        logo: siteSetting?.logoUrl || null,
-        heroImage: homeContent?.heroImageUrl || null,
+        logo:
+          siteSettingResult.status === "fulfilled"
+            ? siteSettingResult.value?.logoUrl || null
+            : null,
+        heroImage:
+          homeContentResult.status === "fulfilled"
+            ? homeContentResult.value?.heroImageUrl || null
+            : null,
         herotext: heroText,
       },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {
+    console.error("GET /api/beranda error:", error);
     return NextResponse.json(
-      { error: "Gagal membaca hero text" },
+      { error: "Gagal membaca data beranda" },
       { status: 500, headers: { "Cache-Control": "no-store" } }
     );
   }
