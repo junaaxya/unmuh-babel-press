@@ -3,7 +3,7 @@
 import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { usePathname } from 'next/navigation';
 import { SessionProvider } from 'next-auth/react';
-
+import { NotificationProvider } from '@/hooks/useNotification';
 
 export default function Layout({ children }) {
   const pathname = usePathname();
@@ -17,5 +17,9 @@ export default function Layout({ children }) {
     <AdminLayout>{children}</AdminLayout>
   );
 
-  return <SessionProvider>{content}</SessionProvider>;
+  return (
+    <SessionProvider>
+      <NotificationProvider>{content}</NotificationProvider>
+    </SessionProvider>
+  );
 }
