@@ -48,7 +48,7 @@ export default function Notification({
                 progressColor: 'bg-green-500',
                 icon: (
                     <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -71,7 +71,7 @@ export default function Notification({
                 progressColor: 'bg-red-500',
                 icon: (
                     <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -94,7 +94,7 @@ export default function Notification({
                 progressColor: 'bg-yellow-500',
                 icon: (
                     <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -117,7 +117,7 @@ export default function Notification({
                 progressColor: 'bg-blue-500',
                 icon: (
                     <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -158,7 +158,9 @@ export default function Notification({
     const positionClasses = getPositionClasses(position);
 
     return (
-        <div className={`${positionClasses} max-w-sm w-full sm:w-96`}>
+        <div
+            className={`${positionClasses} w-full max-w-[calc(100vw-2rem)] sm:max-w-sm`}
+        >
             <div
                 className={`
           ${config.bgColor} ${config.borderColor} ${config.textColor}
@@ -185,13 +187,13 @@ export default function Notification({
                     </div>
                 )}
 
-                <div className="p-4">
-                    <div className="flex items-start gap-3">
+                <div className="p-3 sm:p-4">
+                    <div className="flex items-start gap-2 sm:gap-3">
                         {/* Icon */}
                         <div
                             className={`
                 ${config.iconBg} ${config.iconColor}
-                w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
+                w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
               `}
                         >
                             {config.icon}
@@ -199,7 +201,7 @@ export default function Notification({
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium leading-5 break-words">
+                            <p className="text-xs sm:text-sm font-medium leading-5 break-words">
                                 {message}
                             </p>
                         </div>
@@ -208,15 +210,15 @@ export default function Notification({
                         <button
                             onClick={handleClose}
                             className={`
-                ${config.iconColor} hover:bg-white/50 
-                w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0
+                ${config.iconColor} hover:bg-white/50
+                w-5 h-5 sm:w-6 sm:h-6 rounded-md flex items-center justify-center flex-shrink-0
                 transition-all duration-200 hover:scale-110
                 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-current
               `}
                             aria-label="Tutup notifikasi"
                         >
                             <svg
-                                className="w-4 h-4"
+                                className="w-3.5 h-3.5 sm:w-4 sm:h-4"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
