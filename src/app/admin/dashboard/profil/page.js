@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ImageUploader from '@/components/admin/berita-event/ImageUploader';
 import Notification from '@/components/ui/Notification/Notification';
@@ -83,11 +83,7 @@ export default function AdminProfilPage() {
         { id: 'services', label: 'Layanan', icon: faCogs, shortLabel: 'Layanan' },
     ];
 
-    useEffect(() => {
-        loadData();
-    }, [activeTab]);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             setLoading(true);
             let data;
@@ -137,7 +133,11 @@ export default function AdminProfilPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [activeTab]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     const showNotification = (type, message) => {
         setNotification({ id: Date.now(), type, message });

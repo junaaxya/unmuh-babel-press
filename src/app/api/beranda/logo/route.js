@@ -1,50 +1,85 @@
-import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-import { authorize } from "@/lib/authorize";
-// Fungsi untuk menyimpan file upload
-async function saveFile(file, filename) {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+import { NextResponse } from 'next/server';
+import { authorize } from '@/lib/authorize';
+import { prisma } from '@/lib/db';
+import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(uploadDir, { recursive: true });
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
-  const filePath = path.join(uploadDir, filename);
-  await fs.writeFile(filePath, buffer);
+function bufferToUploadStream(buffer, options) {
+  return new Promise((resolve, reject) => {
+    const upload = cloudinary.uploader.upload_stream(options, (error, result) => {
+      if (error) return reject(error);
+      resolve(result);
+    });
+    Readable.from(buffer).pipe(upload);
+  });
 }
 
-//fungsi updload logo
 export async function POST(request) {
   const authError = await authorize(request);
   if (authError) return authError;
-  const formData = await request.formData();
-  const file = formData.get("file");
-
-  if (!file || typeof file === "string") {
-    return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
-  }
 
   try {
-    await saveFile(file, "logo.png");
-    return NextResponse.json({ message: "Logo uploaded" });
+    const formData = await request.formData();
+    const file = formData.get('file');
+    if (!file || typeof file === 'string') {
+      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const result = await bufferToUploadStream(buffer, {
+      resource_type: 'image',
+      public_id: 'unmuh_press_logo',
+      overwrite: true,
+      invalidate: true,
+      unique_filename: false,
+    });
+
+    const { secure_url } = result || {};
+    if (!secure_url) {
+      return NextResponse.json({ error: 'Upload failed' }, { status: 502 });
+    }
+
+    await prisma.siteSetting.upsert({
+      where: { id: 1 },
+      update: { logoUrl: secure_url },
+      create: { logoUrl: secure_url },
+    });
+
+    return NextResponse.json({ url: secure_url });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    console.error('Logo upload error:', error);
+    return NextResponse.json({ error: 'Failed to upload logo' }, { status: 500 });
   }
 }
 
-// Fungsi untuk menghapus logo
 export async function DELETE(request) {
   const authError = await authorize(request);
   if (authError) return authError;
-  const filePath = path.join(process.cwd(), "public", "uploads", "logo.png");
 
   try {
-    await fs.unlink(filePath);
-    return NextResponse.json({ message: "Logo deleted" });
+    await cloudinary.uploader.destroy('unmuh_press_logo', {
+      resource_type: 'image',
+      invalidate: true,
+    });
+
+    await prisma.siteSetting.upsert({
+      where: { id: 1 },
+      update: { logoUrl: null },
+      create: { logoUrl: null },
+    });
+
+    return NextResponse.json({ message: 'Logo deleted' });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Deletion failed or file not found" }, { status: 500 });
+    console.error('Logo delete error:', error);
+    return NextResponse.json({ error: 'Deletion failed' }, { status: 500 });
   }
 }
