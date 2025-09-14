@@ -11,8 +11,17 @@ export default function BerandaPage() {
     const [notification, setNotification] = useState(null);
 
     const fetchData = async () => {
-        const res = await getHomeContent();
-        setData(res);
+        try {
+            const res = await getHomeContent();
+            setData(res);
+        } catch (err) {
+            console.error('Failed to fetch home content', err);
+            setNotification({
+                id: Date.now(),
+                type: 'error',
+                message: err.message || 'Gagal memuat data beranda',
+            });
+        }
     };
 
     useEffect(() => {
