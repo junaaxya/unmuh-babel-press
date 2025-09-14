@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function Section3Book() {
-    // state untuk menyimpan buku, loading, dan error
+  
     const [randomBooks, setRandomBooks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -33,7 +33,7 @@ export default function Section3Book() {
         };
 
         fetchRandomBooks();
-    }, []); // Array dependensi kosong agar hanya berjalan sekali
+    }, []); 
 
     // Fungsi untuk menampilkan konten berdasarkan state
     const renderContent = () => {
@@ -80,7 +80,7 @@ export default function Section3Book() {
                 </motion.div>
 
                 {/*carousel (atau status loading/error) secara dinamis */}
-                <div className="mt-10">
+                <div className="mt-10 overflow-x-hidden">
                     {renderContent()}
                 </div>
             </div>
