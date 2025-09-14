@@ -45,19 +45,25 @@ export async function POST(request) {
 
     const { secure_url } = result || {};
     if (!secure_url) {
-      return NextResponse.json({ error: 'Upload failed' }, { status: 502 });
+      return NextResponse.json(
+        { message: 'Upload failed', details: 'Cloudinary did not return a URL' },
+        { status: 502 }
+      );
     }
 
     await prisma.siteSetting.upsert({
       where: { id: 1 },
       update: { logoUrl: secure_url },
-      create: { logoUrl: secure_url },
+      create: { id: 1, logoUrl: secure_url },
     });
 
     return NextResponse.json({ url: secure_url });
   } catch (error) {
     console.error('Logo upload error:', error);
-    return NextResponse.json({ error: 'Failed to upload logo' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Upload failed', details: error.message },
+      { status: 500 }
+    );
   }
 }
 
@@ -74,12 +80,15 @@ export async function DELETE(request) {
     await prisma.siteSetting.upsert({
       where: { id: 1 },
       update: { logoUrl: null },
-      create: { logoUrl: null },
+      create: { id: 1, logoUrl: null },
     });
 
     return NextResponse.json({ message: 'Logo deleted' });
   } catch (error) {
     console.error('Logo delete error:', error);
-    return NextResponse.json({ error: 'Deletion failed' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Deletion failed', details: error.message },
+      { status: 500 }
+    );
   }
 }

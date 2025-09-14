@@ -45,19 +45,33 @@ export async function POST(request) {
 
     const { secure_url } = result || {};
     if (!secure_url) {
-      return NextResponse.json({ error: 'Upload failed' }, { status: 502 });
+      return NextResponse.json(
+        { message: 'Upload failed', details: 'Cloudinary did not return a URL' },
+        { status: 502 }
+      );
+    }
+
+    if (!prisma.homeContent) {
+      console.error('HomeContent model is unavailable in Prisma client');
+      return NextResponse.json(
+        { message: 'Upload failed', details: 'HomeContent model not found' },
+        { status: 500 }
+      );
     }
 
     await prisma.homeContent.upsert({
       where: { id: 1 },
       update: { heroImageUrl: secure_url },
-      create: { heroImageUrl: secure_url },
+      create: { id: 1, heroImageUrl: secure_url },
     });
 
     return NextResponse.json({ url: secure_url });
   } catch (error) {
     console.error('Hero image upload error:', error);
-    return NextResponse.json({ error: 'Failed to upload hero image' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Upload failed', details: error.message },
+      { status: 500 }
+    );
   }
 }
 
@@ -71,15 +85,26 @@ export async function DELETE(request) {
       invalidate: true,
     });
 
+    if (!prisma.homeContent) {
+      console.error('HomeContent model is unavailable in Prisma client');
+      return NextResponse.json(
+        { message: 'Deletion failed', details: 'HomeContent model not found' },
+        { status: 500 }
+      );
+    }
+
     await prisma.homeContent.upsert({
       where: { id: 1 },
       update: { heroImageUrl: null },
-      create: { heroImageUrl: null },
+      create: { id: 1, heroImageUrl: null },
     });
 
     return NextResponse.json({ message: 'Hero image deleted' });
   } catch (error) {
     console.error('Hero image delete error:', error);
-    return NextResponse.json({ error: 'Deletion failed' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Deletion failed', details: error.message },
+      { status: 500 }
+    );
   }
 }
