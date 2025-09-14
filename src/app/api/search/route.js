@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { applyRateLimit } from '@/lib/rateLimit';
+import { serializeBigInt } from '@/lib/serialize';
 
 export async function GET(request) {
   const rateLimitResponse = await applyRateLimit(request);
@@ -59,12 +60,7 @@ export async function GET(request) {
       }),
     ]);
 
-    const serializedBooks = books.map((book) => ({
-      ...book,
-      id: book.id.toString(),
-    }));
-
-    return NextResponse.json({ books: serializedBooks, news, events });
+    return NextResponse.json(serializeBigInt({ books, news, events }));
   } catch (error) {
     console.error('Global search error', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

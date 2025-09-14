@@ -32,7 +32,7 @@ export const useNotification = () => {
   }, []);
 
   const NotificationContainer = useCallback(() => (
-    <div className="fixed top-4 right-4 z-[9999] space-y-2">
+    <>
       {notifications.map(notification => (
         <Notification
           key={notification.id}
@@ -40,7 +40,7 @@ export const useNotification = () => {
           onClose={() => hideNotification(notification.id)}
         />
       ))}
-    </div>
+    </>
   ), [notifications, hideNotification]);
 
   return {

@@ -1,5 +1,6 @@
 // src/app/api/news/slug/[slug]/route.js
 import { prisma } from "@/lib/db";
+import { serializeBigInt } from "@/lib/serialize";
 
 async function getParams(context) {
   const { params: maybeParams } = await context;
@@ -30,7 +31,7 @@ export async function GET(request, context) {
       );
     }
 
-    return Response.json({ status: "success", data: news });
+    return Response.json(serializeBigInt({ status: "success", data: news }));
   } catch (err) {
     console.error("GET /api/news/slug/[slug] error:", err);
     return Response.json(

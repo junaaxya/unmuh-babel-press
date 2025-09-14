@@ -12,7 +12,6 @@ import SectionHeading from '@/components/common/SectionHeading';
 import { getBooks } from '@/app/services/api';
 
 export default function Section2Books() {
-    // state untuk buku, loading, dan error
     const [monthlyBooks, setMonthlyBooks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -48,7 +47,7 @@ export default function Section2Books() {
         };
 
         fetchMonthlyBooks();
-    }, []); // Dependensi kosong agar hanya berjalan sekali saat komponen dimuat
+    }, []);
 
     return (
         <section className="py-16 px-4 bg-white ">
@@ -83,7 +82,7 @@ export default function Section2Books() {
                     </motion.div>
 
                     {/* 3. Tampilkan konten secara dinamis berdasarkan status */}
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full overflow-x-hidden">
                         {isLoading ? (
                             <div className="flex justify-center items-center h-64">
                                 <FontAwesomeIcon icon={faSpinner} className="text-3xl text-blue-500 animate-spin" />

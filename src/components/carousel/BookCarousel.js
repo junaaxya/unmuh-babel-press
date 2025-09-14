@@ -10,7 +10,9 @@ export default function BookCarousel({ books, autoplay = true }) {
     const scrollRef = useRef(null);
     const [dragging, setDragging] = useState(false);
     const [startX, setStartX] = useState(0);
+    const [startY, setStartY] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [isScrolling, setIsScrolling] = useState(false);
 
     // Auto-scroll every 3s
     useEffect(() => {
@@ -42,19 +44,36 @@ export default function BookCarousel({ books, autoplay = true }) {
     const handleTouchStart = (e) => {
         setDragging(true);
         setStartX(e.touches[0].pageX);
+        setStartY(e.touches[0].pageY); 
         setScrollLeft(scrollRef.current.scrollLeft);
     };
 
-    const handleTouchMove = (e) => {
+  const handleTouchMove = (e) => {
         if (!dragging) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX;
-        const walk = (x - startX) * 2; // Multiply for faster scroll
-        scrollRef.current.scrollLeft = scrollLeft - walk;
+        
+        if (!isScrolling) {
+            const deltaX = Math.abs(e.touches[0].pageX - startX);
+            const deltaY = Math.abs(e.touches[0].pageY - startY);
+
+            if (deltaX > deltaY) {
+                setIsScrolling(true);
+            } else {
+                setDragging(false); 
+                return;
+            }
+        }
+        
+        if (isScrolling) {
+            e.preventDefault();
+            const x = e.touches[0].pageX;
+            const walk = (x - startX) * 2; // Multiply for faster scroll
+            scrollRef.current.scrollLeft = scrollLeft - walk;
+        }
     };
 
     const handleTouchEnd = () => {
         setDragging(false);
+        setIsScrolling(false); 
     };
 
     return (

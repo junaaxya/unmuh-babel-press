@@ -12,8 +12,6 @@ services:
         command: ['--skip-log-bin']
         env_file:
             - .env.production
-        ports:
-            
         volumes:
             - mysql_data_prod:/var/lib/mysql
         healthcheck:
@@ -54,13 +52,16 @@ services:
     #     restart: unless-stopped
 
     app:
-        container_name: ubp-prod-mysql
+        container_name: ubp-prod-app
         build:
             context: .
             dockerfile: Dockerfile
             args:
                 NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
                 NEXTAUTH_URL: https://unmuhbabelpress.com
+                MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+                MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+                RESEND_API_KEY: ${RESEND_API_KEY}
         env_file:
             - .env.production
         environment:
