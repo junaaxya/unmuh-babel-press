@@ -7,10 +7,15 @@ const filePath = path.join(process.cwd(), "src", "data", "heroText.json");
 
 export async function GET() {
   try {
+    const siteSettingPromise = prisma.siteSetting.findUnique({ where: { id: 1 } });
+    const homeContentPromise = prisma.homeContent
+      ? prisma.homeContent.findUnique({ where: { id: 1 } })
+      : Promise.resolve(null);
+
     const [fileResult, siteSettingResult, homeContentResult] = await Promise.allSettled([
       fs.readFile(filePath, "utf-8"),
-      prisma.siteSetting.findUnique({ where: { id: 1 } }),
-      prisma.homeContent.findUnique({ where: { id: 1 } }),
+      siteSettingPromise,
+      homeContentPromise,
     ]);
 
     let heroText = { title: "", subtitle: "" };
