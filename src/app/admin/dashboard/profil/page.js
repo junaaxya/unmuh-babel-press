@@ -17,6 +17,8 @@ import {
     faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 
+const HISTORY_DESCRIPTION_MAX_LENGTH = 5000;
+
 // Helper function untuk API request
 async function apiRequest(url, method = 'GET', body = null) {
     const headers = {};
@@ -499,7 +501,7 @@ export default function AdminProfilPage() {
                                                     Deskripsi
                                                 </label>
                                                 <textarea
-                                                    value={item.description}
+                                                    value={item.description || ''}
                                                     onChange={(e) =>
                                                         updateHistoryItem(
                                                             index,
@@ -508,9 +510,14 @@ export default function AdminProfilPage() {
                                                         )
                                                     }
                                                     rows={3}
+                                                    maxLength={HISTORY_DESCRIPTION_MAX_LENGTH}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                                                     placeholder="Deskripsi peristiwa"
                                                 />
+                                                <p className="text-xs text-gray-500 mt-1 text-right">
+                                                    {(item.description?.length || 0)}/
+                                                    {HISTORY_DESCRIPTION_MAX_LENGTH} karakter
+                                                </p>
                                             </div>
                                         </div>
                                     ))}
@@ -894,6 +901,9 @@ export default function AdminProfilPage() {
     };
 
     const updateHistoryItem = (index, field, value) => {
+        if (field === 'description') {
+            value = value.slice(0, HISTORY_DESCRIPTION_MAX_LENGTH);
+        }
         const newHistory = [...historyData];
         newHistory[index] = { ...newHistory[index], [field]: value };
         setHistoryData(newHistory);
