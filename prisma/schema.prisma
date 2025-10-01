@@ -139,7 +139,7 @@ model HistoryItem {
   id          Int    @id @default(autoincrement())
   year        String
   title       String
-  description String
+  description String @db.Text
   order       Int    @default(0)
 }
 
