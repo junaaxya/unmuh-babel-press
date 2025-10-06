@@ -1,9 +1,22 @@
-# *
+# Aturan ini berlaku untuk semua robot crawler
 User-agent: *
-Allow: /
 
-# Host
-Host: https://unmuhbabelpress.com
+# Direktori dan halaman yang tidak boleh di-crawl
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /register/
+Disallow: /login/
+Disallow: /accept-invitation/
+Disallow: /reset-password/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /search/
+Disallow: /profile/
+Disallow: /preview/
 
-# Sitemaps
+# Mencegah crawling URL dengan parameter tertentu
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+# Lokasi sitemap untuk membantu crawler menemukan halaman penting
 Sitemap: https://unmuhbabelpress.com/sitemap.xml

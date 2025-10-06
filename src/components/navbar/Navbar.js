@@ -74,10 +74,10 @@ export default function Navbar() {
                         style={{ objectFit: 'contain' }}
                     />
                     <div className="text-xs leading-tight">
-                        <p className="font-bold text-[10px] md:text-lg text-blue-700">
+                        <p className="font-bold text-[16px] md:text-lg text-blue-700">
                             BADAN PENERBIT DAN PUBLIKASI
                         </p>
-                        <p className="text-[6px] md:text-sm md:-my-1.5 text-gray-700">
+                        <p className="text-[12px] md:text-sm md:-my-1.5 text-gray-700">
                             Universitas Muhammadiyah Bangka Belitung
                         </p>
                     </div>
