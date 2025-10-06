@@ -2,9 +2,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategoryChange, onClearFilters, totalBooks, filteredBooks, categories = [] }) => {
+const SearchFilter = ({
+  searchTerm,
+  onSearchChange,
+  selectedCategory,
+  onCategoryChange,
+  onClearFilters,
+  totalBooks = 0,
+  filteredBooks = 0,
+  rangeStart,
+  rangeEnd,
+  isLoading = false,
+  categories = [],
+}) => {
 
   const hasActiveFilters = searchTerm || selectedCategory;
+  const hasValidRange =
+    typeof rangeStart === "number" &&
+    typeof rangeEnd === "number" &&
+    rangeStart > 0 &&
+    rangeEnd >= rangeStart;
+
+  let summaryText = "Tidak ada buku untuk ditampilkan";
+
+  if (isLoading) {
+    summaryText = "Memuat buku...";
+  } else if (totalBooks === 0) {
+    summaryText = "Tidak ada buku untuk ditampilkan";
+  } else if (hasValidRange) {
+    summaryText = `Menampilkan ${rangeStart}-${rangeEnd} dari ${totalBooks} buku`;
+  } else {
+    summaryText = `Menampilkan ${filteredBooks} dari ${totalBooks} buku`;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
@@ -58,7 +87,7 @@ const SearchFilter = ({ searchTerm, onSearchChange, selectedCategory, onCategory
       {/* Results Summary */}
       <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
         <div>
-          Menampilkan {filteredBooks} dari {totalBooks} buku
+          {summaryText}
           {hasActiveFilters && <span className="ml-2 text-blue-600">(dengan filter aktif)</span>}
         </div>
 

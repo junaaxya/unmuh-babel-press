@@ -8,7 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// --- Content models (unchanged) ---
 model News {
   id           Int          @id @default(autoincrement())
   title        String       @db.VarChar(200)
@@ -23,13 +22,6 @@ model News {
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @updatedAt @map("updated_at")
   published_at DateTime?    @db.Timestamp(6)
-}
-
-enum NewsCategory {
-  Berita
-  Pengumuman
-  Artikel
-  Press_Release
 }
 
 model Event {
@@ -57,21 +49,6 @@ model Event {
   updatedAt               DateTime      @updatedAt @map("updated_at")
 }
 
-enum EventCategory {
-  Event
-  Seminar
-  Workshop
-  Konferensi
-  Pelatihan
-}
-
-enum EventStatus {
-  Upcoming
-  Ongoing
-  Completed
-  Cancelled
-}
-
 model Book {
   id           BigInt    @id @default(autoincrement())
   kode_buku    String?   @db.VarChar(50)
@@ -91,48 +68,45 @@ model Book {
   updated_at   DateTime  @updatedAt
 }
 
-enum Status {
-  draft
-  published
-}
-
-// --- Profile Page Models ---
-
 model ProfileHero {
   id          Int        @id @default(1)
   title       String
   subtitle    String
   description String
-  stats       HeroStat[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  stats       HeroStat[]
 }
 
 model HeroStat {
   id     Int         @id @default(autoincrement())
-  hero   ProfileHero @relation(fields: [heroId], references: [id], onDelete: Cascade)
   heroId Int
   number Int
   label  String
   suffix String?
   icon   String?
   order  Int         @default(0)
+  hero   ProfileHero @relation(fields: [heroId], references: [id], onDelete: Cascade)
+
+  @@index([heroId], map: "HeroStat_heroId_fkey")
 }
 
 model VisionMission {
   id        Int       @id @default(1)
   vision    String
-  missions  Mission[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  missions  Mission[]
 }
 
 model Mission {
   id              Int           @id @default(autoincrement())
-  visionMission   VisionMission @relation(fields: [visionMissionId], references: [id], onDelete: Cascade)
   visionMissionId Int
   text            String
   order           Int           @default(0)
+  visionMission   VisionMission @relation(fields: [visionMissionId], references: [id], onDelete: Cascade)
+
+  @@index([visionMissionId], map: "Mission_visionMissionId_fkey")
 }
 
 model HistoryItem {
@@ -157,16 +131,18 @@ model Service {
   title       String
   description String
   icon        String?
-  features    ServiceFeature[]
   order       Int              @default(0)
+  features    ServiceFeature[]
 }
 
 model ServiceFeature {
   id        Int     @id @default(autoincrement())
-  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId Int
   text      String
   order     Int     @default(0)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId], map: "ServiceFeature_serviceId_fkey")
 }
 
 model ServicePackage {
@@ -199,31 +175,21 @@ model Contact {
   hoursWeekend    String?
   hoursClosed     String?
   hoursIcon       String?
-  socialLinks     SocialLink[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
+  socialLinks     SocialLink[]
 }
 
 model SocialLink {
   id        Int     @id @default(autoincrement())
-  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
   contactId Int
   platform  String
   url       String
   icon      String?
   order     Int     @default(0)
-}
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
 
-// --- NextAuth models, User Management, and Site Settings ---
-enum UserStatus {
-  INVITED
-  ACTIVE
-}
-
-enum Role {
-  ADMIN
-  EDITOR
-  VIEWER
+  @@index([contactId], map: "SocialLink_contactId_fkey")
 }
 
 model User {
@@ -236,10 +202,10 @@ model User {
   role            Role       @default(VIEWER)
   status          UserStatus @default(INVITED)
   twoFactorSecret String?
-  accounts        Account[]
-  sessions        Session[]
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+  accounts        Account[]
+  sessions        Session[]
 }
 
 model Account {
@@ -258,6 +224,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
 }
 
 model Session {
@@ -266,6 +233,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
 }
 
 model VerificationToken {
@@ -295,10 +264,10 @@ model SiteSetting {
   id                 Int      @id @default(1)
   siteName           String   @default("")
   faviconUrl         String?
-  logoUrl            String?
   sessionMaxAgeHours Int      @default(24)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  logoUrl            String?
 }
 
 model HomeContent {
@@ -306,4 +275,42 @@ model HomeContent {
   heroImageUrl String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+enum NewsCategory {
+  Berita
+  Pengumuman
+  Artikel
+  Press_Release
+}
+
+enum EventCategory {
+  Event
+  Seminar
+  Workshop
+  Konferensi
+  Pelatihan
+}
+
+enum EventStatus {
+  Upcoming
+  Ongoing
+  Completed
+  Cancelled
+}
+
+enum Status {
+  draft
+  published
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
 }
