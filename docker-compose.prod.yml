@@ -65,10 +65,13 @@ services:
         env_file:
             - .env.production
         environment:
-            NODE_ENV: production
-            PORT: 4000
-            HOST: 0.0.0.0
-            NEXTAUTH_URL: https://unmuhbabelpress.com
+            - NODE_ENV=production
+            - PORT=4000
+            - HOST=0.0.0.0
+            - NEXTAUTH_URL=https://unmuhbabelpress.com
+            - GA_CLIENT_EMAIL=${GA_CLIENT_EMAIL}
+            - GA_PRIVATE_KEY=${GA_PRIVATE_KEY}
+            - GA_PROPERTY_ID=${GA_PROPERTY_ID}
         depends_on:
             mysql:
                 condition: service_healthy
@@ -76,4 +79,3 @@ services:
             - '5000:4000'
         networks: [prod]
         restart: always
-       
