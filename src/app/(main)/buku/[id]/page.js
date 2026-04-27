@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { getBookById } from '@/app/services/api';
-import BookDetailView from './BookDetailView'; // Impor komponen klien
+import BookDetailView from './BookDetailView';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,7 +11,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // --- Komponen Halaman Utama (Server Component) ---
-// Ini adalah komponen default yang diekspor. Ia berjalan di server.
 export default async function BookDetailPage({ params }) {
     const { id } = await params;
     try {
@@ -42,8 +41,46 @@ export default async function BookDetailPage({ params }) {
             );
         }
 
-        // Merender komponen Klien dan memberikan data buku sebagai prop
-        return <BookDetailView book={book} />;
+        // ── Schema.org JSON-LD ─────────────────────────────────────────────
+        // Ditambahkan untuk Google Search & Google Books indexing otomatis
+        const siteUrl = process.env.NEXTAUTH_URL || 'https://unmuhbabelpress.ac.id';
+        const schemaData = {
+            '@context': 'https://schema.org',
+            '@type': 'Book',
+            name: book.title,
+            author: {
+                '@type': 'Person',
+                name: book.penulis || 'Unmuh Babel Press',
+            },
+            publisher: {
+                '@type': 'Organization',
+                name: book.penerbit || 'Unmuh Babel Press',
+                url: siteUrl,
+            },
+            isbn: book.isbn || '',
+            numberOfPages: book.halaman || '',
+            description: book.sinopsis || '',
+            image: book.image || '',
+            url: `${siteUrl}/buku/${book.id}`,
+            inLanguage: 'id',
+            bookFormat: 'https://schema.org/Paperback',
+            datePublished: book.published_at
+                ? new Date(book.published_at).toISOString().split('T')[0]
+                : '',
+        };
+        // ──────────────────────────────────────────────────────────────────
+
+        return (
+            <>
+                {/* Schema.org JSON-LD — dibaca Google untuk indexing otomatis */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+                />
+                {/* Komponen Klien dengan data buku */}
+                <BookDetailView book={book} />
+            </>
+        );
     } catch (error) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-center p-4">
@@ -71,7 +108,6 @@ export default async function BookDetailPage({ params }) {
 }
 
 // --- Fungsi generateMetadata (Server Function) ---
-// Fungsi ini sekarang bisa diekspor karena file ini adalah Server Component.
 export async function generateMetadata({ params }) {
     try {
         const { id } = await params;
@@ -81,17 +117,38 @@ export async function generateMetadata({ params }) {
         if (!book || book.status !== 'published') {
             return { title: 'Buku Tidak Ditemukan' };
         }
+
+        const siteUrl = process.env.NEXTAUTH_URL || 'https://unmuhbabelpress.ac.id';
+
         return {
             title: `${book.title} | Unmuh Press`,
             description:
                 book.sinopsis?.substring(0, 160) ||
                 `Detail lengkap buku ${book.title}`,
+            // ── Tambahan metadata untuk Google ──────────────────────────
+            keywords: [
+                book.title,
+                book.penulis,
+                book.penerbit,
+                book.isbn,
+                book.kategori,
+                'Unmuh Babel Press',
+                'buku',
+            ]
+                .filter(Boolean)
+                .join(', '),
+            // ─────────────────────────────────────────────────────────────
             openGraph: {
                 title: `${book.title} | Unmuh Press`,
                 description:
                     book.sinopsis?.substring(0, 160) ||
                     `Detail lengkap buku ${book.title}`,
                 images: [{ url: book.image }],
+                type: 'book',
+                // ── Tambahan OpenGraph untuk Google Books ────────────────
+                url: `${siteUrl}/buku/${book.id}`,
+                siteName: 'Unmuh Babel Press',
+                // ─────────────────────────────────────────────────────────
             },
         };
     } catch (error) {

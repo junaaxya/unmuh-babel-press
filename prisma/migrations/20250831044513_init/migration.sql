@@ -65,6 +65,7 @@ CREATE TABLE `Book` (
     `published_at` TIMESTAMP(6) NULL,
     `created_at` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     `updated_at` DATETIME(3) NOT NULL,
+    `google_books_url` VARCHAR(500) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

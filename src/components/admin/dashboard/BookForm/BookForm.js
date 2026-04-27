@@ -1,4 +1,4 @@
-// src/components/admin/BookForm/BookForm.js
+// src/components/admin/dashboard/BookForm/BookForm.js
 import { useState, useEffect, useCallback } from 'react';
 import FormInput from '@/components/ui/FormInput/FormInput';
 import Image from 'next/image';
@@ -17,6 +17,10 @@ import {
     faBarcode,
     faCalendarAlt,
     faCircleNotch,
+    faCheckCircle,
+    faLink,
+    faExternalLinkAlt,
+    faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     uploadCoverImage,
@@ -43,6 +47,7 @@ const BookForm = ({
             return '';
         }
     };
+
     const [formData, setFormData] = useState({
         kode_buku: '',
         title: '',
@@ -57,16 +62,15 @@ const BookForm = ({
         image: '',
         status: 'draft',
         published_at: '',
+        google_books_url: '',
     });
     const [imageFile, setImageFile] = useState(null);
-
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0); // Untuk masa depan jika ingin progress bar
     const [previewImage, setPreviewImage] = useState(null);
 
-    // Fetch categories on component mount
+    // Fetch categories on mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -76,13 +80,12 @@ const BookForm = ({
                 );
             } catch (error) {
                 console.error('Failed to fetch categories:', error);
-                // Mungkin bisa ditambahkan notifikasi toast di sini
             }
         };
         fetchCategories();
     }, []);
 
-    // Populate form if editing an existing book
+    // Populate form jika edit buku
     useEffect(() => {
         if (book) {
             setFormData({
@@ -99,6 +102,7 @@ const BookForm = ({
                 image: book.image || '',
                 status: book.status || 'draft',
                 published_at: formatDateForInput(book.published_at),
+                google_books_url: book.google_books_url || '',
             });
             if (book.image) {
                 setPreviewImage(book.image);
@@ -106,14 +110,12 @@ const BookForm = ({
         }
     }, [book]);
 
-    // Gabungkan error dari client-side dan server-side
     const combinedErrors = { ...errors, ...apiErrors };
 
     const handleInputChange = useCallback(
         (e) => {
             const { name, value } = e.target;
             setFormData((prev) => ({ ...prev, [name]: value }));
-            // Clear error when user starts typing
             if (errors[name] || apiErrors[name]) {
                 setErrors((prev) => ({ ...prev, [name]: undefined }));
             }
@@ -121,18 +123,18 @@ const BookForm = ({
         [errors, apiErrors]
     );
 
+    // Hapus link Google Books
+    const handleClearGoogleBooksUrl = () => {
+        setFormData((prev) => ({ ...prev, google_books_url: '' }));
+    };
+
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         setImageFile(file);
 
-        // Validasi file di client-side
         if (file.size > 5 * 1024 * 1024) {
-            // 5MB
-            setErrors((prev) => ({
-                ...prev,
-                image: 'Ukuran file maksimal 5MB.',
-            }));
+            setErrors((prev) => ({ ...prev, image: 'Ukuran file maksimal 5MB.' }));
             return;
         }
 
@@ -140,23 +142,18 @@ const BookForm = ({
         showNotification('info', 'Mengunggah cover buku...');
         setErrors((prev) => ({ ...prev, image: undefined }));
 
-        // Buat preview lokal sementara
         const localPreview = URL.createObjectURL(file);
         setPreviewImage(localPreview);
 
         try {
-            // Panggil API untuk upload ke Cloudinary via backend
             const response = await uploadCoverImage(file, 'books');
             setFormData((prev) => ({ ...prev, image: response.url }));
-            setPreviewImage(response.url); // Update preview dengan URL final
+            setPreviewImage(response.url);
             showNotification('success', 'Cover buku berhasil diunggah!');
         } catch (error) {
             console.error('Image upload failed:', error);
-            setErrors((prev) => ({
-                ...prev,
-                image: error.message || 'Gagal mengunggah gambar.',
-            }));
-            setPreviewImage(book?.image || null); // Kembalikan ke gambar awal jika gagal
+            setErrors((prev) => ({ ...prev, image: error.message || 'Gagal mengunggah gambar.' }));
+            setPreviewImage(book?.image || null);
         } finally {
             setIsUploading(false);
         }
@@ -164,53 +161,46 @@ const BookForm = ({
 
     const validateForm = () => {
         const newErrors = {};
+        if (!formData.title.trim())    newErrors.title    = 'Judul buku wajib diisi';
+        if (!formData.penerbit.trim()) newErrors.penerbit = 'Penerbit wajib diisi';
+        if (!formData.penulis.trim())  newErrors.penulis  = 'Penulis wajib diisi';
+        if (!String(formData.halaman || '').trim()) newErrors.halaman = 'Jumlah halaman wajib diisi';
+        if (!formData.kategori)        newErrors.kategori = 'Kategori wajib dipilih';
+        if (!formData.sinopsis.trim()) newErrors.sinopsis = 'Sinopsis wajib diisi';
 
-        if (!formData.title.trim()) newErrors.title = 'Judul buku wajib diisi';
-        if (!formData.penerbit.trim())
-            newErrors.penerbit = 'Penerbit wajib diisi';
-        if (!formData.penulis.trim()) newErrors.penulis = 'Penulis wajib diisi';
-        if (!String(formData.halaman || '').trim()) {
-            newErrors.halaman = 'Jumlah halaman wajib diisi';
+        // Validasi URL Google Books jika diisi
+        if (formData.google_books_url.trim()) {
+            try {
+                new URL(formData.google_books_url.trim());
+            } catch {
+                newErrors.google_books_url = 'URL tidak valid. Contoh: https://books.google.com/books?id=...';
+            }
         }
-        if (!formData.kategori) newErrors.kategori = 'Kategori wajib dipilih';
-        if (!formData.sinopsis.trim())
-            newErrors.sinopsis = 'Sinopsis wajib diisi';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
     const handleSubmit = (e, status) => {
         e.preventDefault();
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         const submissionData = new FormData();
         for (const key in formData) {
             if (key === 'published_at' && formData[key]) {
-                submissionData.append(
-                    key,
-                    new Date(formData[key]).toISOString()
-                );
+                submissionData.append(key, new Date(formData[key]).toISOString());
             } else if (formData[key] !== null && formData[key] !== undefined) {
-                // Jangan kirim status dari state, karena kita pakai dari parameter
-                if (key !== 'status') {
-                    submissionData.append(key, formData[key]);
-                }
+                if (key !== 'status') submissionData.append(key, formData[key]);
             }
         }
-
-        // Gunakan 'status' dari parameter tombol yang diklik
         submissionData.append('status', status);
-
         onSubmit(submissionData);
     };
 
+    const hasGoogleBooksUrl = formData.google_books_url.trim() !== '';
+
     return (
-        <form
-            onSubmit={(e) => handleSubmit(e, 'published')}
-            className="space-y-6"
-        >
+        <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left Column */}
                 <div className="space-y-4">
@@ -235,12 +225,15 @@ const BookForm = ({
                         icon={faBook}
                     />
 
+                    {/* ISBN — cukup ketik manual */}
                     <FormInput
                         label="ISBN"
                         name="isbn"
                         value={formData.isbn}
                         onChange={handleInputChange}
                         placeholder="978-xxx-xxx-xxx-x"
+                        error={errors.isbn}
+                        icon={faBarcode}
                     />
 
                     <FormInput
@@ -253,7 +246,6 @@ const BookForm = ({
                         error={errors.penerbit}
                         icon={faBuilding}
                     />
-
                     <FormInput
                         label="Editor"
                         name="editor"
@@ -262,7 +254,6 @@ const BookForm = ({
                         placeholder="Nama editor"
                         icon={faUserEdit}
                     />
-
                     <FormInput
                         label="Ukuran Buku"
                         name="ukuran"
@@ -285,7 +276,6 @@ const BookForm = ({
                         error={errors.author}
                         icon={faUser}
                     />
-
                     <FormInput
                         label="Jumlah Halaman"
                         name="halaman"
@@ -297,7 +287,6 @@ const BookForm = ({
                         error={errors.halaman}
                         min="1"
                     />
-
                     <FormInput
                         label="Kategori"
                         name="kategori"
@@ -308,7 +297,6 @@ const BookForm = ({
                         error={errors.kategori}
                         options={categories}
                     />
-
                     <FormInput
                         label="Tanggal Terbit"
                         name="published_at"
@@ -349,7 +337,7 @@ const BookForm = ({
                 </div>
             </div>
 
-            {/* Synopsis - Full Width */}
+            {/* Synopsis */}
             <FormInput
                 label="Sinopsis"
                 name="sinopsis"
@@ -363,6 +351,72 @@ const BookForm = ({
                 icon={faFileText}
             />
 
+            {/* ── Link Google Books ─────────────────────────────────────── */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <FontAwesomeIcon icon={faLink} className="mr-2 text-blue-500" />
+                    Link Google Books
+                    <span className="ml-2 text-xs text-gray-400 font-normal">
+                        (Isi jika buku sudah tersedia di Google Books — bisa diedit atau dihapus kapan saja)
+                    </span>
+                </label>
+
+                <div className="flex gap-2 items-center">
+                    <input
+                        type="url"
+                        name="google_books_url"
+                        value={formData.google_books_url}
+                        onChange={handleInputChange}
+                        placeholder="https://books.google.com/books?id=..."
+                        className={`flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            errors.google_books_url ? 'border-red-400' : 'border-gray-300'
+                        }`}
+                    />
+                    {/* Tombol buka link (jika sudah ada URL) */}
+                    {hasGoogleBooksUrl && (
+                        <a
+                            href={formData.google_books_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Buka di Google Books"
+                            className="flex items-center justify-center w-9 h-9 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                        >
+                            <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4" />
+                        </a>
+                    )}
+                    {/* Tombol hapus link */}
+                    {hasGoogleBooksUrl && (
+                        <button
+                            type="button"
+                            onClick={handleClearGoogleBooksUrl}
+                            title="Hapus link Google Books"
+                            className="flex items-center justify-center w-9 h-9 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
+                        >
+                            <FontAwesomeIcon icon={faTimesCircle} className="w-4 h-4" />
+                        </button>
+                    )}
+                </div>
+
+                {/* Error validasi URL */}
+                {errors.google_books_url && (
+                    <p className="text-red-500 text-xs mt-1">{errors.google_books_url}</p>
+                )}
+
+                {/* Status indikator */}
+                {hasGoogleBooksUrl && !errors.google_books_url ? (
+                    <p className="text-green-600 text-xs mt-1.5 flex items-center gap-1">
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                        Buku tersedia di Google Books ✅
+                    </p>
+                ) : !hasGoogleBooksUrl ? (
+                    <p className="text-gray-400 text-xs mt-1.5 flex items-center gap-1">
+                        <FontAwesomeIcon icon={faTimesCircle} />
+                        Buku belum tersedia di Google Books
+                    </p>
+                ) : null}
+            </div>
+            {/* ─────────────────────────────────────────────────────────── */}
+
             {/* Action Buttons */}
             <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
                 <button
@@ -375,7 +429,6 @@ const BookForm = ({
                 </button>
                 <button
                     type="button"
-                    // Panggil handleSubmit dengan status 'draft'
                     onClick={(e) => handleSubmit(e, 'draft')}
                     disabled={isLoading || (book && book.status === 'draft')}
                     className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"

@@ -1,14 +1,9 @@
-import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
-import { Readable } from "stream";
 import { authorize } from "@/lib/authorize";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
+// Fungsi ini tetap ada untuk kompatibilitas jika dipakai di tempat lain
 async function streamToBuffer(stream) {
   const chunks = [];
   for await (const chunk of stream) {
@@ -37,22 +32,19 @@ export async function POST(req) {
     const buffer = await file.arrayBuffer();
     const uploadBuffer = Buffer.from(buffer);
 
-    const uploadResult = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: targetFolder,
-          transformation: [{ width: 1200, crop: "limit" }, { fetch_format: "auto" }, { quality: "auto" }],
-        },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
+    // Nama file unik agar tidak tertimpa
+    const ext      = path.extname(file.name) || ".jpg";
+    const baseName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, "_");
+    const fileName = `${baseName}_${Date.now()}${ext}`;
 
-      Readable.from(uploadBuffer).pipe(uploadStream);
-    });
+    // Simpan ke public/uploads/{folder}/
+    const uploadDir = path.join(process.cwd(), "public", "uploads", targetFolder);
+    await mkdir(uploadDir, { recursive: true });
+    await writeFile(path.join(uploadDir, fileName), uploadBuffer);
 
-    return NextResponse.json({ url: uploadResult.secure_url });
+    const secure_url = `/uploads/${targetFolder}/${fileName}`;
+
+    return NextResponse.json({ url: secure_url });
   } catch (error) {
     console.error("Upload failed:", error);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });

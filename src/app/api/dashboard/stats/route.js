@@ -51,12 +51,21 @@ export async function GET(request) {
         take: 5,
         select: { title: true, updatedAt: true, publishStatus: true },
       }),
+      // Fetch visitors dengan fallback aman jika GA belum dikonfigurasi
       fetch(new URL('/api/analytics/visitors', request.url).toString(), {
         headers: { cookie: request.headers.get('cookie') || '' },
-      }).then((res) => res.json()).catch(() => ({ total: 0, previous: 0 })),
+      })
+        .then((res) => {
+          if (!res.ok) return { total: 0, previous: 0 };
+          return res.json();
+        })
+        .then((data) => ({
+          total: typeof data?.total === 'number' ? data.total : 0,
+          previous: typeof data?.previous === 'number' ? data.previous : 0,
+        }))
+        .catch(() => ({ total: 0, previous: 0 })),
     ]);
 
-    const visitorsTrend = calcTrend(visitorsRes.total, visitorsRes.previous);
     const recentActivity = [
       ...recentBooks.map((b) => ({
         type: 'book',
@@ -82,10 +91,10 @@ export async function GET(request) {
 
     return NextResponse.json({
       stats: {
-        books: { total: totalBooks, trend: calcTrend(totalBooks, prevBooks) },
-        news: { total: totalNews, trend: calcTrend(totalNews, prevNews) },
-        events: { total: upcomingEvents, trend: 0 },
-        visitors: { total: visitorsRes.total, trend: visitorsTrend },
+        books:    { total: totalBooks ?? 0,        trend: calcTrend(totalBooks, prevBooks) },
+        news:     { total: totalNews ?? 0,         trend: calcTrend(totalNews, prevNews) },
+        events:   { total: upcomingEvents ?? 0,    trend: 0 },
+        visitors: { total: visitorsRes.total ?? 0, trend: calcTrend(visitorsRes.total, visitorsRes.previous) },
       },
       recentActivity: recentActivity.map((a) => ({
         ...a,

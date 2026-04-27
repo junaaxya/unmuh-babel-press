@@ -1,6 +1,6 @@
 //src/app/api/books/route.js
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import prisma from "@/lib/db"; // FIX: default import (bukan named import)
 import { bookSchema } from "@/lib/validation";
 import { serializeBigInt } from "@/lib/serialize";
 import { authorize } from "@/lib/authorize";
@@ -94,6 +94,8 @@ export async function POST(req) {
 
     if (!parsed.success) {
       const errorMap = parsed.error.flatten().fieldErrors;
+      // Log detail agar mudah debug
+      console.error("Validasi gagal:", JSON.stringify(errorMap, null, 2));
       return NextResponse.json(
         {
           success: false,

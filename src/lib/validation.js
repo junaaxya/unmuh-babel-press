@@ -5,7 +5,11 @@ export const newsSchema = z.object({
   title: z.string().min(1, { message: "Judul tidak boleh kosong" }),
   excerpt: z.string().min(1, { message: "Ringkasan tidak boleh kosong" }),
   content: z.string().min(1, { message: "Konten tidak boleh kosong" }),
-  image: z.string().url({ message: "URL gambar tidak valid" }),
+  // FIX: terima path lokal /uploads/... dan URL https://...
+  image: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+    z.string().min(1, { message: "Gambar wajib diunggah" })
+  ),
   date: z.preprocess((val) => (val ? new Date(val) : new Date()), z.date()),
   category: z.string().min(1, { message: "Kategori tidak boleh kosong" }),
   status: z.enum(["draft", "published"]).default("draft"),
@@ -19,7 +23,11 @@ export const eventSchema = z.object({
   title: z.string().min(1, { message: "Judul tidak boleh kosong" }),
   excerpt: z.string().min(1, { message: "Ringkasan tidak boleh kosong" }),
   content: z.string().min(1, { message: "Konten tidak boleh kosong" }),
-  image: z.string().url({ message: "URL gambar tidak valid" }).min(1, { message: "Gambar wajib diunggah" }),
+  // FIX: terima path lokal /uploads/... dan URL https://...
+  image: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+    z.string().min(1, { message: "Gambar wajib diunggah" })
+  ),
   date: z.string().refine((val) => val && !isNaN(Date.parse(val)), { message: "Format tanggal tidak valid" }),
   time: z.string().min(1, { message: "Waktu tidak boleh kosong" }),
   location: z.string().min(1, { message: "Lokasi tidak boleh kosong" }),
@@ -88,9 +96,20 @@ export const bookSchema = z.object({
         errorMap: () => ({ message: "Jumlah halaman harus berupa angka." })
   }).positive("Jumlah halaman harus positif.").optional(),
 
-  image: z.string().url("Format URL gambar tidak valid").optional(),
+  // FIX: terima path lokal /uploads/... dan URL https://...
+  image: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+    z.string().optional()
+  ),
+
   kategori: z.string().max(100).optional(),
   sinopsis: z.string().optional(),
   status: z.enum(["draft", "published"]).default("draft"),
   published_at: z.coerce.date().nullable().optional(),
+
+  // Tambahan field google_books_url
+  google_books_url: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+    z.string().url("Format URL Google Books tidak valid").optional()
+  ),
 });

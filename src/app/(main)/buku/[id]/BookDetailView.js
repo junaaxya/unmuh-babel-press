@@ -13,6 +13,7 @@ import {
     faLink,
     faArrowLeft,
     faBook,
+    faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faFacebookF,
@@ -122,13 +123,33 @@ const BookDetailView = ({ book }) => {
                                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
                                     {book.title}
                                 </h1>
-                                <div className="flex items-center text-gray-500 mb-6">
+                                <div className="flex items-center text-gray-500 mb-4">
                                     <FontAwesomeIcon
                                         icon={faCalendarAlt}
                                         className="mr-2"
                                     />
                                    <span>{formatDate(book.published_at)}</span>
                                 </div>
+
+                                {/* ── Badge Google Books (Tambahan) ──────────────── */}
+                                {book.google_books_url ? (
+                                    <a
+                                        href={book.google_books_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                                    >
+                                        <FontAwesomeIcon icon={faCheckCircle} className="text-green-500" />
+                                        Tersedia di Google Books
+                                        <span className="text-blue-500 underline text-xs">Lihat di Google Books →</span>
+                                    </a>
+                                ) : (
+                                    <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-gray-50 border border-gray-200 text-gray-500 rounded-lg text-sm">
+                                        <FontAwesomeIcon icon={faBook} className="text-gray-400" />
+                                        Belum terdaftar di Google Books
+                                    </div>
+                                )}
+                                {/* ─────────────────────────────────────────────── */}
 
                                 {/* Tabs */}
                                 <div className="border-b border-gray-200 mb-6">

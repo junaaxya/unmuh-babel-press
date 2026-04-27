@@ -16,10 +16,10 @@ const schema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   const authError = await authorize(request, ['ADMIN']);
   if (authError) return authError;
-  const { id } = params;
+  const { id } = await context.params; // FIX: await params (Next.js 15)
   try {
     const body = await request.json();
     const parsed = schema.safeParse(body);
@@ -46,10 +46,10 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   const authError = await authorize(request, ['ADMIN']);
   if (authError) return authError;
-  const { id } = params;
+  const { id } = await context.params; // FIX: await params (Next.js 15)
   try {
     await prisma.servicePackage.delete({ where: { id } });
     return NextResponse.json({ status: 'success' });
