@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import Notification from '@/components/ui/Notification/Notification'; 
+import Notification from '@/components/ui/Notification/Notification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarAlt,
-    faShare,
     faLink,
     faArrowLeft,
     faBook,
     faCheckCircle,
+    faFilePdf,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faFacebookF,
@@ -22,27 +22,25 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 const BookDetailView = ({ book }) => {
-     // State hanya untuk interaksi UI seperti tab aktif
     const [activeTab, setActiveTab] = useState('spesifikasi');
+    const [notification, setNotification] = useState({
+        id: null,
+        type: '',
+        message: '',
+    });
 
-     // 2. Tambahkan state untuk mengelola notifikasi
-    const [notification, setNotification] = useState({ id: null, type: '', message: '' });
-
-    // Fungsi helper untuk menampilkan notifikasi
     const showNotification = (type, message) => {
         setNotification({ id: Date.now(), type, message });
     };
 
-    // useEffect untuk fetch data sudah tidak diperlukan di sini
-
     const formatDate = (dateString) => {
         if (!dateString) return 'Tanggal tidak tersedia';
         return new Date(dateString).toLocaleDateString('id-ID', {
-            day: 'numeric', month: 'long', year: 'numeric',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
         });
     };
-
-    
 
     const handleShare = (platform) => {
         const url = window.location.href;
@@ -67,21 +65,35 @@ const BookDetailView = ({ book }) => {
             default:
                 return;
         }
+
         window.open(shareUrl, '_blank', 'noopener,noreferrer');
     };
+
     return (
         <>
-        
-           <Head>
+            <Head>
                 <title>{`${book.title} | Unmuh Press`}</title>
-                <meta name="description" content={book.sinopsis?.substring(0, 160) || `Detail buku ${book.title}`}/>
+                <meta
+                    name="description"
+                    content={
+                        book.sinopsis?.substring(0, 160) ||
+                        `Detail buku ${book.title}`
+                    }
+                />
             </Head>
-               {notification.id && (
+
+            {notification.id && (
                 <Notification
                     id={notification.id}
                     type={notification.type}
                     message={notification.message}
-                    onClose={() => setNotification({ id: null, type: '', message: '' })}
+                    onClose={() =>
+                        setNotification({
+                            id: null,
+                            type: '',
+                            message: '',
+                        })
+                    }
                 />
             )}
 
@@ -123,35 +135,61 @@ const BookDetailView = ({ book }) => {
                                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
                                     {book.title}
                                 </h1>
+
                                 <div className="flex items-center text-gray-500 mb-4">
                                     <FontAwesomeIcon
                                         icon={faCalendarAlt}
                                         className="mr-2"
                                     />
-                                   <span>{formatDate(book.published_at)}</span>
+                                    <span>{formatDate(book.published_at)}</span>
                                 </div>
 
-                                {/* ── Badge Google Books (Tambahan) ──────────────── */}
-                                {book.google_books_url ? (
-                                    <a
-                                        href={book.google_books_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
-                                    >
-                                        <FontAwesomeIcon icon={faCheckCircle} className="text-green-500" />
-                                        Tersedia di Google Books
-                                        <span className="text-blue-500 underline text-xs">Lihat di Google Books →</span>
-                                    </a>
-                                ) : (
-                                    <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-gray-50 border border-gray-200 text-gray-500 rounded-lg text-sm">
-                                        <FontAwesomeIcon icon={faBook} className="text-gray-400" />
-                                        Belum terdaftar di Google Books
-                                    </div>
-                                )}
-                                {/* ─────────────────────────────────────────────── */}
+                                <div className="flex flex-wrap gap-3 mb-6">
+                                    {book.google_books_url ? (
+                                        <a
+                                            href={book.google_books_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faCheckCircle}
+                                                className="text-green-500"
+                                            />
+                                            Tersedia di Google Books
+                                            <span className="text-blue-500 underline text-xs">
+                                                Lihat →
+                                            </span>
+                                        </a>
+                                    ) : (
+                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 text-gray-500 rounded-lg text-sm">
+                                            <FontAwesomeIcon
+                                                icon={faBook}
+                                                className="text-gray-400"
+                                            />
+                                            Belum terdaftar di Google Books
+                                        </div>
+                                    )}
 
-                                {/* Tabs */}
+                                    {book.pdf_url ? (
+                                        <Link
+                                            href={`/buku/${book.id}/baca`}
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 border border-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-semibold"
+                                        >
+                                            <FontAwesomeIcon icon={faFilePdf} />
+                                            Baca PDF Buku
+                                            <span className="text-xs opacity-90">
+                                                {book.preview_percent || 100}%
+                                            </span>
+                                        </Link>
+                                    ) : (
+                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 text-red-400 rounded-lg text-sm">
+                                            <FontAwesomeIcon icon={faFilePdf} />
+                                            PDF belum tersedia
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="border-b border-gray-200 mb-6">
                                     <div className="flex -mb-px">
                                         <button
@@ -166,6 +204,7 @@ const BookDetailView = ({ book }) => {
                                         >
                                             Spesifikasi
                                         </button>
+
                                         <button
                                             onClick={() =>
                                                 setActiveTab('sinopsis')
@@ -181,10 +220,8 @@ const BookDetailView = ({ book }) => {
                                     </div>
                                 </div>
 
-                                {/* Tab Content */}
                                 {activeTab === 'spesifikasi' && (
                                     <div className="space-y-4 text-sm">
-                                        {/* Spesifikasi di sini menggunakan data dari 'book' state */}
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Kode buku:
@@ -193,6 +230,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.kode_buku || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Judul:
@@ -201,6 +239,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.title || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 ISBN:
@@ -209,6 +248,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.isbn || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Penerbit:
@@ -217,6 +257,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.penerbit || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Penulis:
@@ -225,6 +266,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.penulis || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Editor:
@@ -233,6 +275,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.editor || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Ukuran:
@@ -241,6 +284,7 @@ const BookDetailView = ({ book }) => {
                                                 {book.ukuran || '-'}
                                             </span>
                                         </div>
+
                                         <div className="flex">
                                             <span className="text-gray-600 w-32">
                                                 Halaman:
@@ -261,11 +305,11 @@ const BookDetailView = ({ book }) => {
                                     </div>
                                 )}
 
-                                {/* Share buttons */}
                                 <div className="mt-8">
                                     <p className="text-gray-600 mb-3">
                                         Bagikan Melalui:
                                     </p>
+
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() =>
@@ -278,6 +322,7 @@ const BookDetailView = ({ book }) => {
                                                 size="sm"
                                             />
                                         </button>
+
                                         <button
                                             onClick={() =>
                                                 handleShare('twitter')
@@ -289,6 +334,7 @@ const BookDetailView = ({ book }) => {
                                                 size="sm"
                                             />
                                         </button>
+
                                         <button
                                             onClick={() =>
                                                 handleShare('whatsapp')
@@ -300,6 +346,7 @@ const BookDetailView = ({ book }) => {
                                                 size="sm"
                                             />
                                         </button>
+
                                         <button
                                             onClick={() => handleShare('copy')}
                                             className="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center hover:bg-gray-300"

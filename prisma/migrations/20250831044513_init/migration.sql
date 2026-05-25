@@ -65,6 +65,8 @@ CREATE TABLE `Book` (
     `published_at` TIMESTAMP(6) NULL,
     `created_at` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     `updated_at` DATETIME(3) NOT NULL,
+    `pdf_url` VARCHAR(500) NULL,
+    `preview_percent` INTEGER NOT NULL DEFAULT 100,
     `google_books_url` VARCHAR(500) NULL,
 
     PRIMARY KEY (`id`)

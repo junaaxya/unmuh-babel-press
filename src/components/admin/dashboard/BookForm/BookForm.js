@@ -21,7 +21,9 @@ import {
     faLink,
     faExternalLinkAlt,
     faTimesCircle,
+    faFilePdf,
 } from '@fortawesome/free-solid-svg-icons';
+
 import {
     uploadCoverImage,
     getBookCategories,
@@ -63,14 +65,16 @@ const BookForm = ({
         status: 'draft',
         published_at: '',
         google_books_url: '',
+        pdf_url: '',
+        preview_percent: 100,
     });
-    const [imageFile, setImageFile] = useState(null);
+
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
+    const [isUploadingPdf, setIsUploadingPdf] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
 
-    // Fetch categories on mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -85,7 +89,6 @@ const BookForm = ({
         fetchCategories();
     }, []);
 
-    // Populate form jika edit buku
     useEffect(() => {
         if (book) {
             setFormData({
@@ -103,7 +106,10 @@ const BookForm = ({
                 status: book.status || 'draft',
                 published_at: formatDateForInput(book.published_at),
                 google_books_url: book.google_books_url || '',
+                pdf_url: book.pdf_url || '',
+                preview_percent: book.preview_percent || 100,
             });
+
             if (book.image) {
                 setPreviewImage(book.image);
             }
@@ -116,6 +122,7 @@ const BookForm = ({
         (e) => {
             const { name, value } = e.target;
             setFormData((prev) => ({ ...prev, [name]: value }));
+
             if (errors[name] || apiErrors[name]) {
                 setErrors((prev) => ({ ...prev, [name]: undefined }));
             }
@@ -123,15 +130,17 @@ const BookForm = ({
         [errors, apiErrors]
     );
 
-    // Hapus link Google Books
     const handleClearGoogleBooksUrl = () => {
         setFormData((prev) => ({ ...prev, google_books_url: '' }));
+    };
+
+    const handleClearPdf = () => {
+        setFormData((prev) => ({ ...prev, pdf_url: '' }));
     };
 
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        setImageFile(file);
 
         if (file.size > 5 * 1024 * 1024) {
             setErrors((prev) => ({ ...prev, image: 'Ukuran file maksimal 5MB.' }));
@@ -139,7 +148,7 @@ const BookForm = ({
         }
 
         setIsUploading(true);
-        showNotification('info', 'Mengunggah cover buku...');
+        showNotification?.('info', 'Mengunggah cover buku...');
         setErrors((prev) => ({ ...prev, image: undefined }));
 
         const localPreview = URL.createObjectURL(file);
@@ -149,32 +158,78 @@ const BookForm = ({
             const response = await uploadCoverImage(file, 'books');
             setFormData((prev) => ({ ...prev, image: response.url }));
             setPreviewImage(response.url);
-            showNotification('success', 'Cover buku berhasil diunggah!');
+            showNotification?.('success', 'Cover buku berhasil diunggah!');
         } catch (error) {
             console.error('Image upload failed:', error);
-            setErrors((prev) => ({ ...prev, image: error.message || 'Gagal mengunggah gambar.' }));
+            setErrors((prev) => ({
+                ...prev,
+                image: error.message || 'Gagal mengunggah gambar.',
+            }));
             setPreviewImage(book?.image || null);
         } finally {
             setIsUploading(false);
         }
     };
 
+    const handlePdfChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.type !== 'application/pdf') {
+            setErrors((prev) => ({ ...prev, pdf_url: 'File harus berformat PDF.' }));
+            return;
+        }
+
+        if (file.size > 50 * 1024 * 1024) {
+            setErrors((prev) => ({ ...prev, pdf_url: 'Ukuran PDF maksimal 50MB.' }));
+            return;
+        }
+
+        setIsUploadingPdf(true);
+        showNotification?.('info', 'Mengunggah PDF buku...');
+        setErrors((prev) => ({ ...prev, pdf_url: undefined }));
+
+        try {
+            const response = await uploadCoverImage(file, 'books-pdf');
+
+            setFormData((prev) => ({
+                ...prev,
+                pdf_url: response.url,
+            }));
+
+            showNotification?.('success', 'PDF buku berhasil diunggah!');
+        } catch (error) {
+            console.error('PDF upload failed:', error);
+            setErrors((prev) => ({
+                ...prev,
+                pdf_url: error.message || 'Gagal mengunggah PDF.',
+            }));
+        } finally {
+            setIsUploadingPdf(false);
+        }
+    };
+
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.title.trim())    newErrors.title    = 'Judul buku wajib diisi';
+
+        if (!formData.title.trim()) newErrors.title = 'Judul buku wajib diisi';
         if (!formData.penerbit.trim()) newErrors.penerbit = 'Penerbit wajib diisi';
-        if (!formData.penulis.trim())  newErrors.penulis  = 'Penulis wajib diisi';
+        if (!formData.penulis.trim()) newErrors.penulis = 'Penulis wajib diisi';
         if (!String(formData.halaman || '').trim()) newErrors.halaman = 'Jumlah halaman wajib diisi';
-        if (!formData.kategori)        newErrors.kategori = 'Kategori wajib dipilih';
+        if (!formData.kategori) newErrors.kategori = 'Kategori wajib dipilih';
         if (!formData.sinopsis.trim()) newErrors.sinopsis = 'Sinopsis wajib diisi';
 
-        // Validasi URL Google Books jika diisi
         if (formData.google_books_url.trim()) {
             try {
                 new URL(formData.google_books_url.trim());
             } catch {
                 newErrors.google_books_url = 'URL tidak valid. Contoh: https://books.google.com/books?id=...';
             }
+        }
+
+        const percent = Number(formData.preview_percent);
+        if (percent < 10 || percent > 100) {
+            newErrors.preview_percent = 'Batas baca harus antara 10% sampai 100%.';
         }
 
         setErrors(newErrors);
@@ -186,6 +241,7 @@ const BookForm = ({
         if (!validateForm()) return;
 
         const submissionData = new FormData();
+
         for (const key in formData) {
             if (key === 'published_at' && formData[key]) {
                 submissionData.append(key, new Date(formData[key]).toISOString());
@@ -193,16 +249,17 @@ const BookForm = ({
                 if (key !== 'status') submissionData.append(key, formData[key]);
             }
         }
+
         submissionData.append('status', status);
         onSubmit(submissionData);
     };
 
     const hasGoogleBooksUrl = formData.google_books_url.trim() !== '';
+    const hasPdf = formData.pdf_url.trim() !== '';
 
     return (
         <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Left Column */}
                 <div className="space-y-4">
                     <FormInput
                         label="Kode Buku"
@@ -214,6 +271,7 @@ const BookForm = ({
                         error={errors.kode_buku}
                         icon={faBarcode}
                     />
+
                     <FormInput
                         label="Judul Buku"
                         name="title"
@@ -225,7 +283,6 @@ const BookForm = ({
                         icon={faBook}
                     />
 
-                    {/* ISBN — cukup ketik manual */}
                     <FormInput
                         label="ISBN"
                         name="isbn"
@@ -246,6 +303,7 @@ const BookForm = ({
                         error={errors.penerbit}
                         icon={faBuilding}
                     />
+
                     <FormInput
                         label="Editor"
                         name="editor"
@@ -254,6 +312,7 @@ const BookForm = ({
                         placeholder="Nama editor"
                         icon={faUserEdit}
                     />
+
                     <FormInput
                         label="Ukuran Buku"
                         name="ukuran"
@@ -264,7 +323,6 @@ const BookForm = ({
                     />
                 </div>
 
-                {/* Right Column */}
                 <div className="space-y-4">
                     <FormInput
                         label="Penulis"
@@ -273,9 +331,10 @@ const BookForm = ({
                         onChange={handleInputChange}
                         placeholder="Nama penulis"
                         required
-                        error={errors.author}
+                        error={errors.penulis}
                         icon={faUser}
                     />
+
                     <FormInput
                         label="Jumlah Halaman"
                         name="halaman"
@@ -287,6 +346,7 @@ const BookForm = ({
                         error={errors.halaman}
                         min="1"
                     />
+
                     <FormInput
                         label="Kategori"
                         name="kategori"
@@ -297,6 +357,7 @@ const BookForm = ({
                         error={errors.kategori}
                         options={categories}
                     />
+
                     <FormInput
                         label="Tanggal Terbit"
                         name="published_at"
@@ -307,7 +368,6 @@ const BookForm = ({
                         icon={faCalendarAlt}
                     />
 
-                    {/* Cover Image Upload */}
                     <FormInput
                         label="Cover Buku"
                         name="cover"
@@ -317,7 +377,6 @@ const BookForm = ({
                         icon={faImage}
                     />
 
-                    {/* Image Preview */}
                     {previewImage && (
                         <div className="mt-2">
                             <p className="text-sm font-medium text-gray-700 mb-2">
@@ -337,7 +396,6 @@ const BookForm = ({
                 </div>
             </div>
 
-            {/* Synopsis */}
             <FormInput
                 label="Sinopsis"
                 name="sinopsis"
@@ -351,14 +409,10 @@ const BookForm = ({
                 icon={faFileText}
             />
 
-            {/* ── Link Google Books ─────────────────────────────────────── */}
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                     <FontAwesomeIcon icon={faLink} className="mr-2 text-blue-500" />
                     Link Google Books
-                    <span className="ml-2 text-xs text-gray-400 font-normal">
-                        (Isi jika buku sudah tersedia di Google Books — bisa diedit atau dihapus kapan saja)
-                    </span>
                 </label>
 
                 <div className="flex gap-2 items-center">
@@ -372,7 +426,7 @@ const BookForm = ({
                             errors.google_books_url ? 'border-red-400' : 'border-gray-300'
                         }`}
                     />
-                    {/* Tombol buka link (jika sudah ada URL) */}
+
                     {hasGoogleBooksUrl && (
                         <a
                             href={formData.google_books_url}
@@ -384,7 +438,7 @@ const BookForm = ({
                             <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4" />
                         </a>
                     )}
-                    {/* Tombol hapus link */}
+
                     {hasGoogleBooksUrl && (
                         <button
                             type="button"
@@ -397,27 +451,94 @@ const BookForm = ({
                     )}
                 </div>
 
-                {/* Error validasi URL */}
                 {errors.google_books_url && (
                     <p className="text-red-500 text-xs mt-1">{errors.google_books_url}</p>
                 )}
-
-                {/* Status indikator */}
-                {hasGoogleBooksUrl && !errors.google_books_url ? (
-                    <p className="text-green-600 text-xs mt-1.5 flex items-center gap-1">
-                        <FontAwesomeIcon icon={faCheckCircle} />
-                        Buku tersedia di Google Books ✅
-                    </p>
-                ) : !hasGoogleBooksUrl ? (
-                    <p className="text-gray-400 text-xs mt-1.5 flex items-center gap-1">
-                        <FontAwesomeIcon icon={faTimesCircle} />
-                        Buku belum tersedia di Google Books
-                    </p>
-                ) : null}
             </div>
-            {/* ─────────────────────────────────────────────────────────── */}
 
-            {/* Action Buttons */}
+            {/* PDF Buku */}
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2 text-red-500" />
+                    File PDF Buku
+                </label>
+
+                <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handlePdfChange}
+                    disabled={isUploadingPdf}
+                    className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-lg file:border-0 file:bg-red-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-red-700"
+                />
+
+                {isUploadingPdf && (
+                    <p className="text-blue-600 text-xs mt-2">
+                        Mengunggah PDF...
+                    </p>
+                )}
+
+                {errors.pdf_url && (
+                    <p className="text-red-500 text-xs mt-2">{errors.pdf_url}</p>
+                )}
+
+                {hasPdf ? (
+                    <div className="mt-3 flex items-center gap-2">
+                        <a
+                            href={formData.pdf_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-2 text-sm text-green-700 hover:bg-green-200"
+                        >
+                            <FontAwesomeIcon icon={faExternalLinkAlt} />
+                            Lihat PDF
+                        </a>
+
+                        <button
+                            type="button"
+                            onClick={handleClearPdf}
+                            className="inline-flex items-center gap-2 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-600 hover:bg-red-200"
+                        >
+                            <FontAwesomeIcon icon={faTimesCircle} />
+                            Hapus PDF
+                        </button>
+                    </div>
+                ) : (
+                    <p className="text-gray-500 text-xs mt-2">
+                        Belum ada PDF buku yang diunggah.
+                    </p>
+                )}
+            </div>
+
+            {/* Batas Baca */}
+            <div className="rounded-xl border border-gray-200 bg-white p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Batas Baca Pengunjung
+                </label>
+
+                <select
+                    name="preview_percent"
+                    value={formData.preview_percent}
+                    onChange={handleInputChange}
+                    className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.preview_percent ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                >
+                    {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((percent) => (
+                        <option key={percent} value={percent}>
+                            Pengunjung bisa baca {percent}%
+                        </option>
+                    ))}
+                </select>
+
+                {errors.preview_percent && (
+                    <p className="text-red-500 text-xs mt-2">{errors.preview_percent}</p>
+                )}
+
+                <p className="text-gray-500 text-xs mt-2">
+                    Contoh: jika buku 100 halaman dan dipilih 30%, maka pengunjung hanya boleh membaca 30 halaman.
+                </p>
+            </div>
+
             <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
                 <button
                     type="button"
@@ -427,10 +548,11 @@ const BookForm = ({
                     <FontAwesomeIcon icon={faTimes} className="mr-2" />
                     Batal
                 </button>
+
                 <button
                     type="button"
                     onClick={(e) => handleSubmit(e, 'draft')}
-                    disabled={isLoading || (book && book.status === 'draft')}
+                    disabled={isLoading || isUploading || isUploadingPdf || (book && book.status === 'draft')}
                     className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                 >
                     <FontAwesomeIcon
@@ -439,9 +561,10 @@ const BookForm = ({
                     />
                     Simpan Draf
                 </button>
+
                 <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isLoading || isUploading || isUploadingPdf}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
                 >
                     <FontAwesomeIcon icon={faSave} className="mr-2" />

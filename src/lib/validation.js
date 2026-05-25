@@ -89,7 +89,6 @@ export const bookSchema = z.object({
   editor: z.string().max(255).optional(),
   ukuran: z.string().max(50).optional(),
   
-  // --- PERBAIKAN DI SINI ---
   // Mengubah dari z.string() menjadi z.coerce.number() agar Zod
   // otomatis mengubah string dari form menjadi angka.
   halaman: z.coerce.number({
@@ -107,9 +106,22 @@ export const bookSchema = z.object({
   status: z.enum(["draft", "published"]).default("draft"),
   published_at: z.coerce.date().nullable().optional(),
 
-  // Tambahan field google_books_url
+    // Tambahan field google_books_url
   google_books_url: z.preprocess(
     (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
     z.string().url("Format URL Google Books tidak valid").optional()
   ),
+
+  // Tambahan field PDF buku
+  pdf_url: z.preprocess(
+    (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+    z.string().optional()
+  ),
+
+  // Batas baca pengunjung: 10% sampai 100%
+  preview_percent: z.coerce
+    .number()
+    .min(10, "Minimal batas baca 10%")
+    .max(100, "Maksimal batas baca 100%")
+    .default(100),
 });
